@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Haron Enterprises, LLC - Residential Lease Application</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chosen Palette: Professional Neutral -->
+    <!-- Application Structure Plan: The multi-step wizard is used to break down the long application. A new, final 'summary' section is added. This section is dynamically generated from form data upon submission, allowing the user to review and print the completed application. This structure was chosen to provide a professional, end-to-end experience without needing a backend server. -->
+    <!-- Visualization & Content Choices: The goal is to collect and then format data. After a user clicks 'Submit', JavaScript captures all form inputs and generates a new, structured HTML section that mimics the look of the original PDF document. The fields are rendered as key-value pairs. This allows the user to immediately print or save the final document. The form relies on basic HTML for input and JavaScript for dynamic content generation. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
             background-color: #f8f7f4; 
@@ -61,7 +65,7 @@
     <div class="container mx-auto px-4 py-8 md:py-12 no-print">
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
-            <p class="mt-2 text-lg text-gray-600">Residential Lease Application 0916 0015</p>
+            <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
             <p class="text-sm text-gray-500">In Accordance with Seminole County NSP Rentals Program</p>
         </header>
 
@@ -265,10 +269,10 @@
             </form>
             
             <div id="navigation-controls" class="p-6 bg-gray-50 border-t border-gray-200 flex justify-between items-center">
-                <button id="prev-btn" class="px-6 py-2 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-100 transition-colors duration-200" style="display: none;">Previous</button>
+                <button type="button" id="prev-btn" class="px-6 py-2 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-100 transition-colors duration-200" style="display: none;">Previous</button>
                 <div id="spacer" style="display: block;"></div>
-                <button id="next-btn" class="px-6 py-2 text-sm font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors duration-200">Next</button>
-                <button id="submit-btn" class="px-6 py-2 text-sm font-semibold text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors duration-200" style="display: none;">Submit Application</button>
+                <button type="button" id="next-btn" class="px-6 py-2 text-sm font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors duration-200">Next</button>
+                <button type="button" id="submit-btn" class="px-6 py-2 text-sm font-semibold text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors duration-200" style="display: none;">Submit Application</button>
             </div>
         </div>
     </div>
@@ -322,15 +326,33 @@
                     statusMessage.classList.add('bg-green-100', 'text-green-700');
                 }
             };
+            
+            const validateCurrentSection = () => {
+                const currentSection = document.getElementById(`section-${currentStep}`);
+                let isValid = true;
+                currentSection.querySelectorAll('[required]').forEach(input => {
+                    if (!input.checkValidity()) {
+                        isValid = false;
+                    }
+                });
+                return isValid;
+            };
 
             nextBtn.addEventListener('click', (e) => {
                 e.preventDefault();
-                if (currentStep < totalSteps) {
-                    currentStep++;
-                    showSection(currentStep);
-                    updateButtons();
-                    updateProgressBar();
-                    window.scrollTo(0, 0);
+                if (validateCurrentSection()) {
+                    if (currentStep < totalSteps) {
+                        currentStep++;
+                        showSection(currentStep);
+                        updateButtons();
+                        updateProgressBar();
+                        window.scrollTo(0, 0);
+                        statusMessage.classList.add('hidden');
+                    }
+                } else {
+                    showStatus('Please fill out all required fields before proceeding.', true);
+                    const currentSection = document.getElementById(`section-${currentStep}`);
+                    currentSection.reportValidity();
                 }
             });
 
@@ -342,6 +364,7 @@
                     updateButtons();
                     updateProgressBar();
                     window.scrollTo(0, 0);
+                    statusMessage.classList.add('hidden');
                 }
             });
             
@@ -369,9 +392,55 @@
                     }
                 }
                 
-                const queryString = new URLSearchParams(data).toString();
-                const newUrl = `data:text/html,<html><head><title>Haron Enterprises, LLC - Application Summary</title><script src="https://cdn.tailwindcss.com"></script><style>@import url('https://rsms.me/inter/inter.css');body{font-family:'Inter',sans-serif;background-color:#f8f7f4;padding:2rem}.report-container{max-width:8.5in;margin:0 auto;background-color:white;border:1px solid #ccc;padding:1in;box-shadow:0 0 10px rgba(0,0,0,0.1)}.section-title{font-size:1.5rem;font-weight:bold;margin-bottom:1rem;border-bottom:2px solid #333;padding-bottom:.5rem}.field-label{font-weight:600;color:#4b5563}.field-value{margin-top:.25rem;margin-bottom:1rem;color:#1f2937}.print-button{position:fixed;top:1rem;right:1rem;background-color:#2563eb;color:white;padding:.75rem 1.5rem;border-radius:.5rem;font-weight:bold;cursor:pointer}@media print{.print-button{display:none}.report-container{border:none;box-shadow:none;padding:.5in}}</style></head><body><div class="report-container"><button class="print-button" onclick="window.print()">Save to PDF</button><div class="text-center mb-10"><h1 class="text-2xl font-bold">Haron Enterprises, LLC</h1><h2 class="text-xl">Residential Lease Application</h2><p class="text-sm">In Accordance with Seminole County NSP Rentals Program</p><p class="text-xs mt-4">This document was generated on: ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}</p></div><hr class="my-6"><div id="report-content"></div></div><script>const rawData=decodeURIComponent(window.location.hash.substring(1));const params=new URLSearchParams(rawData);const reportContent=document.getElementById('report-content');let currentSection='';params.forEach((value,key)=>{const parts=key.split('_');const sectionName=parts[0];if(sectionName!==currentSection){if(currentSection){reportContent.innerHTML+='</div>'}reportContent.innerHTML+=\`<div class="mt-8"><h3 class="section-title">${sectionName.replace(/([A-Z])/g,' $1').trim()}</h3><div>\`;currentSection=sectionName}reportContent.innerHTML+=\`<div class="mb-2"><span class="field-label">${key.replace(/([A-Z])/g,' $1').replace(/_(\d+)/,' $1').trim()}:</span> <span class="field-value">${value}</span></div>\`});if(currentSection){reportContent.innerHTML+='</div>'}</script></body></html>`;
-                const newWindow = window.open(newUrl, '_blank');
+                const newWindow = window.open('', '_blank');
+                
+                newWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>Haron Enterprises, LLC - Application Summary</title>
+                            <script src="https://cdn.tailwindcss.com"></script>
+                            <style>
+                                @import url('https://rsms.me/inter/inter.css');
+                                body{font-family:'Inter',sans-serif;background-color:#f8f7f4;padding:2rem}.report-container{max-width:8.5in;margin:0 auto;background-color:white;border:1px solid #ccc;padding:1in;box-shadow:0 0 10px rgba(0,0,0,0.1)}.section-title{font-size:1.5rem;font-weight:bold;margin-bottom:1rem;border-bottom:2px solid #333;padding-bottom:.5rem}.field-label{font-weight:600;color:#4b5563}.field-value{margin-top:.25rem;margin-bottom:1rem;color:#1f2937}.print-button{position:fixed;top:1rem;right:1rem;background-color:#2563eb;color:white;padding:.75rem 1.5rem;border-radius:.5rem;font-weight:bold;cursor:pointer}@media print{.print-button{display:none}.report-container{border:none;box-shadow:none;padding:.5in}}</style>
+                        </head>
+                        <body>
+                            <div class="report-container">
+                                <button class="print-button" onclick="window.print()">Save to PDF</button>
+                                <div class="text-center mb-10">
+                                    <h1 class="text-2xl font-bold">Haron Enterprises, LLC</h1>
+                                    <h2 class="text-xl">Residential Lease Application</h2>
+                                    <p class="text-sm">In Accordance with Seminole County NSP Rentals Program</p>
+                                    <p class="text-xs mt-4">This document was generated on: ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}</p>
+                                </div>
+                                <hr class="my-6">
+                                <div id="report-content"></div>
+                            </div>
+                            <script>
+                                const reportContent=document.getElementById('report-content');
+                                const data = JSON.parse(atob('${btoa(JSON.stringify(data))}'));
+                                let currentSection = '';
+                                
+                                for (const key in data) {
+                                    if (key.includes('[]')) continue;
+                                    const parts = key.split(' ');
+                                    const sectionName = parts[0];
+                                    if (sectionName !== currentSection) {
+                                        if (currentSection) {
+                                            reportContent.innerHTML += '</div>';
+                                        }
+                                        reportContent.innerHTML += \`<div class="mt-8"><h3 class="section-title">${sectionName}</h3><div>\`;
+                                        currentSection = sectionName;
+                                    }
+                                    reportContent.innerHTML += \`<div class="mb-2"><span class="field-label">${key}:</span> <span class="field-value">${data[key]}</span></div>\`;
+                                }
+                                if (currentSection) {
+                                    reportContent.innerHTML += '</div>';
+                                }
+                            </script>
+                        </body>
+                    </html>
+                `);
+                newWindow.document.close();
                 
             });
             
@@ -456,4 +525,3 @@
     </script>
 </body>
 </html>
-```eof
