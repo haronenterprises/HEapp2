@@ -6,8 +6,8 @@
     <title>Haron Enterprises, LLC - Residential Lease Application</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chosen Palette: Professional Neutral -->
-    <!-- Application Structure Plan: A simple, single-page form is used to isolate a submission issue. All fields are visible at once to eliminate any JavaScript-based navigation that may be causing a silent failure. This structure is a diagnostic tool to confirm the Formspree connection is working correctly. -->
-    <!-- Visualization & Content Choices: The goal is basic data collection. Standard HTML input fields are used. There is no dynamic interactivity or complex visualization. The form relies on basic form submission to test the core connection. -->
+    <!-- Application Structure Plan: A single-page form designed for the simplest possible submission test. This version eliminates all JavaScript and dynamic fields to ensure the form submission itself is working correctly. It is a diagnostic tool to prove the connection to the backend service is functional. -->
+    <!-- Visualization & Content Choices: The goal is basic data collection. All fields are static HTML inputs. There is no dynamic interactivity. The form relies on basic form submission to a third-party service. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
@@ -40,7 +40,7 @@
     <div class="container mx-auto px-4 py-8 md:py-12">
         <header class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
-            <p class="mt-2 text-lg text-gray-600">Residential Lease Application 0916012</p>
+            <p class="mt-2 text-lg text-gray-600">Residential Lease Application 091625 0013</p>
             <p class="text-sm text-gray-500">In Accordance with Seminole County NSP Rentals Program</p>
         </header>
 
@@ -50,34 +50,35 @@
                 <p class="text-gray-600 mb-6">This simplified form is for testing purposes only. Please fill out the personal information below to confirm the form is working.</p>
             </div>
 
-            <form id="rental-application-form" action="https://formspree.io/f/myzdarew" method="POST" class="p-6 md:p-8">
+            <form id="rental-application-form" action="https://formsubmit.co/YOUR_EMAIL_ADDRESS" method="POST" class="p-6 md:p-8">
                 <div id="status-message" class="text-sm px-4 py-2 rounded-md mb-4 hidden" role="alert"></div>
                 
                 <section id="section-1" class="form-section active">
                     <div class="form-grid">
-                        <div><label class="label-text" for="fullName">Full Name</label><input type="text" id="fullName" name="fullName" class="input-field" required></div>
-                        <div><label class="label-text" for="dob">Date of Birth</label><input type="date" id="dob" name="dob" class="input-field" required></div>
-                        <div><label class="label-text" for="phone">Phone</label><input type="tel" id="phone" name="phone" class="input-field" required></div>
-                        <div><label class="label-text" for="email">Email Address</label><input type="email" id="email" name="email" class="input-field" required></div>
-                        <div><label class="label-text" for="ssn">Social Security Number</label><input type="text" id="ssn" name="ssn" class="input-field" required></div>
-                        <div><label class="label-text" for="dl">Driver's License #</label><input type="text" id="dl" name="dl" class="input-field" required></div>
+                        <div><label class="label-text" for="fullName">Full Name</label><input type="text" id="fullName" name="Full Name" class="input-field" required></div>
+                        <div><label class="label-text" for="dob">Date of Birth</label><input type="date" id="dob" name="Date of Birth" class="input-field" required></div>
+                        <div><label class="label-text" for="phone">Phone</label><input type="tel" id="phone" name="Phone" class="input-field" required></div>
+                        <div><label class="label-text" for="email">Email Address</label><input type="email" id="email" name="Email" class="input-field" required></div>
+                        <div><label class="label-text" for="ssn">Social Security Number</label><input type="text" id="ssn" name="Social Security Number" class="input-field" required></div>
+                        <div><label class="label-text" for="dl">Driver's License #</label><input type="text" id="dl" name="Driver's License #" class="input-field" required></div>
                          <div class="md:col-span-2 space-y-4">
                             <div>
                                 <span class="label-text">Are you a member of the Armed Services?</span>
                                 <div class="radio-group mt-2">
-                                    <label class="radio-label"><input type="radio" name="armedServices" value="yes" class="radio-input mr-2">Yes</label>
-                                    <label class="radio-label"><input type="radio" name="armedServices" value="no" class="radio-input mr-2" checked>No</label>
+                                    <label class="radio-label"><input type="radio" name="Armed Services Member" value="yes" class="radio-input mr-2">Yes</label>
+                                    <label class="radio-label"><input type="radio" name="Armed Services Member" value="no" class="radio-input mr-2" checked>No</label>
                                 </div>
                             </div>
                          </div>
                     </div>
-                     <div class="mt-8">
-                        <label class="flex items-center">
-                            <input type="checkbox" id="agree-terms" name="agreement" class="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500" required>
-                            <span class="ml-3 text-gray-700">By checking this box, you attest that all information provided is true and accurate.</span>
-                        </label>
-                    </div>
                 </section>
+                
+                 <div class="mt-8">
+                    <label class="flex items-center">
+                        <input type="checkbox" id="agree-terms" name="agreement" class="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500" required>
+                        <span class="ml-3 text-gray-700">By checking this box, you attest that all information provided is true and accurate.</span>
+                    </label>
+                </div>
 
                 <div class="mt-8 p-4 bg-gray-50 border-t border-gray-200 flex justify-end">
                     <button type="submit" class="px-6 py-2 text-sm font-semibold text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors duration-200">Submit Application</button>
