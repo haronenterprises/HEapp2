@@ -83,7 +83,7 @@
                 </div>
             </div>
 
-            <form id="rental-application-form" action="https://formspree.io/f/mpwjnbjk" method="POST" class="p-6 md:p-8">
+            <form id="rental-application-form" action="https://formspree.io/f/myzdarew" method="POST" class="p-6 md:p-8">
                  <div id="status-message" class="text-sm px-4 py-2 rounded-md mb-4 hidden" role="alert"></div>
 
                 <section id="section-1" class="form-section active">
@@ -222,7 +222,23 @@
                     </div>
                 </section>
 
-             
+                <section id="section-5" class="form-section">
+                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">Required Documents</h2>
+                    <p class="text-gray-600 mb-6">To complete the verification process, we need you to upload several documents. You can upload multiple files for each category if needed. This is a crucial step for a complete application.</p>
+                    <div class="space-y-4">
+                        <div class="document-upload-item"><label class="label-text">Photo ID for all adult household members</label><input type="file" name="file_PhotoID[]" class="input-field" multiple></div>
+                        <div class="document-upload-item"><label class="label-text">Social Security Cards for all household members</label><input type="file" name="file_SocialSecurityCards[]" class="input-field" multiple></div>
+                        <div class="document-upload-item"><label class="label-text">Birth certificates for household members under 18</label><input type="file" name="file_BirthCertificates[]" class="input-field" multiple></div>
+                        <div class="document-upload-item"><label class="label-text">Six (6) most current pay stubs</label><input type="file" name="file_PayStubs[]" class="input-field" multiple></div>
+                        <div class="document-upload-item"><label class="label-text">Proof of last six (6) months rent/mortgage payments</label><input type="file" name="file_RentMortgageProof[]" class="input-field" multiple></div>
+                        <div class="document-upload-item"><label class="label-text">Self-Employed: Last year's tax return & 3 months income reports</label><input type="file" name="file_SelfEmployedDocs[]" class="input-field" multiple></div>
+                        <div class="document-upload-item"><label class="label-text">Notarized statement for adult household members with no income</label><input type="file" name="file_NoIncomeStatement[]" class="input-field" multiple></div>
+                        <div class="document-upload-item"><label class="label-text">Letter from employer(s)</label><input type="file" name="file_EmployerLetter[]" class="input-field" multiple></div>
+                        <div class="document-upload-item"><label class="label-text">Last six (6) months of bank statements</label><input type="file" name="file_BankStatements[]" class="input-field" multiple></div>
+                        <div class="document-upload-item"><label class="label-text">Photos of any animals that will be living on the premises</label><input type="file" name="file_AnimalPhotos[]" class="input-field" multiple></div>
+                    </div>
+                </section>
+
                 <section id="section-6" class="form-section">
                     <h2 class="text-2xl font-semibold mb-2 text-gray-800">Authorizations & Agreement</h2>
                     <p class="text-gray-600 mb-6">You're almost done! Please read the following legal statements carefully. Your agreement is required to finalize and submit your application for review.</p>
