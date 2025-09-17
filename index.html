@@ -73,7 +73,7 @@
     <div class="container mx-auto px-4 py-8 md:py-12 no-print">
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
-            <p class="mt-2 text-lg text-gray-600">Residential Lease Application 09 17 004 </p>
+            <p class="mt-2 text-lg text-gray-600">Residential Lease Application 09 17 005</p>
             <p class="text-sm text-gray-500">In Accordance with Seminole County NSP Rentals Program</p>
         </header>
 
@@ -297,6 +297,7 @@
             const spacer = document.getElementById('spacer');
             const statusMessage = document.getElementById('status-message');
             
+            // This function updates the visibility of the "Previous," "Next," and "Submit" buttons based on the current step.
             const updateButtons = () => {
                 prevBtn.style.display = currentStep > 1 ? 'block' : 'none';
                 spacer.style.display = currentStep === 1 ? 'block' : 'none';
@@ -304,6 +305,7 @@
                 submitBtn.style.display = currentStep === totalSteps ? 'block' : 'none';
             };
 
+            // This function updates the progress bar at the top of the form.
             const updateProgressBar = () => {
                 for (let i = 1; i <= totalSteps; i++) {
                     const step = document.getElementById(`step-${i}`);
@@ -321,11 +323,13 @@
                 }
             };
             
+            // This function shows the correct section and hides all the others.
             const showSection = (step) => {
                 document.querySelectorAll('.form-section').forEach(section => section.classList.remove('active'));
                 document.getElementById(`section-${step}`).classList.add('active');
             };
             
+            // This function displays a status message to the user.
             const showStatus = (message, isError = false) => {
                 statusMessage.textContent = message;
                 statusMessage.classList.remove('hidden', 'bg-red-100', 'text-red-700', 'bg-green-100', 'text-green-700');
@@ -336,17 +340,7 @@
                 }
             };
             
-            const validateCurrentSection = () => {
-                const currentSection = document.getElementById(`section-${currentStep}`);
-                let isValid = true;
-                currentSection.querySelectorAll('[required]').forEach(input => {
-                    if (!input.checkValidity()) {
-                        isValid = false;
-                    }
-                });
-                return isValid;
-            };
-
+            // This event listener handles the "Next" button click.
             nextBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 const currentSection = document.getElementById(`section-${currentStep}`);
@@ -356,6 +350,8 @@
                 requiredInputs.forEach(input => {
                     if (!input.checkValidity()) {
                         isValid = false;
+                        // Added to display an error message for invalid inputs
+                        input.reportValidity();
                     }
                 });
                 
@@ -374,6 +370,7 @@
                 }
             });
 
+            // This event listener handles the "Previous" button click.
             prevBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 if (currentStep > 1) {
@@ -386,6 +383,7 @@
                 }
             });
             
+            // This event listener handles the "Submit" button click.
             submitBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 
