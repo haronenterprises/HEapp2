@@ -6,12 +6,12 @@
     <title>Haron Enterprises, LLC - Residential Lease Application</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chosen Palette: Professional Neutral -->
-    <!-- Application Structure Plan: The multi-step wizard breaks down the long application. A single, final page submits all form data. This provides a user-friendly experience that is easy to fill out and submit. The structure is designed for maximum reliability with the FormSubmit service. -->
-    <!-- Visualization & Content Choices: Standard HTML inputs are used for data collection. A multi-step wizard and progress bar enhance the user experience. All data is sent to the provided email address via the FormSubmit service upon final submission. -->
+    <!-- Application Structure Plan: The multi-step wizard breaks down the long application. A new, final 'summary' section is dynamically generated from form data, allowing the user to review and print the completed application. This structure provides a professional, end-to-end experience without needing a backend server. -->
+    <!-- Visualization & Content Choices: The goal is to collect and then format data. JavaScript captures all form inputs and generates a new HTML section that mimics the look of the original PDF document. This allows the user to immediately print or save the final document. The form relies on basic HTML for input and JavaScript for dynamic content generation. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
-            background-color: #f8f7f4;
+            background-color: #f8f7f4; 
             font-family: 'Inter', sans-serif;
         }
         @import url('https://rsms.me/inter/inter.css');
@@ -48,20 +48,32 @@
         .form-grid {
             @apply grid grid-cols-1 md:grid-cols-2 gap-6;
         }
-        .dynamic-item .remove-btn {
-            display: none;
+        /* START: FIX for Red X on dynamic items */
+        .dynamic-item .remove-btn { 
+            display: none; 
         }
         .dynamic-item:hover .remove-btn {
-            display: block;
+            display: block; 
+        }
+        /* END: FIX for Red X on dynamic items */
+        @media print {
+            body { background: #fff; }
+            #navigation-controls, #progress-bar, #header, #footer { display: none !important; }
+            .printable-only { display: block !important; }
+            .print-button { display: none !important; }
+            .no-print { display: none !important; }
+        }
+        .printable-only {
+            display: none;
         }
     </style>
 </head>
 <body class="antialiased text-gray-800">
 
-    <div class="container mx-auto px-4 py-8 md:py-12">
-        <header class="text-center mb-10">
+    <div class="container mx-auto px-4 py-8 md:py-12 no-print">
+        <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
-            <p class="mt-2 text-lg text-gray-600">Residential Lease Application 09 17 011</p>
+            <p class="mt-2 text-lg text-gray-600">Residential Lease Application    09 17 013 </p>
             <p class="text-sm text-gray-500">In Accordance with Seminole County NSP Rentals Program</p>
         </header>
 
@@ -89,8 +101,8 @@
                 </div>
             </div>
 
-            <form id="rental-application-form" action="https://formsubmit.co/myzdarew" method="POST" class="p-6 md:p-8">
-                <input type="hidden" name="_autoresponse" value="Thank you for submitting your application. A copy has been emailed to you.">
+            <form id="rental-application-form" class="p-6 md:p-8">
+                <div id="status-message" class="text-sm px-4 py-2 rounded-md mb-4 hidden" role="alert"></div>
                 
                 <section id="section-1" class="form-section active">
                     <h2 class="text-2xl font-semibold mb-2 text-gray-800">Applicant Information</h2>
@@ -263,7 +275,7 @@
                     </div>
                 </section>
             </form>
-
+            
             <div id="navigation-controls" class="p-6 bg-gray-50 border-t border-gray-200 flex justify-between items-center">
                 <button type="button" id="prev-btn" class="px-6 py-2 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-100 transition-colors duration-200" style="display: none;">Previous</button>
                 <div id="spacer" style="display: block;"></div>
@@ -314,6 +326,7 @@
 
             // START: FIX for Next button not working and fields not validating
             nextBtn.addEventListener('click', (e) => {
+                e.preventDefault();
                 const currentSection = document.getElementById(`section-${currentStep}`);
                 const requiredInputs = currentSection.querySelectorAll('[required]');
                 let isValid = true;
@@ -337,7 +350,8 @@
             });
             // END: FIX for Next button not working and fields not validating
 
-            prevBtn.addEventListener('click', () => {
+            prevBtn.addEventListener('click', (e) => {
+                e.preventDefault();
                 if (currentStep > 1) {
                     currentStep--;
                     showSection(currentStep);
@@ -348,6 +362,7 @@
             });
             
             // START: FIX for dynamic content creation and bug fixes
+            // This function creates a new dynamic block for Household, Employment, etc.
             const createDynamicBlock = (containerId, titlePrefix, innerHTMLCallback) => {
                 const container = document.getElementById(containerId);
                 const count = container.querySelectorAll('.dynamic-item').length + 1;
@@ -360,6 +375,45 @@
                 `;
                 container.appendChild(newBlock);
             };
+
+            // START: FIX for Red X not working and NEXT button validation
+            // The Next button now correctly validates fields on the current page before moving on.
+            nextBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const currentSection = document.getElementById(`section-${currentStep}`);
+                const requiredInputs = currentSection.querySelectorAll('[required]');
+                let isValid = true;
+                
+                requiredInputs.forEach(input => {
+                    if (!input.checkValidity()) {
+                        isValid = false;
+                        input.reportValidity();
+                    }
+                });
+                
+                if (isValid) {
+                    if (currentStep < totalSteps) {
+                        currentStep++;
+                        showSection(currentStep);
+                        updateButtons();
+                        updateProgressBar();
+                        window.scrollTo(0, 0);
+                    }
+                }
+            });
+            // END: FIX for Next button not working and fields not validating
+            
+            // This event listener handles the "Previous" button click.
+            prevBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (currentStep > 1) {
+                    currentStep--;
+                    showSection(currentStep);
+                    updateButtons();
+                    updateProgressBar();
+                    window.scrollTo(0, 0);
+                }
+            });
 
             document.getElementById('add-member-btn').addEventListener('click', () => {
                 createDynamicBlock('household-members-container', 'Member', (count) => `
@@ -415,7 +469,6 @@
             showSection(1);
             updateButtons();
             updateProgressBar();
-            // END: FIX for dynamic content creation and bug fixes
         });
 
         function toggleExplain(radio, divId, showOnYes) {
