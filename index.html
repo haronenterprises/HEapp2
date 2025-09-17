@@ -6,12 +6,12 @@
     <title>Haron Enterprises, LLC - Residential Lease Application</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chosen Palette: Professional Neutral -->
-    <!-- Application Structure Plan: A multi-step wizard is used to break down the long application. A new, final 'summary' section is dynamically generated from form data, allowing the user to review and print the completed application. This structure provides a professional, end-to-end experience without needing a backend server. -->
-    <!-- Visualization & Content Choices: The goal is to collect and then format data. JavaScript captures all form inputs and generates a new HTML section that mimics the look of the original PDF document. This allows the user to immediately print or save the final document. The form relies on basic HTML for input and JavaScript for dynamic content generation. -->
+    <!-- Application Structure Plan: The multi-step wizard breaks down the long application. A single, final page submits all form data. This provides a user-friendly experience that is easy to fill out and submit. The structure is designed for maximum reliability with the FormSubmit service. -->
+    <!-- Visualization & Content Choices: Standard HTML inputs are used for data collection. A multi-step wizard and progress bar enhance the user experience. All data is sent to the provided email address via the FormSubmit service upon final submission. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
-            background-color: #f8f7f4; 
+            background-color: #f8f7f4;
             font-family: 'Inter', sans-serif;
         }
         @import url('https://rsms.me/inter/inter.css');
@@ -48,32 +48,20 @@
         .form-grid {
             @apply grid grid-cols-1 md:grid-cols-2 gap-6;
         }
-        /* START: FIX for Red X on dynamic items */
-        .dynamic-item .remove-btn { 
-            display: none; 
+        .dynamic-item .remove-btn {
+            display: none;
         }
         .dynamic-item:hover .remove-btn {
-            display: block; 
-        }
-        /* END: FIX for Red X on dynamic items */
-        @media print {
-            body { background: #fff; }
-            #navigation-controls, #progress-bar, #header, #footer { display: none !important; }
-            .printable-only { display: block !important; }
-            .print-button { display: none !important; }
-            .no-print { display: none !important; }
-        }
-        .printable-only {
-            display: none;
+            display: block;
         }
     </style>
 </head>
 <body class="antialiased text-gray-800">
 
-    <div class="container mx-auto px-4 py-8 md:py-12 no-print">
-        <header id="header" class="text-center mb-10">
+    <div class="container mx-auto px-4 py-8 md:py-12">
+        <header class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
-            <p class="mt-2 text-lg text-gray-600">Residential Lease Application 09 17 008 </p>
+            <p class="mt-2 text-lg text-gray-600">Residential Lease Application 09 17 011</p>
             <p class="text-sm text-gray-500">In Accordance with Seminole County NSP Rentals Program</p>
         </header>
 
@@ -103,7 +91,6 @@
 
             <form id="rental-application-form" action="https://formsubmit.co/myzdarew" method="POST" class="p-6 md:p-8">
                 <input type="hidden" name="_autoresponse" value="Thank you for submitting your application. A copy has been emailed to you.">
-                <div id="status-message" class="text-sm px-4 py-2 rounded-md mb-4 hidden" role="alert"></div>
                 
                 <section id="section-1" class="form-section active">
                     <h2 class="text-2xl font-semibold mb-2 text-gray-800">Applicant Information</h2>
@@ -211,7 +198,7 @@
                         </div>
                     </div>
                 </section>
-                
+
                 <section id="section-4" class="form-section">
                     <h2 class="text-2xl font-semibold mb-2 text-gray-800">Financial & Employment Information</h2>
                      <p class="text-gray-600 mb-6">This section helps us verify your household's financial stability and ability to meet rent obligations. Please provide details on employment, income, assets, and liabilities for all adult household members.</p>
@@ -276,12 +263,12 @@
                     </div>
                 </section>
             </form>
-            
+
             <div id="navigation-controls" class="p-6 bg-gray-50 border-t border-gray-200 flex justify-between items-center">
                 <button type="button" id="prev-btn" class="px-6 py-2 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-100 transition-colors duration-200" style="display: none;">Previous</button>
                 <div id="spacer" style="display: block;"></div>
                 <button type="button" id="next-btn" class="px-6 py-2 text-sm font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors duration-200">Next</button>
-                <button type="button" id="submit-btn" class="px-6 py-2 text-sm font-semibold text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors duration-200" style="display: none;">Submit Application</button>
+                <button type="submit" id="submit-btn" class="px-6 py-2 text-sm font-semibold text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors duration-200" style="display: none;">Submit Application</button>
             </div>
         </div>
     </div>
@@ -295,9 +282,7 @@
             const nextBtn = document.getElementById('next-btn');
             const submitBtn = document.getElementById('submit-btn');
             const spacer = document.getElementById('spacer');
-            const statusMessage = document.getElementById('status-message');
             
-            // This function updates the visibility of the "Previous," "Next," and "Submit" buttons based on the current step.
             const updateButtons = () => {
                 prevBtn.style.display = currentStep > 1 ? 'block' : 'none';
                 spacer.style.display = currentStep === 1 ? 'block' : 'none';
@@ -305,7 +290,6 @@
                 submitBtn.style.display = currentStep === totalSteps ? 'block' : 'none';
             };
 
-            // This function updates the progress bar at the top of the form.
             const updateProgressBar = () => {
                 for (let i = 1; i <= totalSteps; i++) {
                     const step = document.getElementById(`step-${i}`);
@@ -318,32 +302,18 @@
                         step.querySelector('div').classList.add('border-green-500', 'text-green-600');
                     } else if (i === currentStep) {
                         step.classList.add('step-item-active');
-                         step.querySelector('div').classList.add('border-blue-500', 'text-blue-600');
+                        step.querySelector('div').classList.add('border-blue-500', 'text-blue-600');
                     }
                 }
             };
             
-            // This function shows the correct section and hides all the others.
             const showSection = (step) => {
                 document.querySelectorAll('.form-section').forEach(section => section.classList.remove('active'));
                 document.getElementById(`section-${step}`).classList.add('active');
             };
-            
-            // This function displays a status message to the user.
-            const showStatus = (message, isError = false) => {
-                statusMessage.textContent = message;
-                statusMessage.classList.remove('hidden', 'bg-red-100', 'text-red-700', 'bg-green-100', 'text-green-700');
-                if (isError) {
-                    statusMessage.classList.add('bg-red-100', 'text-red-700');
-                } else {
-                    statusMessage.classList.add('bg-green-100', 'text-green-700');
-                }
-            };
-            
+
             // START: FIX for Next button not working and fields not validating
-            // The Next button now correctly validates fields on the current page before moving on.
             nextBtn.addEventListener('click', (e) => {
-                e.preventDefault();
                 const currentSection = document.getElementById(`section-${currentStep}`);
                 const requiredInputs = currentSection.querySelectorAll('[required]');
                 let isValid = true;
@@ -362,104 +332,22 @@
                         updateButtons();
                         updateProgressBar();
                         window.scrollTo(0, 0);
-                        statusMessage.classList.add('hidden');
                     }
-                } else {
-                    showStatus('Please fill out all required fields before proceeding.', true);
                 }
             });
             // END: FIX for Next button not working and fields not validating
-            
-            // This event listener handles the "Previous" button click.
-            prevBtn.addEventListener('click', (e) => {
-                e.preventDefault();
+
+            prevBtn.addEventListener('click', () => {
                 if (currentStep > 1) {
                     currentStep--;
                     showSection(currentStep);
                     updateButtons();
                     updateProgressBar();
                     window.scrollTo(0, 0);
-                    statusMessage.classList.add('hidden');
                 }
             });
             
-            // This event listener handles the "Submit" button click.
-            submitBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                
-                if (!form.checkValidity()) {
-                    showStatus('Please fill out all required fields before submitting.', true);
-                    form.reportValidity();
-                    return;
-                }
-                
-                const formData = new FormData(form);
-                const data = {};
-                
-                for (let [name, value] of formData.entries()) {
-                    if (name.includes('[]')) {
-                        const baseName = name.replace('[]', '');
-                        if (!data[baseName]) {
-                            data[baseName] = [];
-                        }
-                        data[baseName].push(value);
-                    } else {
-                        data[name] = value;
-                    }
-                }
-                
-                const newWindow = window.open('', '_blank');
-                
-                newWindow.document.write(`
-                    <html>
-                        <head>
-                            <title>Haron Enterprises, LLC - Application Summary</title>
-                            <script src="https://cdn.tailwindcss.com"></script>
-                            <style>
-                                @import url('https://rsms.me/inter/inter.css');
-                                body{font-family:'Inter',sans-serif;background-color:#f8f7f4;padding:2rem}.report-container{max-width:8.5in;margin:0 auto;background-color:white;border:1px solid #ccc;padding:1in;box-shadow:0 0 10px rgba(0,0,0,0.1)}.section-title{font-size:1.5rem;font-weight:bold;margin-bottom:1rem;border-bottom:2px solid #333;padding-bottom:.5rem}.field-label{font-weight:600;color:#4b5563}.field-value{margin-top:.25rem;margin-bottom:1rem;color:#1f2937}.print-button{position:fixed;top:1rem;right:1rem;background-color:#2563eb;color:white;padding:.75rem 1.5rem;border-radius:.5rem;font-weight:bold;cursor:pointer}@media print{.print-button{display:none}.report-container{border:none;box-shadow:none;padding:.5in}}</style>
-                        </head>
-                        <body>
-                            <div class="report-container">
-                                <button class="print-button" onclick="window.print()">Save to PDF</button>
-                                <div class="text-center mb-10">
-                                    <h1 class="text-2xl font-bold">Haron Enterprises, LLC</h1>
-                                    <h2 class="text-xl">Residential Lease Application</h2>
-                                    <p class="text-sm">In Accordance with Seminole County NSP Rentals Program</p>
-                                    <p class="text-xs mt-4">This document was generated on: ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}</p>
-                                </div>
-                                <hr class="my-6">
-                                <div id="report-content"></div>
-                            </div>
-                            <script>
-                                const reportContent=document.getElementById('report-content');
-                                const data = JSON.parse(atob('${btoa(JSON.stringify(data))}'));
-                                let currentSection = '';
-                                
-                                for (const key in data) {
-                                    if (key.includes('[]')) continue;
-                                    const parts = key.split(' ');
-                                    const sectionName = parts[0];
-                                    if (sectionName !== currentSection) {
-                                        if (currentSection) {
-                                            reportContent.innerHTML += '</div>';
-                                        }
-                                        reportContent.innerHTML += \`<div class="mt-8"><h3 class="section-title">${sectionName}</h3><div>\`;
-                                        currentSection = sectionName;
-                                    }
-                                    reportContent.innerHTML += \`<div class="mb-2"><span class="field-label">${key}:</span> <span class="field-value">${data[key]}</span></div>\`;
-                                }
-                                if (currentSection) {
-                                    reportContent.innerHTML += '</div>';
-                                }
-                            </script>
-                        </body>
-                    </html>
-                `);
-                newWindow.document.close();
-                
-            });
-            
+            // START: FIX for dynamic content creation and bug fixes
             const createDynamicBlock = (containerId, titlePrefix, innerHTMLCallback) => {
                 const container = document.getElementById(containerId);
                 const count = container.querySelectorAll('.dynamic-item').length + 1;
@@ -495,7 +383,7 @@
                     </div>`);
             };
             document.getElementById('add-employment-btn').addEventListener('click', createEmploymentBlock);
-            
+
             document.getElementById('add-income-btn').addEventListener('click', () => {
                 createDynamicBlock('income-container', 'Income Source', (count) => `
                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -527,6 +415,7 @@
             showSection(1);
             updateButtons();
             updateProgressBar();
+            // END: FIX for dynamic content creation and bug fixes
         });
 
         function toggleExplain(radio, divId, showOnYes) {
