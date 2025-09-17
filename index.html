@@ -1,26 +1,61 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haron Enterprises, LLC - Residential Lease Application</title>
+    <title>Haron Enterprises, LLC - Residential Lease Application 09 17 002</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chosen Palette: Professional Neutral -->
+    <!-- Application Structure Plan: A multi-step wizard is used to break down the long application. A new, final 'summary' section is dynamically generated from form data, allowing the user to review and print the completed application. This structure provides a professional, end-to-end experience without needing a backend server. -->
+    <!-- Visualization & Content Choices: The goal is to collect and then format data. JavaScript captures all form inputs and generates a new HTML section that mimics the look of the original PDF document. This allows the user to immediately print or save the final document. The form relies on basic HTML for input and JavaScript for dynamic content generation. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
             background-color: #f8f7f4; 
             font-family: 'Inter', sans-serif;
         }
         @import url('https://rsms.me/inter/inter.css');
-        .form-section { display: none; }
-        .form-section.active { display: block; }
-        .step-item-active { border-color: #3b82f6; color: #3b82f6; }
-        .step-item-complete { border-color: #16a34a; color: #16a34a; background-color: #f0fdf4; }
-        .input-field { @apply w-full px-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200; }
-        .label-text { @apply block text-sm font-medium text-gray-600 mb-1; }
-        .radio-group { @apply flex items-center gap-x-4; }
-        .radio-label { @apply flex items-center text-sm text-gray-700; }
-        .radio-input { @apply h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500; }
-        .form-grid { @apply grid grid-cols-1 md:grid-cols-2 gap-6; }
+        .form-section {
+            display: none;
+        }
+        .form-section.active {
+            display: block;
+        }
+        .step-item-active {
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+        .step-item-complete {
+            border-color: #16a34a;
+            color: #16a34a;
+            background-color: #f0fdf4;
+        }
+        .input-field {
+            @apply w-full px-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200;
+        }
+        .label-text {
+            @apply block text-sm font-medium text-gray-600 mb-1;
+        }
+        .radio-group {
+            @apply flex items-center gap-x-4;
+        }
+        .radio-label {
+            @apply flex items-center text-sm text-gray-700;
+        }
+        .radio-input {
+            @apply h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500;
+        }
+        .form-grid {
+            @apply grid grid-cols-1 md:grid-cols-2 gap-6;
+        }
+        /* START: FIX for Red X on dynamic items */
+        .dynamic-item .remove-btn { 
+            display: none; 
+        }
+        .dynamic-item:hover .remove-btn {
+            display: block; 
+        }
+        /* END: FIX for Red X on dynamic items */
         @media print {
             body { background: #fff; }
             #navigation-controls, #progress-bar, #header, #footer { display: none !important; }
@@ -28,9 +63,9 @@
             .print-button { display: none !important; }
             .no-print { display: none !important; }
         }
-        .printable-only { display: none; }
-        .dynamic-item .remove-btn { display: none; } /* Default state */
-        .dynamic-item:hover .remove-btn { display: block; } /* Show on hover */
+        .printable-only {
+            display: none;
+        }
     </style>
 </head>
 <body class="antialiased text-gray-800">
@@ -38,7 +73,7 @@
     <div class="container mx-auto px-4 py-8 md:py-12 no-print">
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
-            <p class="mt-2 text-lg text-gray-600">Residential Lease Application   09 17 001</p>
+            <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
             <p class="text-sm text-gray-500">In Accordance with Seminole County NSP Rentals Program</p>
         </header>
 
@@ -321,6 +356,8 @@
                 requiredInputs.forEach(input => {
                     if (!input.checkValidity()) {
                         isValid = false;
+                        // Added to display an error message for invalid inputs
+                        input.reportValidity();
                     }
                 });
                 
@@ -433,7 +470,7 @@
                 const newBlock = document.createElement('div');
                 newBlock.className = 'p-4 border border-gray-200 rounded-lg relative dynamic-item';
                 newBlock.innerHTML = `
-                    <button type="button" class="absolute top-2 right-2 text-red-500 hover:text-red-700" onclick="this.parentElement.remove()">&#x2715;</button>
+                    <button type="button" class="absolute top-2 right-2 text-red-500 hover:text-red-700 remove-btn" onclick="this.parentElement.remove()">&#x2715;</button>
                     <h4 class="font-semibold mb-2 text-sm">${titlePrefix} ${count}</h4>
                     ${innerHTMLCallback(count)}
                 `;
