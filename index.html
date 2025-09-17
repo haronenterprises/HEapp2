@@ -73,7 +73,7 @@
     <div class="container mx-auto px-4 py-8 md:py-12 no-print">
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
-            <p class="mt-2 text-lg text-gray-600">Residential Lease Application 09 17 006 </p>
+            <p class="mt-2 text-lg text-gray-600">Residential Lease Application 09 17 008 </p>
             <p class="text-sm text-gray-500">In Accordance with Seminole County NSP Rentals Program</p>
         </header>
 
@@ -341,6 +341,7 @@
             };
             
             // START: FIX for Next button not working and fields not validating
+            // The Next button now correctly validates fields on the current page before moving on.
             nextBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 const currentSection = document.getElementById(`section-${currentStep}`);
