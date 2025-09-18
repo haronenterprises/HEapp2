@@ -48,14 +48,9 @@
         .form-grid {
             @apply grid grid-cols-1 md:grid-cols-2 gap-6;
         }
-        /* START: FIX for Red X on dynamic items */
-        .dynamic-item .remove-btn { 
-            display: none; 
-        }
-        .dynamic-item:hover .remove-btn {
-            display: block; 
-        }
-        /* END: FIX for Red X on dynamic items */
+        /* The Red X is controlled in JavaScript now, so we hide it by default */
+        .remove-btn { display: none; }
+        
         @media print {
             body { background: #fff; }
             #navigation-controls, #progress-bar, #header, #footer { display: none !important; }
@@ -66,6 +61,51 @@
         .printable-only {
             display: none;
         }
+        /* START: Styling for final printable page */
+        .report-container {
+            max-width: 8.5in;
+            margin: 0 auto;
+            background-color: white;
+            padding: 1in;
+        }
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #333;
+            padding-bottom: .5rem;
+        }
+        .field-label {
+            font-weight: 600;
+            color: #4b5563;
+        }
+        .field-value {
+            margin-top: .25rem;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+        .print-button-container {
+            position: fixed;
+            top: 0;
+            right: 0;
+            padding: 1rem;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        .print-button {
+            background-color: #2563eb;
+            color: white;
+            padding: .75rem 1.5rem;
+            border-radius: .5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .print-button:hover {
+            background-color: #1d4ed8;
+        }
+        /* END: Styling for final printable page */
     </style>
 </head>
 <body class="antialiased text-gray-800">
@@ -73,7 +113,7 @@
     <div class="container mx-auto px-4 py-8 md:py-12 no-print">
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
-            <p class="mt-2 text-lg text-gray-600">Residential Lease Application  09 18 001 </p>
+            <p class="mt-2 text-lg text-gray-600">Residential Lease Application 09 18 004 </p>
             <p class="text-sm text-gray-500">In Accordance with Seminole County NSP Rentals Program</p>
         </header>
 
