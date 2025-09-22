@@ -67,6 +67,13 @@
         #submit-btn:hover {
             background-color: #b91c1c; /* red-700 */
         }
+        /* New styles for the printable summary */
+        .printable-field {
+            @apply p-2 border-b border-gray-400 text-sm;
+        }
+        .printable-label {
+            @apply block text-xs font-semibold text-gray-500 uppercase tracking-wide;
+        }
     </style>
 </head>
 <body class="antialiased text-gray-800">
@@ -75,7 +82,7 @@
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
-            <p class="text-sm text-gray-500">Eff date 09 22 25 v10.6</p>
+            <p class="text-sm text-gray-500">Eff date 09 22 25 v10.7</p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -261,10 +268,15 @@
                 
                 <!-- START: NEW PAGE 7 - Summary Section -->
                 <section id="section-7" class="form-section printable-only">
-                    <h2 class="text-2xl font-semibold mb-6">Application Summary</h2>
-                    <div id="summary-content"></div>
-                    <div class="mt-10 flex justify-center no-print">
-                        <button type="button" id="save-pdf-btn" class="px-8 py-3 text-sm font-semibold text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors duration-200">Save to PDF</button>
+                    <div class="summary-container p-6 bg-white rounded-lg shadow-lg">
+                        <div class="text-center mb-8">
+                            <h1 class="text-2xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
+                            <p class="mt-1 text-sm text-gray-600">Residential Lease Application Summary</p>
+                        </div>
+                        <div id="summary-content" class="space-y-4"></div>
+                        <div class="mt-8 text-center no-print">
+                            <button type="button" id="save-pdf-btn" class="px-8 py-3 text-sm font-semibold text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors duration-200">Save to PDF</button>
+                        </div>
                     </div>
                 </section>
                 <!-- END: NEW PAGE 7 - Summary Section -->
@@ -275,7 +287,6 @@
                 <button type="button" id="prev-btn" class="px-6 py-2 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-100 transition-colors duration-200" style="display: none;">Previous</button>
                 <div id="spacer" style="display: block;"></div>
                 <button type="button" id="next-btn" class="px-6 py-2 text-sm font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors duration-200">Next</button>
-                <!-- The submit button is now ONLY on page 7 -->
                 <button type="button" id="final-submit-btn" class="px-6 py-2 text-sm font-semibold text-white bg-red-600 rounded-md hover:bg-red-700 transition-colors duration-200" style="display: none;">Submit Application</button>
             </div>
         </div>
@@ -308,7 +319,7 @@
                     const stepNumber = index + 1;
                     const stepDiv = document.createElement('div');
                     stepDiv.id = `step-${stepNumber}`;
-                    stepDiv.className = 'step-item text-center w-1/7';
+                    stepDiv.className = 'step-item text-center flex-1';
 
                     const innerDiv = document.createElement('div');
                     innerDiv.className = 'border-b-4 pb-2 text-xs md:text-sm font-semibold';
@@ -336,7 +347,7 @@
             const generateAndShowSummary = () => {
                 const formData = new FormData(form);
                 const summaryDiv = document.getElementById('summary-content');
-                let summaryHTML = `<h2 class="text-2xl font-semibold mb-6">Application Summary</h2>`;
+                let summaryHTML = '';
                 const data = {};
 
                 for (const [key, value] of formData.entries()) {
@@ -345,45 +356,58 @@
                 }
 
                 // Personal Info
-                summaryHTML += `<h3 class="text-xl font-semibold mt-6 mb-2">Applicant Information</h3>`;
-                summaryHTML += `<p><strong>Full Name:</strong> ${data['Full Name'] || ''}</p>`;
-                summaryHTML += `<p><strong>Date of Birth:</strong> ${data['Date of Birth'] || ''}</p>`;
-                summaryHTML += `<p><strong>Phone:</strong> ${data['Phone'] || ''}</p>`;
-                summaryHTML += `<p><strong>Email:</strong> ${data['Email'] || ''}</p>`;
-                summaryHTML += `<p><strong>SSN:</strong> ${data['Social Security Number'] || ''}</p>`;
-                summaryHTML += `<p><strong>Driver's License #:</strong> ${data["Driver's License #"] || ''}</p>`;
-                summaryHTML += `<p><strong>Vehicle:</strong> ${data['Vehicle Make & Model'] || ''} - Tag: ${data['Vehicle Tag #'] || ''}</p>`;
-                summaryHTML += `<p><strong>Nearest Relative:</strong> ${data['Name of Nearest Relative'] || ''} - Phone: ${data['Phone of Nearest Relative'] || ''}</p>`;
-                summaryHTML += `<p><strong>Armed Services Member:</strong> ${data['Armed Services Member'] || 'No'}</p>`;
+                summaryHTML += `<h3 class="text-xl font-semibold mt-4 mb-2">Applicant Information</h3>`;
+                summaryHTML += `<div class="grid grid-cols-2 gap-4">
+                                    <div class="printable-field"><p class="printable-label">Full Name</p>${data['Full Name'] || ''}</div>
+                                    <div class="printable-field"><p class="printable-label">Date of Birth</p>${data['Date of Birth'] || ''}</div>
+                                    <div class="printable-field"><p class="printable-label">Phone</p>${data['Phone'] || ''}</div>
+                                    <div class="printable-field"><p class="printable-label">Email</p>${data['Email'] || ''}</div>
+                                    <div class="printable-field"><p class="printable-label">Social Security Number</p>${data['Social Security Number'] || ''}</div>
+                                    <div class="printable-field"><p class="printable-label">Driver's License #</p>${data["Driver's License #"] || ''}</div>
+                                    <div class="printable-field"><p class="printable-label">Vehicle Make & Model</p>${data['Vehicle Make & Model'] || ''}</div>
+                                    <div class="printable-field"><p class="printable-label">Vehicle Tag #</p>${data['Vehicle Tag #'] || ''}</div>
+                                </div>
+                                <div class="printable-field mt-4"><p class="printable-label">Name of Nearest Relative</p>${data['Name of Nearest Relative'] || ''}</div>
+                                <div class="printable-field mt-4"><p class="printable-label">Phone of Nearest Relative</p>${data['Phone of Nearest Relative'] || ''}</div>
+                                <div class="printable-field mt-4"><p class="printable-label">Armed Services Member</p>${data['Armed Services Member'] || 'No'}</div>
+                                `;
 
                 // Household Info
                 summaryHTML += `<h3 class="text-xl font-semibold mt-6 mb-2">Household Information</h3>`;
-                summaryHTML += `<p><strong>Address:</strong> ${data['Street Address'] || ''}, ${data['City'] || ''}, ${data['State'] || ''} ${data['Zip Code'] || ''}</p>`;
-                summaryHTML += `<p><strong>All household members are U.S. Citizens:</strong> ${data['US Citizens'] || 'No'}</p>`;
-                if (data['US Citizens Explanation']) summaryHTML += `<p class="ml-4"><strong>Explanation:</strong> ${data['US Citizens Explanation']}</p>`;
-                summaryHTML += `<p><strong>Any household member is a full-time student:</strong> ${data['Full-Time Student'] || 'No'}</p>`;
-                if (data['Student Explanation']) summaryHTML += `<p class="ml-4"><strong>Explanation:</strong> ${data['Student Explanation']}</p>`;
-                
+                summaryHTML += `<div class="grid grid-cols-2 gap-4">
+                                    <div class="printable-field"><p class="printable-label">Street Address</p>${data['Street Address'] || ''}</div>
+                                    <div class="printable-field"><p class="printable-label">City</p>${data['City'] || ''}</div>
+                                    <div class="printable-field"><p class="printable-label">State</p>${data['State'] || ''}</div>
+                                    <div class="printable-field"><p class="printable-label">Zip Code</p>${data['Zip Code'] || ''}</div>
+                                </div>
+                                <div class="printable-field mt-4"><p class="printable-label">All household members are U.S. Citizens?</p>${data['US Citizens'] || 'No'}</div>`;
+                if (data['US Citizens Explanation']) summaryHTML += `<div class="printable-field mt-2"><p class="printable-label">Explanation</p>${data['US Citizens Explanation']}</div>`;
+                summaryHTML += `<div class="printable-field mt-4"><p class="printable-label">Any household member (age 18+) a full-time student?</p>${data['Full-Time Student'] || 'No'}</div>`;
+                if (data['Student Explanation']) summaryHTML += `<div class="printable-field mt-2"><p class="printable-label">Explanation</p>${data['Student Explanation']}</div>`;
+
                 // Dynamic Household Members
                 for (let i = 1; data[`Household Member ${i} Full Name`]; i++) {
                     summaryHTML += `<h4 class="font-semibold mt-4">Household Member ${i}</h4>`;
-                    summaryHTML += `<p><strong>Full Name:</strong> ${data[`Household Member ${i} Full Name`]}</p>`;
-                    summaryHTML += `<p><strong>Age & DOB:</strong> ${data[`Household Member ${i} Age & DOB`]}</p>`;
-                    summaryHTML += `<p><strong>Relationship:</strong> ${data[`Household Member ${i} Relationship`]}</p>`;
+                    summaryHTML += `<div class="grid grid-cols-3 gap-4">
+                                        <div class="printable-field"><p class="printable-label">Full Name</p>${data[`Household Member ${i} Full Name`]}</div>
+                                        <div class="printable-field"><p class="printable-label">Age & DOB</p>${data[`Household Member ${i} Age & DOB`]}</div>
+                                        <div class="printable-field"><p class="printable-label">Relationship</p>${data[`Household Member ${i} Relationship`]}</div>
+                                    </div>`;
                 }
 
                 // Background History
                 summaryHTML += `<h3 class="text-xl font-semibold mt-6 mb-2">Background & History</h3>`;
-                summaryHTML += `<p><strong>Ever Evicted:</strong> ${data['Ever Evicted'] || 'No'}</p>`;
-                if (data['Evicted Explanation']) summaryHTML += `<p class="ml-4"><strong>Explanation:</strong> ${data['Evicted Explanation']}</p>`;
-                summaryHTML += `<p><strong>Ever Foreclosed:</strong> ${data['Ever Foreclosed'] || 'No'}</p>`;
-                if (data['Foreclosed Explanation']) summaryHTML += `<p class="ml-4"><strong>Explanation:</strong> ${data['Foreclosed Explanation']}</p>`;
-                summaryHTML += `<p><strong>Ever Filed for Bankruptcy:</strong> ${data['Ever Filed for Bankruptcy'] || 'No'}</p>`;
-                if (data['Bankruptcy Explanation']) summaryHTML += `<p class="ml-4"><strong>Explanation:</strong> ${data['Bankruptcy Explanation']}</p>`;
-                summaryHTML += `<p><strong>Ever Charged with a Felony:</strong> ${data['Ever Charged with a Felony'] || 'No'}</p>`;
-                if (data['Felony Explanation']) summaryHTML += `<p class="ml-4"><strong>Explanation:</strong> ${data['Felony Explanation']}</p>`;
-                summaryHTML += `<p><strong>Ever Broken a Lease:</strong> ${data['Ever Broken Lease'] || 'No'}</p>`;
-                if (data['Broken Lease Explanation']) summaryHTML += `<p class="ml-4"><strong>Explanation:</strong> ${data['Broken Lease Explanation']}</p>`;
+                
+                const historyQuestions = [
+                    'Ever Evicted', 'Ever Foreclosed', 'Ever Filed for Bankruptcy',
+                    'Ever Charged with a Felony', 'Ever Broken Lease'
+                ];
+                historyQuestions.forEach(question => {
+                    summaryHTML += `<div class="printable-field mt-4"><p class="printable-label">${question}</p>${data[question] || 'No'}</div>`;
+                    if (data[`${question} Explanation`]) {
+                        summaryHTML += `<div class="printable-field mt-2"><p class="printable-label">Explanation</p>${data[`${question} Explanation`]}</div>`;
+                    }
+                });
 
                 // Financial
                 summaryHTML += `<h3 class="text-xl font-semibold mt-6 mb-2">Financial Information</h3>`;
@@ -391,42 +415,50 @@
                 // Employment History
                 for (let i = 1; data[`Employment ${i} Employer Name`]; i++) {
                     summaryHTML += `<h4 class="font-semibold mt-4">Employment ${i}</h4>`;
-                    summaryHTML += `<p><strong>Employer:</strong> ${data[`Employment ${i} Employer Name`]}</p>`;
-                    summaryHTML += `<p><strong>Phone:</strong> ${data[`Employment ${i} Phone Number`]}</p>`;
-                    summaryHTML += `<p><strong>Address:</strong> ${data[`Employment ${i} Address`]}</p>`;
-                    summaryHTML += `<p><strong>Position:</strong> ${data[`Employment ${i} Position`]}</p>`;
-                    summaryHTML += `<p><strong>Pay Rate:</strong> ${data[`Employment ${i} Pay Rate`]}</p>`;
-                    summaryHTML += `<p><strong>Annual Income:</strong> ${data[`Employment ${i} Annual Income`]}</p>`;
-                    summaryHTML += `<p><strong>Time Employed:</strong> ${data[`Employment ${i} Time Employed`]}</p>`;
+                    summaryHTML += `<div class="grid grid-cols-2 gap-4">
+                                        <div class="printable-field"><p class="printable-label">Employer</p>${data[`Employment ${i} Employer Name`]}</div>
+                                        <div class="printable-field"><p class="printable-label">Phone</p>${data[`Employment ${i} Phone Number`]}</div>
+                                        <div class="printable-field col-span-2"><p class="printable-label">Address</p>${data[`Employment ${i} Address`]}</div>
+                                        <div class="printable-field"><p class="printable-label">Position</p>${data[`Employment ${i} Position`]}</div>
+                                        <div class="printable-field"><p class="printable-label">Pay Rate</p>${data[`Employment ${i} Pay Rate`]}</div>
+                                        <div class="printable-field"><p class="printable-label">Annual Income</p>${data[`Employment ${i} Annual Income`]}</div>
+                                        <div class="printable-field"><p class="printable-label">Time Employed</p>${data[`Employment ${i} Time Employed`]}</div>
+                                    </div>`;
                 }
                 
                 // Other Income Sources
                 for (let i = 1; data[`Income ${i} Type`]; i++) {
                     summaryHTML += `<h4 class="font-semibold mt-4">Other Income ${i}</h4>`;
-                    summaryHTML += `<p><strong>Type:</strong> ${data[`Income ${i} Type`]}</p>`;
-                    summaryHTML += `<p><strong>Gross Annual Amount:</strong> ${data[`Income ${i} Amount`]}</p>`;
+                    summaryHTML += `<div class="grid grid-cols-2 gap-4">
+                                        <div class="printable-field"><p class="printable-label">Type</p>${data[`Income ${i} Type`]}</div>
+                                        <div class="printable-field"><p class="printable-label">Gross Annual Amount</p>${data[`Income ${i} Amount`]}</div>
+                                    </div>`;
                 }
 
                 // Assets
                 for (let i = 1; data[`Asset ${i} Type`]; i++) {
                     summaryHTML += `<h4 class="font-semibold mt-4">Asset ${i}</h4>`;
-                    summaryHTML += `<p><strong>Type:</strong> ${data[`Asset ${i} Type`]}</p>`;
-                    summaryHTML += `<p><strong>Asset Value:</strong> ${data[`Asset ${i} Value`]}</p>`;
-                    summaryHTML += `<p><strong>Interest Rate:</strong> ${data[`Asset ${i} Interest Rate`]}</p>`;
+                    summaryHTML += `<div class="grid grid-cols-3 gap-4">
+                                        <div class="printable-field"><p class="printable-label">Type</p>${data[`Asset ${i} Type`]}</div>
+                                        <div class="printable-field"><p class="printable-label">Value</p>${data[`Asset ${i} Value`]}</div>
+                                        <div class="printable-field"><p class="printable-label">Interest Rate</p>${data[`Asset ${i} Interest Rate`]}</div>
+                                    </div>`;
                 }
 
                 // Liabilities
                 for (let i = 1; data[`Liability ${i} Type`]; i++) {
                     summaryHTML += `<h4 class="font-semibold mt-4">Liability ${i}</h4>`;
-                    summaryHTML += `<p><strong>Type:</strong> ${data[`Liability ${i} Type`]}</p>`;
-                    summaryHTML += `<p><strong>Creditor's Name:</strong> ${data[`Liability ${i} Creditor's Name`]}</p>`;
-                    summaryHTML += `<p><strong>Balance Owed:</strong> ${data[`Liability ${i} Balance Owed`]}</p>`;
-                    summaryHTML += `<p><strong>Monthly Payment:</strong> ${data[`Liability ${i} Monthly Payment`]}</p>`;
+                    summaryHTML += `<div class="grid grid-cols-4 gap-4">
+                                        <div class="printable-field"><p class="printable-label">Type</p>${data[`Liability ${i} Type`]}</div>
+                                        <div class="printable-field"><p class="printable-label">Creditor's Name</p>${data[`Liability ${i} Creditor's Name`]}</div>
+                                        <div class="printable-field"><p class="printable-label">Balance Owed</p>${data[`Liability ${i} Balance Owed`]}</div>
+                                        <div class="printable-field"><p class="printable-label">Monthly Payment</p>${data[`Liability ${i} Monthly Payment`]}</div>
+                                    </div>`;
                 }
                 
                 // Agreement
                 summaryHTML += `<h3 class="text-xl font-semibold mt-6 mb-2">Agreement</h3>`;
-                summaryHTML += `<p><strong>Agreement Checkbox:</strong> ${data['agreement'] ? 'Checked' : 'Not Checked'}</p>`;
+                summaryHTML += `<div class="printable-field mt-4"><p class="printable-label">Agreement Checkbox</p>${data['agreement'] ? 'Checked' : 'Not Checked'}</div>`;
 
                 summaryDiv.innerHTML = summaryHTML;
             };
@@ -452,8 +484,8 @@
                         updateProgressBar();
                         window.scrollTo(0, 0);
                     } else if (currentStep === 6 && document.getElementById('agree-terms').checked) {
-                        // FIX: This is the new logic for Page 6 to 7 transition
                         currentStep = 7;
+                        generateAndShowSummary();
                         showSection(currentStep);
                         updateButtons();
                         updateProgressBar();
@@ -463,9 +495,8 @@
             });
 
             finalSubmitBtn.addEventListener('click', () => {
-                // This is the new logic for Page 7 final submission
                 generateAndShowSummary();
-                const element = document.getElementById('summary-content');
+                const element = document.getElementById('summary-content').parentElement; // Get the whole summary container
                 const opt = {
                     margin: 0.5,
                     filename: 'Haron_Enterprises_Lease_Application.pdf',
