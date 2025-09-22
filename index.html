@@ -5,10 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Haron Enterprises, LLC - Residential Lease Application</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chosen Palette: Professional Neutral -->
-    <!-- Application Structure Plan: The multi-step wizard is used to break down the long application. A new, final 'summary' section is dynamically generated from form data, allowing the user to review and print the completed application. This structure provides a professional, end-to-end experience without needing a backend server. -->
-    <!-- Visualization & Content Choices: The goal is to collect and then format data. JavaScript captures all form inputs and generates a new HTML section that mimics the look of the original PDF document. This allows the user to immediately print or save the final document. The form relies on basic HTML for input and JavaScript for dynamic content generation. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" xintegrity="sha512-GsSsR48Gq4lXW9z9P4f5p09j5l4C8q5t+4i4+6h5g5+j4l9a6b5e5+p5+b5+g5+5w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
         body {
             background-color: #f8f7f4; 
@@ -48,14 +45,12 @@
         .form-grid {
             @apply grid grid-cols-1 md:grid-cols-2 gap-6;
         }
-        /* START: FIX for Red X on dynamic items */
         .dynamic-item .remove-btn { 
             display: none; 
         }
         .dynamic-item:hover .remove-btn {
             display: block; 
         }
-        /* END: FIX for Red X on dynamic items */
         @media print {
             body { background: #fff; }
             #navigation-controls, #progress-bar, #header, #footer { display: none !important; }
@@ -66,6 +61,14 @@
         .printable-only {
             display: none;
         }
+        /* START: FIX to make the submit button red */
+        #submit-btn {
+            background-color: #dc2626; /* red-600 */
+        }
+        #submit-btn:hover {
+            background-color: #b91c1c; /* red-700 */
+        }
+        /* END: FIX to make the submit button red */
     </style>
 </head>
 <body class="antialiased text-gray-800">
@@ -74,7 +77,7 @@
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
-            <p class="text-sm text-gray-500">Eff date 09 1822 25 v10.3  </p>
+            <p class="text-sm text-gray-500">Eff date 09 22 25 v10.4</p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
