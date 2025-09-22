@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Haron Enterprises, LLC - Residential Lease Application</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" xintegrity="sha512-GsSsR48Gq4lXW9z9P4f5p09j5l4C8q5t+4i4+6h5g5+j4l9a6b5e5+p5+b5+g5+5w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         body {
             background-color: #f8f7f4; 
@@ -61,14 +61,12 @@
         .printable-only {
             display: none;
         }
-        /* START: FIX to make the submit button red */
         #submit-btn {
             background-color: #dc2626; /* red-600 */
         }
         #submit-btn:hover {
             background-color: #b91c1c; /* red-700 */
         }
-        /* END: FIX to make the submit button red */
     </style>
 </head>
 <body class="antialiased text-gray-800">
@@ -77,7 +75,7 @@
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
-            <p class="text-sm text-gray-500">Eff date 09 22 25 v10.4</p>
+            <p class="text-sm text-gray-500">Eff date 09 22 25 v10.5</p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -151,7 +149,7 @@
                         <div>
                             <span class="label-text">Are ALL members of the household U.S. Citizens?</span>
                              <div class="radio-group mt-2">
-                                <label class="radio-label"><input type="radio" name="US Citizens" value="yes" class="radio-input mr-2" checked onclick="toggleExplain(this, 'citizen-explain', false)">Yes</label>
+                                <label class="radio-label"><input type="radio" name="US Citizens" value="yes" class="radio-input mr-2" onclick="toggleExplain(this, 'citizen-explain', false)">Yes</label>
                                 <label class="radio-label"><input type="radio" name="US Citizens" value="no" class="radio-input mr-2" onclick="toggleExplain(this, 'citizen-explain', false)">No</label>
                             </div>
                              <div id="citizen-explain" class="hidden mt-2"><label class="label-text">If no, please explain:</label><textarea class="input-field" name="US Citizens Explanation" rows="2"></textarea></div>
@@ -277,6 +275,16 @@
                         <p class="text-sm text-blue-700 mt-1">A non-refundable processing fee of $50.00 is required. This fee must be paid prior to an application being accepted or processed. Upon submitting, you will be contacted with payment instructions.</p>
                     </div>
                 </section>
+                
+                <!-- START: NEW PAGE 7 - Summary Section -->
+                <section id="section-7" class="form-section printable-only">
+                    <div id="summary-content"></div>
+                    <div class="mt-10 flex justify-center no-print">
+                        <button type="button" id="save-pdf-btn" class="px-8 py-3 text-sm font-semibold text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors duration-200">Save to PDF</button>
+                    </div>
+                </section>
+                <!-- END: NEW PAGE 7 - Summary Section -->
+
             </form>
             
             <div id="navigation-controls" class="p-6 bg-gray-50 border-t border-gray-200 flex justify-between items-center">
@@ -291,43 +299,158 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             let currentStep = 1;
-            const totalSteps = 6;
+            const totalSteps = 7; // Updated to 7 steps
             const form = document.getElementById('rental-application-form');
             const prevBtn = document.getElementById('prev-btn');
             const nextBtn = document.getElementById('next-btn');
             const submitBtn = document.getElementById('submit-btn');
             const spacer = document.getElementById('spacer');
-            
+            const savePdfBtn = document.getElementById('save-pdf-btn');
+
             const updateButtons = () => {
                 prevBtn.style.display = currentStep > 1 ? 'block' : 'none';
                 spacer.style.display = currentStep === 1 ? 'block' : 'none';
-                nextBtn.style.display = currentStep < totalSteps ? 'block' : 'none';
-                submitBtn.style.display = currentStep === totalSteps ? 'block' : 'none';
+                nextBtn.style.display = (currentStep < 6 && currentStep !== totalSteps) ? 'block' : 'none';
+                submitBtn.style.display = currentStep === 6 ? 'block' : 'none';
             };
 
             const updateProgressBar = () => {
-                for (let i = 1; i <= totalSteps; i++) {
-                    const step = document.getElementById(`step-${i}`);
-                    step.classList.remove('step-item-active', 'step-item-complete');
-                    step.querySelector('div').classList.remove('border-blue-500', 'text-blue-600', 'border-green-500', 'text-green-600', 'bg-green-50');
-                    step.querySelector('div').classList.add('border-gray-200', 'text-gray-400');
+                const stepItems = document.querySelectorAll('.step-item');
+                // Remove existing step items for a fresh render
+                stepItems.forEach(step => step.remove());
 
-                    if (i < currentStep) {
-                        step.classList.add('step-item-complete');
-                        step.querySelector('div').classList.add('border-green-500', 'text-green-600');
-                    } else if (i === currentStep) {
-                        step.classList.add('step-item-active');
-                        step.querySelector('div').classList.add('border-blue-500', 'text-blue-600');
+                const newSteps = ['Personal', 'Household', 'History', 'Financial', 'Documents', 'Agreement', 'Summary'];
+                const progressBarContainer = document.getElementById('progress-bar').querySelector('.flex');
+
+                newSteps.forEach((label, index) => {
+                    const stepNumber = index + 1;
+                    const stepDiv = document.createElement('div');
+                    stepDiv.id = `step-${stepNumber}`;
+                    stepDiv.className = 'step-item text-center flex-1';
+
+                    const innerDiv = document.createElement('div');
+                    innerDiv.className = 'border-b-4 pb-2 text-xs md:text-sm font-semibold';
+                    innerDiv.textContent = label;
+                    stepDiv.appendChild(innerDiv);
+
+                    if (stepNumber < currentStep) {
+                        stepDiv.classList.add('step-item-complete');
+                        innerDiv.classList.add('border-green-500', 'text-green-600');
+                    } else if (stepNumber === currentStep) {
+                        stepDiv.classList.add('step-item-active');
+                        innerDiv.classList.add('border-blue-500', 'text-blue-600');
+                    } else {
+                        innerDiv.classList.add('border-gray-200', 'text-gray-400');
                     }
-                }
+                    progressBarContainer.appendChild(stepDiv);
+                });
             };
-            
+
             const showSection = (step) => {
                 document.querySelectorAll('.form-section').forEach(section => section.classList.remove('active'));
                 document.getElementById(`section-${step}`).classList.add('active');
             };
 
-            // START: FIX for Next button not working and fields not validating
+            const generateAndShowSummary = () => {
+                const formData = new FormData(form);
+                const summaryDiv = document.getElementById('summary-content');
+                let summaryHTML = `<h2 class="text-2xl font-semibold mb-6">Application Summary</h2>`;
+
+                const data = {};
+                for (const [key, value] of formData.entries()) {
+                    if (key.startsWith('file_')) continue;
+                    data[key] = value;
+                }
+
+                // Personal Info
+                summaryHTML += `<h3 class="text-xl font-semibold mt-6 mb-2">Applicant Information</h3>`;
+                summaryHTML += `<p><strong>Full Name:</strong> ${data['Full Name'] || ''}</p>`;
+                summaryHTML += `<p><strong>Date of Birth:</strong> ${data['Date of Birth'] || ''}</p>`;
+                summaryHTML += `<p><strong>Phone:</strong> ${data['Phone'] || ''}</p>`;
+                summaryHTML += `<p><strong>Email:</strong> ${data['Email'] || ''}</p>`;
+                summaryHTML += `<p><strong>SSN:</strong> ${data['Social Security Number'] || ''}</p>`;
+                summaryHTML += `<p><strong>Driver's License #:</strong> ${data["Driver's License #"] || ''}</p>`;
+                summaryHTML += `<p><strong>Vehicle:</strong> ${data['Vehicle Make & Model'] || ''} - Tag: ${data['Vehicle Tag #'] || ''}</p>`;
+                summaryHTML += `<p><strong>Nearest Relative:</strong> ${data['Name of Nearest Relative'] || ''} - Phone: ${data['Phone of Nearest Relative'] || ''}</p>`;
+                summaryHTML += `<p><strong>Armed Services Member:</strong> ${data['Armed Services Member'] || 'No'}</p>`;
+
+                // Household Info
+                summaryHTML += `<h3 class="text-xl font-semibold mt-6 mb-2">Household Information</h3>`;
+                summaryHTML += `<p><strong>Address:</strong> ${data['Street Address'] || ''}, ${data['City'] || ''}, ${data['State'] || ''} ${data['Zip Code'] || ''}</p>`;
+                summaryHTML += `<p><strong>All household members are U.S. Citizens:</strong> ${data['US Citizens'] || 'No'}</p>`;
+                if (data['US Citizens Explanation']) summaryHTML += `<p class="ml-4"><strong>Explanation:</strong> ${data['US Citizens Explanation']}</p>`;
+                summaryHTML += `<p><strong>Any household member is a full-time student:</strong> ${data['Full-Time Student'] || 'No'}</p>`;
+                if (data['Student Explanation']) summaryHTML += `<p class="ml-4"><strong>Explanation:</strong> ${data['Student Explanation']}</p>`;
+                
+                // Dynamic Household Members
+                for (let i = 1; data[`Household Member ${i} Full Name`]; i++) {
+                    summaryHTML += `<h4 class="font-semibold mt-4">Household Member ${i}</h4>`;
+                    summaryHTML += `<p><strong>Full Name:</strong> ${data[`Household Member ${i} Full Name`]}</p>`;
+                    summaryHTML += `<p><strong>Age & DOB:</strong> ${data[`Household Member ${i} Age & DOB`]}</p>`;
+                    summaryHTML += `<p><strong>Relationship:</strong> ${data[`Household Member ${i} Relationship`]}</p>`;
+                }
+
+                // Background History
+                summaryHTML += `<h3 class="text-xl font-semibold mt-6 mb-2">Background & History</h3>`;
+                summaryHTML += `<p><strong>Ever Evicted:</strong> ${data['Ever Evicted'] || 'No'}</p>`;
+                if (data['Evicted Explanation']) summaryHTML += `<p class="ml-4"><strong>Explanation:</strong> ${data['Evicted Explanation']}</p>`;
+                summaryHTML += `<p><strong>Ever Foreclosed:</strong> ${data['Ever Foreclosed'] || 'No'}</p>`;
+                if (data['Foreclosed Explanation']) summaryHTML += `<p class="ml-4"><strong>Explanation:</strong> ${data['Foreclosed Explanation']}</p>`;
+                summaryHTML += `<p><strong>Ever Filed for Bankruptcy:</strong> ${data['Ever Filed for Bankruptcy'] || 'No'}</p>`;
+                if (data['Bankruptcy Explanation']) summaryHTML += `<p class="ml-4"><strong>Explanation:</strong> ${data['Bankruptcy Explanation']}</p>`;
+                summaryHTML += `<p><strong>Ever Charged with a Felony:</strong> ${data['Ever Charged with a Felony'] || 'No'}</p>`;
+                if (data['Felony Explanation']) summaryHTML += `<p class="ml-4"><strong>Explanation:</strong> ${data['Felony Explanation']}</p>`;
+                summaryHTML += `<p><strong>Ever Broken a Lease:</strong> ${data['Ever Broken Lease'] || 'No'}</p>`;
+                if (data['Broken Lease Explanation']) summaryHTML += `<p class="ml-4"><strong>Explanation:</strong> ${data['Broken Lease Explanation']}</p>`;
+
+                // Financial
+                summaryHTML += `<h3 class="text-xl font-semibold mt-6 mb-2">Financial Information</h3>`;
+                
+                // Employment History
+                for (let i = 1; data[`Employment ${i} Employer Name`]; i++) {
+                    summaryHTML += `<h4 class="font-semibold mt-4">Employment ${i}</h4>`;
+                    summaryHTML += `<p><strong>Employer:</strong> ${data[`Employment ${i} Employer Name`]}</p>`;
+                    summaryHTML += `<p><strong>Phone:</strong> ${data[`Employment ${i} Phone Number`]}</p>`;
+                    summaryHTML += `<p><strong>Address:</strong> ${data[`Employment ${i} Address`]}</p>`;
+                    summaryHTML += `<p><strong>Position:</strong> ${data[`Employment ${i} Position`]}</p>`;
+                    summaryHTML += `<p><strong>Pay Rate:</strong> ${data[`Employment ${i} Pay Rate`]}</p>`;
+                    summaryHTML += `<p><strong>Annual Income:</strong> ${data[`Employment ${i} Annual Income`]}</p>`;
+                    summaryHTML += `<p><strong>Time Employed:</strong> ${data[`Employment ${i} Time Employed`]}</p>`;
+                }
+                
+                // Other Income Sources
+                for (let i = 1; data[`Income ${i} Type`]; i++) {
+                    summaryHTML += `<h4 class="font-semibold mt-4">Other Income ${i}</h4>`;
+                    summaryHTML += `<p><strong>Type:</strong> ${data[`Income ${i} Type`]}</p>`;
+                    summaryHTML += `<p><strong>Amount:</strong> ${data[`Income ${i} Amount`]}</p>`;
+                }
+
+                // Assets
+                for (let i = 1; data[`Asset ${i} Type`]; i++) {
+                    summaryHTML += `<h4 class="font-semibold mt-4">Asset ${i}</h4>`;
+                    summaryHTML += `<p><strong>Type:</strong> ${data[`Asset ${i} Type`]}</p>`;
+                    summaryHTML += `<p><strong>Value:</strong> ${data[`Asset ${i} Value`]}</p>`;
+                    summaryHTML += `<p><strong>Interest Rate:</strong> ${data[`Asset ${i} Interest Rate`]}</p>`;
+                }
+
+                // Liabilities
+                for (let i = 1; data[`Liability ${i} Type`]; i++) {
+                    summaryHTML += `<h4 class="font-semibold mt-4">Liability ${i}</h4>`;
+                    summaryHTML += `<p><strong>Type:</strong> ${data[`Liability ${i} Type`]}</p>`;
+                    summaryHTML += `<p><strong>Creditor's Name:</strong> ${data[`Liability ${i} Creditor's Name`]}</p>`;
+                    summaryHTML += `<p><strong>Balance:</strong> ${data[`Liability ${i} Balance Owed`]}</p>`;
+                    summaryHTML += `<p><strong>Monthly Payment:</strong> ${data[`Liability ${i} Monthly Payment`]}</p>`;
+                }
+                
+                // Agreement
+                summaryHTML += `<h3 class="text-xl font-semibold mt-6 mb-2">Agreement</h3>`;
+                summaryHTML += `<p><strong>Agreement Checkbox:</strong> ${data['agreement'] ? 'Checked' : 'Not Checked'}</p>`;
+
+
+                summaryDiv.innerHTML = summaryHTML;
+            };
+
+            // START: NEW FIX for Next and Submit button logic on final pages
             nextBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 const currentSection = document.getElementById(`section-${currentStep}`);
@@ -342,8 +465,16 @@
                 });
                 
                 if (isValid) {
-                    if (currentStep < totalSteps) {
+                    if (currentStep < 6) {
                         currentStep++;
+                        showSection(currentStep);
+                        updateButtons();
+                        updateProgressBar();
+                        window.scrollTo(0, 0);
+                    } else if (currentStep === 6 && document.getElementById('agree-terms').checked) {
+                         // This is the new logic for Page 6 to 7 transition
+                        currentStep++;
+                        generateAndShowSummary();
                         showSection(currentStep);
                         updateButtons();
                         updateProgressBar();
@@ -351,7 +482,20 @@
                     }
                 }
             });
-            // END: FIX for Next button not working and fields not validating
+
+            // This is the new function to handle the final PDF generation
+            savePdfBtn.addEventListener('click', () => {
+                const element = document.getElementById('summary-content');
+                const opt = {
+                    margin: 0.5,
+                    filename: 'Haron_Enterprises_Lease_Application.pdf',
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2 },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
+                html2pdf().from(element).set(opt).save();
+            });
+            // END: NEW FIX for Next and Submit button logic on final pages
 
             prevBtn.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -363,9 +507,7 @@
                     window.scrollTo(0, 0);
                 }
             });
-            
-            // START: FIX for dynamic content creation and bug fixes
-            // This function creates a new dynamic block for Household, Employment, etc.
+
             const createDynamicBlock = (containerId, titlePrefix, innerHTMLCallback) => {
                 const container = document.getElementById(containerId);
                 const count = container.querySelectorAll('.dynamic-item').length + 1;
@@ -378,45 +520,6 @@
                 `;
                 container.appendChild(newBlock);
             };
-
-            // START: FIX for Red X not working and NEXT button validation
-            // The Next button now correctly validates fields on the current page before moving on.
-            nextBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const currentSection = document.getElementById(`section-${currentStep}`);
-                const requiredInputs = currentSection.querySelectorAll('[required]');
-                let isValid = true;
-                
-                requiredInputs.forEach(input => {
-                    if (!input.checkValidity()) {
-                        isValid = false;
-                        input.reportValidity();
-                    }
-                });
-                
-                if (isValid) {
-                    if (currentStep < totalSteps) {
-                        currentStep++;
-                        showSection(currentStep);
-                        updateButtons();
-                        updateProgressBar();
-                        window.scrollTo(0, 0);
-                    }
-                }
-            });
-            // END: FIX for Next button not working and fields not validating
-            
-            // This event listener handles the "Previous" button click.
-            prevBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                if (currentStep > 1) {
-                    currentStep--;
-                    showSection(currentStep);
-                    updateButtons();
-                    updateProgressBar();
-                    window.scrollTo(0, 0);
-                }
-            });
 
             document.getElementById('add-member-btn').addEventListener('click', () => {
                 createDynamicBlock('household-members-container', 'Member', (count) => `
