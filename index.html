@@ -75,30 +75,13 @@
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
-            <p class="text-sm text-gray-500">Eff date 09 22 25 v10.5</p>
+            <p class="text-sm text-gray-500">Eff date 09 22 25 v10.6</p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
             <div id="progress-bar" class="p-6 border-b border-gray-200">
                 <div class="flex items-center justify-between">
-                    <div id="step-1" class="step-item step-item-active text-center w-1/6">
-                        <div class="border-b-4 pb-2 text-xs md:text-sm font-semibold">Personal</div>
-                    </div>
-                     <div id="step-2" class="step-item text-center w-1/6">
-                        <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Household</div>
-                    </div>
-                     <div id="step-3" class="step-item text-center w-1/6">
-                        <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">History</div>
-                    </div>
-                     <div id="step-4" class="step-item text-center w-1/6">
-                        <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Financial</div>
-                    </div>
-                     <div id="step-5" class="step-item text-center w-1/6">
-                        <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Documents</div>
-                    </div>
-                    <div id="step-6" class="step-item text-center w-1/6">
-                        <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Submit</div>
-                    </div>
+                    <!-- Progress steps will be dynamically added by JavaScript -->
                 </div>
             </div>
 
@@ -278,6 +261,7 @@
                 
                 <!-- START: NEW PAGE 7 - Summary Section -->
                 <section id="section-7" class="form-section printable-only">
+                    <h2 class="text-2xl font-semibold mb-6">Application Summary</h2>
                     <div id="summary-content"></div>
                     <div class="mt-10 flex justify-center no-print">
                         <button type="button" id="save-pdf-btn" class="px-8 py-3 text-sm font-semibold text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors duration-200">Save to PDF</button>
@@ -291,7 +275,8 @@
                 <button type="button" id="prev-btn" class="px-6 py-2 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-100 transition-colors duration-200" style="display: none;">Previous</button>
                 <div id="spacer" style="display: block;"></div>
                 <button type="button" id="next-btn" class="px-6 py-2 text-sm font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors duration-200">Next</button>
-                <button type="submit" id="submit-btn" class="px-6 py-2 text-sm font-semibold text-white bg-red-600 rounded-md hover:bg-red-700 transition-colors duration-200" style="display: none;">Submit Application</button>
+                <!-- The submit button is now ONLY on page 7 -->
+                <button type="button" id="final-submit-btn" class="px-6 py-2 text-sm font-semibold text-white bg-red-600 rounded-md hover:bg-red-700 transition-colors duration-200" style="display: none;">Submit Application</button>
             </div>
         </div>
     </div>
@@ -299,34 +284,31 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             let currentStep = 1;
-            const totalSteps = 7; // Updated to 7 steps
+            const totalSteps = 7;
             const form = document.getElementById('rental-application-form');
             const prevBtn = document.getElementById('prev-btn');
             const nextBtn = document.getElementById('next-btn');
-            const submitBtn = document.getElementById('submit-btn');
+            const finalSubmitBtn = document.getElementById('final-submit-btn');
             const spacer = document.getElementById('spacer');
             const savePdfBtn = document.getElementById('save-pdf-btn');
 
             const updateButtons = () => {
                 prevBtn.style.display = currentStep > 1 ? 'block' : 'none';
                 spacer.style.display = currentStep === 1 ? 'block' : 'none';
-                nextBtn.style.display = (currentStep < 6 && currentStep !== totalSteps) ? 'block' : 'none';
-                submitBtn.style.display = currentStep === 6 ? 'block' : 'none';
+                nextBtn.style.display = currentStep < totalSteps ? 'block' : 'none';
+                finalSubmitBtn.style.display = currentStep === totalSteps ? 'block' : 'none';
             };
 
             const updateProgressBar = () => {
-                const stepItems = document.querySelectorAll('.step-item');
-                // Remove existing step items for a fresh render
-                stepItems.forEach(step => step.remove());
-
+                const stepItems = document.getElementById('progress-bar').querySelector('.flex');
+                stepItems.innerHTML = '';
                 const newSteps = ['Personal', 'Household', 'History', 'Financial', 'Documents', 'Agreement', 'Summary'];
-                const progressBarContainer = document.getElementById('progress-bar').querySelector('.flex');
-
+                
                 newSteps.forEach((label, index) => {
                     const stepNumber = index + 1;
                     const stepDiv = document.createElement('div');
                     stepDiv.id = `step-${stepNumber}`;
-                    stepDiv.className = 'step-item text-center flex-1';
+                    stepDiv.className = 'step-item text-center w-1/7';
 
                     const innerDiv = document.createElement('div');
                     innerDiv.className = 'border-b-4 pb-2 text-xs md:text-sm font-semibold';
@@ -342,7 +324,7 @@
                     } else {
                         innerDiv.classList.add('border-gray-200', 'text-gray-400');
                     }
-                    progressBarContainer.appendChild(stepDiv);
+                    stepItems.appendChild(stepDiv);
                 });
             };
 
@@ -355,8 +337,8 @@
                 const formData = new FormData(form);
                 const summaryDiv = document.getElementById('summary-content');
                 let summaryHTML = `<h2 class="text-2xl font-semibold mb-6">Application Summary</h2>`;
-
                 const data = {};
+
                 for (const [key, value] of formData.entries()) {
                     if (key.startsWith('file_')) continue;
                     data[key] = value;
@@ -422,14 +404,14 @@
                 for (let i = 1; data[`Income ${i} Type`]; i++) {
                     summaryHTML += `<h4 class="font-semibold mt-4">Other Income ${i}</h4>`;
                     summaryHTML += `<p><strong>Type:</strong> ${data[`Income ${i} Type`]}</p>`;
-                    summaryHTML += `<p><strong>Amount:</strong> ${data[`Income ${i} Amount`]}</p>`;
+                    summaryHTML += `<p><strong>Gross Annual Amount:</strong> ${data[`Income ${i} Amount`]}</p>`;
                 }
 
                 // Assets
                 for (let i = 1; data[`Asset ${i} Type`]; i++) {
                     summaryHTML += `<h4 class="font-semibold mt-4">Asset ${i}</h4>`;
                     summaryHTML += `<p><strong>Type:</strong> ${data[`Asset ${i} Type`]}</p>`;
-                    summaryHTML += `<p><strong>Value:</strong> ${data[`Asset ${i} Value`]}</p>`;
+                    summaryHTML += `<p><strong>Asset Value:</strong> ${data[`Asset ${i} Value`]}</p>`;
                     summaryHTML += `<p><strong>Interest Rate:</strong> ${data[`Asset ${i} Interest Rate`]}</p>`;
                 }
 
@@ -438,7 +420,7 @@
                     summaryHTML += `<h4 class="font-semibold mt-4">Liability ${i}</h4>`;
                     summaryHTML += `<p><strong>Type:</strong> ${data[`Liability ${i} Type`]}</p>`;
                     summaryHTML += `<p><strong>Creditor's Name:</strong> ${data[`Liability ${i} Creditor's Name`]}</p>`;
-                    summaryHTML += `<p><strong>Balance:</strong> ${data[`Liability ${i} Balance Owed`]}</p>`;
+                    summaryHTML += `<p><strong>Balance Owed:</strong> ${data[`Liability ${i} Balance Owed`]}</p>`;
                     summaryHTML += `<p><strong>Monthly Payment:</strong> ${data[`Liability ${i} Monthly Payment`]}</p>`;
                 }
                 
@@ -446,11 +428,9 @@
                 summaryHTML += `<h3 class="text-xl font-semibold mt-6 mb-2">Agreement</h3>`;
                 summaryHTML += `<p><strong>Agreement Checkbox:</strong> ${data['agreement'] ? 'Checked' : 'Not Checked'}</p>`;
 
-
                 summaryDiv.innerHTML = summaryHTML;
             };
 
-            // START: NEW FIX for Next and Submit button logic on final pages
             nextBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 const currentSection = document.getElementById(`section-${currentStep}`);
@@ -472,9 +452,8 @@
                         updateProgressBar();
                         window.scrollTo(0, 0);
                     } else if (currentStep === 6 && document.getElementById('agree-terms').checked) {
-                         // This is the new logic for Page 6 to 7 transition
-                        currentStep++;
-                        generateAndShowSummary();
+                        // FIX: This is the new logic for Page 6 to 7 transition
+                        currentStep = 7;
                         showSection(currentStep);
                         updateButtons();
                         updateProgressBar();
@@ -483,8 +462,9 @@
                 }
             });
 
-            // This is the new function to handle the final PDF generation
-            savePdfBtn.addEventListener('click', () => {
+            finalSubmitBtn.addEventListener('click', () => {
+                // This is the new logic for Page 7 final submission
+                generateAndShowSummary();
                 const element = document.getElementById('summary-content');
                 const opt = {
                     margin: 0.5,
@@ -494,8 +474,11 @@
                     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
                 };
                 html2pdf().from(element).set(opt).save();
+                // Hide controls after submission
+                document.getElementById('navigation-controls').style.display = 'none';
+                document.getElementById('progress-bar').style.display = 'none';
+                document.getElementById('header').style.display = 'none';
             });
-            // END: NEW FIX for Next and Submit button logic on final pages
 
             prevBtn.addEventListener('click', (e) => {
                 e.preventDefault();
