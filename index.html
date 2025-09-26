@@ -98,7 +98,7 @@
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
-            <p class="text-sm text-gray-500">Eff date 09 26 25 v13.1 new code added to back   </p>
+            <p class="text-sm text-gray-500">Eff date 09 26 25 v13.2 script to script replace   </p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -304,226 +304,46 @@
     </div>
 
     <script>
+       <script>
         document.addEventListener('DOMContentLoaded', () => {
             let currentStep = 1;
-            const totalSteps = 7;
+            const totalSteps = 6;
             const form = document.getElementById('rental-application-form');
             const prevBtn = document.getElementById('prev-btn');
             const nextBtn = document.getElementById('next-btn');
-            const finalSubmitBtn = document.getElementById('final-submit-btn');
+            const submitBtn = document.getElementById('submit-btn');
             const spacer = document.getElementById('spacer');
-
+            
             const updateButtons = () => {
                 prevBtn.style.display = currentStep > 1 ? 'block' : 'none';
                 spacer.style.display = currentStep === 1 ? 'block' : 'none';
                 nextBtn.style.display = currentStep < totalSteps ? 'block' : 'none';
-                finalSubmitBtn.style.display = currentStep === totalSteps ? 'block' : 'none';
+                submitBtn.style.display = currentStep === totalSteps ? 'block' : 'none';
             };
 
             const updateProgressBar = () => {
-                const stepItems = document.getElementById('progress-bar').querySelector('.flex');
-                stepItems.innerHTML = '';
-                const newSteps = ['Personal', 'Household', 'History', 'Financial', 'Documents', 'Agreement', 'Final'];
-                
-                newSteps.forEach((label, index) => {
-                    const stepNumber = index + 1;
-                    const stepDiv = document.createElement('div');
-                    stepDiv.id = `step-${stepNumber}`;
-                    stepDiv.className = 'step-item text-center flex-1';
+                for (let i = 1; i <= totalSteps; i++) {
+                    const step = document.getElementById(`step-${i}`);
+                    step.classList.remove('step-item-active', 'step-item-complete');
+                    step.querySelector('div').classList.remove('border-blue-500', 'text-blue-600', 'border-green-500', 'text-green-600');
+                    step.querySelector('div').classList.add('border-gray-200', 'text-gray-400');
 
-                    const innerDiv = document.createElement('div');
-                    innerDiv.className = 'border-b-4 pb-2 text-xs md:text-sm font-semibold';
-                    innerDiv.textContent = label;
-                    stepDiv.appendChild(innerDiv);
-
-                    if (stepNumber < currentStep) {
-                        stepDiv.classList.add('step-item-complete');
-                        innerDiv.classList.add('border-green-500', 'text-green-600');
-                    } else if (stepNumber === currentStep) {
-                        stepDiv.classList.add('step-item-active');
-                        innerDiv.classList.add('border-blue-500', 'text-blue-600');
-                    } else {
-                        innerDiv.classList.add('border-gray-200', 'text-gray-400');
+                    if (i < currentStep) {
+                        step.classList.add('step-item-complete');
+                        step.querySelector('div').classList.add('border-green-500', 'text-green-600');
+                    } else if (i === currentStep) {
+                        step.classList.add('step-item-active');
+                        step.querySelector('div').classList.add('border-blue-500', 'text-blue-600');
                     }
-                    stepItems.appendChild(stepDiv);
-                });
+                }
             };
-
+            
             const showSection = (step) => {
                 document.querySelectorAll('.form-section').forEach(section => section.classList.remove('active'));
                 document.getElementById(`section-${step}`).classList.add('active');
             };
 
-            const generatePrintableDocument = () => {
-                const formData = new FormData(form);
-                const printableContainer = document.getElementById('printable-application');
-                let printableHTML = '';
-                const data = {};
-
-                for (const [key, value] of formData.entries()) {
-                    if (key.startsWith('file_')) continue;
-                    data[key] = value;
-                }
-
-                // Page 1
-                printableHTML += `<div class="printable-page">
-                    <h1 class="text-xl font-bold text-center">HARON ENTERPRISES, LLC</h1>
-                    <p class="text-center text-sm">RESIDENTIAL LEASE APPLICATION</p>
-                    <p class="text-right text-xs mt-4">Eff Date 09 18 25 v10.7</p>
-
-                    <h2 class="text-md font-bold mt-8 mb-4">I. PERSONAL</h2>
-                    <div class="grid grid-cols-2 gap-x-8 gap-y-4">
-                        <div class="printable-field"><p class="printable-label">Full Name</p>${data['Full Name'] || ''}</div>
-                        <div class="printable-field"><p class="printable-label">Date of Birth</p>${data['Date of Birth'] || ''}</div>
-                        <div class="printable-field"><p class="printable-label">Phone</p>${data['Phone'] || ''}</div>
-                        <div class="printable-field"><p class="printable-label">Email Address</p>${data['Email'] || ''}</div>
-                        <div class="printable-field"><p class="printable-label">Social Security Number</p>${data['Social Security Number'] || ''}</div>
-                        <div class="printable-field"><p class="printable-label">Driver's License #</p>${data["Driver's License #"] || ''}</div>
-                        <div class="printable-field"><p class="printable-label">Vehicle Make & Model</p>${data['Vehicle Make & Model'] || ''}</div>
-                        <div class="printable-field"><p class="printable-label">Vehicle Tag #</p>${data['Vehicle Tag #'] || ''}</div>
-                    </div>
-                    <div class="printable-field mt-4"><p class="printable-label">Name of Nearest Relative</p>${data['Name of Nearest Relative'] || ''}</div>
-                    <div class="printable-field mt-4"><p class="printable-label">Phone of Nearest Relative</p>${data['Phone of Nearest Relative'] || ''}</div>
-                    <div class="printable-field mt-4"><p class="printable-label">Are you a member of the Armed Services?</p>${data['Armed Services Member'] || 'No'}</div>
-                </div>`;
-
-                // Page 2
-                printableHTML += `<div class="printable-page">
-                    <h1 class="text-xl font-bold text-center">HARON ENTERPRISES, LLC</h1>
-                    <p class="text-center text-sm">RESIDENTIAL LEASE APPLICATION</p>
-                    <p class="text-right text-xs mt-4">Eff Date 09 18 25 v10.7</p>
-                    
-                    <h2 class="text-md font-bold mt-8 mb-4">II. HOUSEHOLD INFORMATION</h2>
-                    <div class="grid grid-cols-2 gap-x-8 gap-y-4">
-                        <div class="printable-field col-span-2"><p class="printable-label">Street Address</p>${data['Street Address'] || ''}</div>
-                        <div class="printable-field"><p class="printable-label">City</p>${data['City'] || ''}</div>
-                        <div class="printable-field"><p class="printable-label">State</p>${data['State'] || ''}</div>
-                        <div class="printable-field"><p class="printable-label">Zip Code</p>${data['Zip Code'] || ''}</div>
-                    </div>
-                    
-                    <h3 class="text-sm font-bold mt-8">OTHER HOUSEHOLD MEMBERS</h3>
-                    <div class="space-y-4">`;
-                
-                for (let i = 1; data[`Household Member ${i} Full Name`]; i++) {
-                    printableHTML += `
-                        <div class="grid grid-cols-3 gap-4">
-                            <div class="printable-field"><p class="printable-label">Full Name</p>${data[`Household Member ${i} Full Name`]}</div>
-                            <div class="printable-field"><p class="printable-label">Age & DOB</p>${data[`Household Member ${i} Age & DOB`]}</div>
-                            <div class="printable-field"><p class="printable-label">Relationship</p>${data[`Household Member ${i} Relationship`]}</div>
-                        </div>`;
-                }
-
-                printableHTML += `</div>
-                    <div class="printable-field mt-8"><p class="printable-label">Are ALL members of the household U.S. Citizens?</p>${data['US Citizens'] || 'No'}</div>`;
-                if (data['US Citizens Explanation']) printableHTML += `<div class="printable-field mt-2"><p class="printable-label">If no, please explain:</p>${data['US Citizens Explanation']}</div>`;
-                printableHTML += `<div class="printable-field mt-4"><p class="printable-label">Is any household member (age 18+) a full-time student?</p>${data['Full-Time Student'] || 'No'}</div>`;
-                if (data['Student Explanation']) printableHTML += `<div class="printable-field mt-2"><p class="printable-label">If yes, please list and attach school enrollment printout:</p>${data['Student Explanation']}</div>`;
-
-                printableHTML += `</div>`; // Close Page 2
-
-                // Page 3 - Background & History
-                printableHTML += `<div class="printable-page">
-                    <h1 class="text-xl font-bold text-center">HARON ENTERPRISES, LLC</h1>
-                    <p class="text-center text-sm">RESIDENTIAL LEASE APPLICATION</p>
-                    <p class="text-right text-xs mt-4">Eff Date 09 18 25 v10.7</p>
-
-                    <h2 class="text-md font-bold mt-8 mb-4">III. BACKGROUND & HISTORY</h2>
-                    <div class="space-y-6">
-                        <div class="printable-field"><p class="printable-label">Have you ever been evicted?</p>${data['Ever Evicted'] || 'No'}</div>
-                        ${data['Evicted Explanation'] ? `<div class="printable-field mt-2"><p class="printable-label">Explanation</p>${data['Evicted Explanation']}</div>` : ''}
-
-                        <div class="printable-field mt-4"><p class="printable-label">Have you ever been foreclosed on?</p>${data['Ever Foreclosed'] || 'No'}</div>
-                        ${data['Foreclosed Explanation'] ? `<div class="printable-field mt-2"><p class="printable-label">Explanation</p>${data['Foreclosed Explanation']}</div>` : ''}
-
-                        <div class="printable-field mt-4"><p class="printable-label">Have you ever filed for bankruptcy?</p>${data['Ever Filed for Bankruptcy'] || 'No'}</div>
-                        ${data['Bankruptcy Explanation'] ? `<div class="printable-field mt-2"><p class="printable-label">Explanation</p>${data['Bankruptcy Explanation']}</div>` : ''}
-                        
-                        <div class="printable-field mt-4"><p class="printable-label">Have you ever been charged with a felony?</p>${data['Ever Charged with a Felony'] || 'No'}</div>
-                        ${data['Felony Explanation'] ? `<div class="printable-field mt-2"><p class="printable-label">Explanation</p>${data['Felony Explanation']}</div>` : ''}
-                        
-                        <div class="printable-field mt-4"><p class="printable-label">Have you ever broken a lease or refused to pay rent?</p>${data['Ever Broken Lease'] || 'No'}</div>
-                        ${data['Broken Lease Explanation'] ? `<div class="printable-field mt-2"><p class="printable-label">Explanation</p>${data['Broken Lease Explanation']}</div>` : ''}
-                    </div>
-                </div>`;
-
-                // Page 4-5 Financial & Employment
-                printableHTML += `<div class="printable-page">
-                    <h1 class="text-xl font-bold text-center">HARON ENTERPRISES, LLC</h1>
-                    <p class="text-center text-sm">RESIDENTIAL LEASE APPLICATION</p>
-                    <p class="text-right text-xs mt-4">Eff Date 09 18 25 v10.7</p>
-
-                    <h2 class="text-md font-bold mt-8 mb-4">IV. FINANCIAL & EMPLOYMENT</h2>
-                    <h3 class="text-sm font-bold mt-4">EMPLOYMENT HISTORY (4 years minimum)</h3>
-                    <div class="space-y-4">`;
-
-                for (let i = 1; data[`Employment ${i} Employer Name`]; i++) {
-                    printableHTML += `
-                        <div class="grid grid-cols-2 gap-x-8 gap-y-4">
-                            <h4 class="col-span-2 font-bold mt-4">Employment ${i}</h4>
-                            <div class="printable-field"><p class="printable-label">Employer Name</p>${data[`Employment ${i} Employer Name`]}</div>
-                            <div class="printable-field"><p class="printable-label">Phone Number</p>${data[`Employment ${i} Phone Number`]}</div>
-                            <div class="printable-field col-span-2"><p class="printable-label">Address</p>${data[`Employment ${i} Address`]}</div>
-                            <div class="printable-field"><p class="printable-label">Position</p>${data[`Employment ${i} Position`]}</div>
-                            <div class="printable-field"><p class="printable-label">Pay Rate</p>${data[`Employment ${i} Pay Rate`]}</div>
-                            <div class="printable-field"><p class="printable-label">Annual Income</p>${data[`Employment ${i} Annual Income`]}</div>
-                            <div class="printable-field"><p class="printable-label">Time Employed</p>${data[`Employment ${i} Time Employed`]}</div>
-                        </div>`;
-                }
-                
-                printableHTML += `</div>
-                    <h3 class="text-sm font-bold mt-8">OTHER INCOME SOURCES</h3>
-                    <div class="space-y-4">`;
-                for (let i = 1; data[`Income ${i} Type`]; i++) {
-                    printableHTML += `
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="printable-field"><p class="printable-label">Type of Income</p>${data[`Income ${i} Type`]}</div>
-                            <div class="printable-field"><p class="printable-label">Gross Annual Amount</p>${data[`Income ${i} Amount`]}</div>
-                        </div>`;
-                }
-
-                printableHTML += `</div>
-                    <h3 class="text-sm font-bold mt-8">ASSETS</h3>
-                    <div class="space-y-4">`;
-                for (let i = 1; data[`Asset ${i} Type`]; i++) {
-                    printableHTML += `
-                        <div class="grid grid-cols-3 gap-4">
-                            <div class="printable-field"><p class="printable-label">Type of Asset</p>${data[`Asset ${i} Type`]}</div>
-                            <div class="printable-field"><p class="printable-label">Asset Value</p>${data[`Asset ${i} Value`]}</div>
-                            <div class="printable-field"><p class="printable-label">Interest Rate</p>${data[`Asset ${i} Interest Rate`]}</div>
-                        </div>`;
-                }
-
-                printableHTML += `</div>
-                    <h3 class="text-sm font-bold mt-8">LIABILITIES</h3>
-                    <div class="space-y-4">`;
-                for (let i = 1; data[`Liability ${i} Type`]; i++) {
-                    printableHTML += `
-                        <div class="grid grid-cols-4 gap-4">
-                            <div class="printable-field"><p class="printable-label">Type of Credit/Loan</p>${data[`Liability ${i} Type`]}</div>
-                            <div class="printable-field"><p class="printable-label">Creditor's Name</p>${data[`Liability ${i} Creditor's Name`]}</div>
-                            <div class="printable-field"><p class="printable-label">Balance Owed</p>${data[`Liability ${i} Balance Owed`]}</div>
-                            <div class="printable-field"><p class="printable-label">Monthly Payment</p>${data[`Liability ${i} Monthly Payment`]}</div>
-                        </div>`;
-                }
-                printableHTML += `</div>
-                </div>`;
-
-                // Page 6 - Authorizations
-                printableHTML += `<div class="printable-page">
-                    <h1 class="text-xl font-bold text-center">HARON ENTERPRISES, LLC</h1>
-                    <p class="text-center text-sm">RESIDENTIAL LEASE APPLICATION</p>
-                    <p class="text-right text-xs mt-4">Eff Date 09 18 25 v10.7</p>
-
-                    <h2 class="text-md font-bold mt-8 mb-4">V. AUTHORIZATIONS & AGREEMENT</h2>
-                    <div class="text-sm border border-black p-4">
-                        <p class="text-justify"><strong>Text:</strong> I/We understand that Florida Statute 817 provides that a person is guilty of a misdemeanor in the first degree who knowingly makes a false statement in writing with the intent to mislead a landlord in repairing or leasing a dwelling unit. I CERTIFY THAT ALL THE INFORMATION PROVIDED IN THIS APPLICATION IS TRUE AND CORRECT. I, the undersigned applicant, affirm the information above is true and complete and authorize Haron Enterprises, LLC to make any and all inquiries necessary to verify said information, including but not limited to, direct contact with any person, business, or agency named above. I also understand that any false information on this application may cause this application to be rejected and may be grounds for immediate termination of the lease at the owner's option. I also agree to all the terms and conditions in the rental agreement, should this application be accepted.</p>
-                    </div>
-                    <div class="printable-field mt-8"><p class="printable-label">Agreement Checkbox</p>${data['agreement'] ? 'Checked' : 'Not Checked'}</div>
-                </div>`;
-
-                printableContainer.innerHTML = printableHTML;
-            };
-
+            // FIX: Consolidated Next button logic. This now correctly validates and advances the step.
             nextBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 const currentSection = document.getElementById(`section-${currentStep}`);
@@ -538,15 +358,8 @@
                 });
                 
                 if (isValid) {
-                    if (currentStep < 6) {
+                    if (currentStep < totalSteps) {
                         currentStep++;
-                        showSection(currentStep);
-                        updateButtons();
-                        updateProgressBar();
-                        window.scrollTo(0, 0);
-                    } else if (currentStep === 6 && document.getElementById('agree-terms').checked) {
-                        currentStep = 7;
-                        generatePrintableDocument();
                         showSection(currentStep);
                         updateButtons();
                         updateProgressBar();
@@ -555,22 +368,7 @@
                 }
             });
 
-            finalSubmitBtn.addEventListener('click', () => {
-                generatePrintableDocument(); // Ensure summary is generated right before saving
-                const element = document.getElementById('printable-application');
-                const opt = {
-                    margin: 0.5,
-                    filename: 'Haron_Enterprises_Lease_Application.pdf',
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { scale: 2 },
-                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-                };
-                html2pdf().from(element).set(opt).save();
-                document.getElementById('navigation-controls').style.display = 'none';
-                document.getElementById('progress-bar').style.display = 'none';
-                document.getElementById('header').style.display = 'none';
-            });
-
+            // FIX: Consolidated Previous button logic.
             prevBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 if (currentStep > 1) {
@@ -581,7 +379,8 @@
                     window.scrollTo(0, 0);
                 }
             });
-
+            
+            // This function creates a new dynamic block for Household, Employment, etc.
             const createDynamicBlock = (containerId, titlePrefix, innerHTMLCallback) => {
                 const container = document.getElementById(containerId);
                 const count = container.querySelectorAll('.dynamic-item').length + 1;
@@ -649,31 +448,22 @@
             showSection(1);
             updateButtons();
             updateProgressBar();
-        });
-
-        function toggleExplain(radio, divId, showOnYes) {
-            const explainDiv = document.getElementById(divId);
-            const shouldShow = (radio.value === 'yes' && showOnYes) || (radio.value === 'no' && !showOnYes);
-            if (shouldShow) {
-                explainDiv.classList.remove('hidden');
-            } else {
-                explainDiv.classList.add('hidden');
-            }
-        }
-            // START: ADDED CODE FOR FORM SUBMISSION AND SUMMARY
+            
+            // START: ADDED CODE FOR FORM SUBMISSION AND MANUAL REVIEW (Per your request)
             const generateSummary = () => {
                 const formData = new FormData(form);
                 let summaryOutput = '';
 
                 for (const [key, value] of formData.entries()) {
                     if (key && value && !key.startsWith('file_')) {
-                        summaryOutput += `<p><strong>${key}:</strong> ${value}</p>`;
+                        const displayKey = key.trim().replace(/\s+/g, ' ').replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
+                        summaryOutput += `<p><strong>${displayKey}:</strong> ${value}</p>`;
                     }
                 }
 
                 // Special handling for dynamic sections to improve readability
                 summaryOutput = summaryOutput.replace(/Household Member (\d+) Full Name/g, '<h4 class="font-semibold mt-4">Household Member $1</h4><p><strong>Full Name:</strong>');
-                summaryOutput = summaryOutput.replace(/Household Member (\d+) Age & DOB/g, '<strong>Age & DOB:</strong>');
+                summaryOutput = summaryOutput.replace(/Household Member (\d+) Age & Dob/g, '<strong>Age & DOB:</strong>');
                 summaryOutput = summaryOutput.replace(/Household Member (\d+) Relationship/g, '<strong>Relationship to Applicant:</strong>');
                 
                 summaryOutput = summaryOutput.replace(/Employment (\d+) Employer Name/g, '<h4 class="font-semibold mt-4">Employment $1</h4><p><strong>Employer Name:</strong>');
@@ -692,7 +482,7 @@
                 summaryOutput = summaryOutput.replace(/Asset (\d+) Interest Rate/g, '<strong>Interest Rate:</strong>');
 
                 summaryOutput = summaryOutput.replace(/Liability (\d+) Type/g, '<h4 class="font-semibold mt-4">Liability $1</h4><p><strong>Type of Credit/Loan:</strong>');
-                summaryOutput = summaryOutput.replace(/Liability (\d+) Creditor's Name/g, '<strong>Creditor's Name:</strong>');
+                summaryOutput = summaryOutput.replace(/Liability (\d+) Creditor's Name/g, '<strong>Creditor\'s Name:</strong>');
                 summaryOutput = summaryOutput.replace(/Liability (\d+) Balance Owed/g, '<strong>Balance Owed:</strong>');
                 summaryOutput = summaryOutput.replace(/Liability (\d+) Monthly Payment/g, '<strong>Monthly Payment:</strong>');
 
@@ -701,42 +491,54 @@
 
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
-                const currentSection = document.getElementById(`section-${currentStep}`);
-                const requiredInputs = currentSection.querySelectorAll('[required]');
-                let isValid = true;
-                requiredInputs.forEach(input => {
-                    if (!input.checkValidity()) {
-                        isValid = false;
-                        input.reportValidity();
-                    }
-                });
-
-                if (isValid) {
-                     const summary = generateSummary();
-                     const newWindow = window.open('', '_blank', 'width=800,height=600');
-                     newWindow.document.write(`
-                         <html>
-                         <head>
-                             <title>Application Summary</title>
-                             <style>
-                                 body { font-family: sans-serif; padding: 20px; }
-                                 h2, h4 { margin-top: 20px; }
-                                 p { line-height: 1.5; }
-                             </style>
-                         </head>
-                         <body>
-                             <h2>Haron Enterprises, LLC - Application Summary</h2>
-                             ${summary}
-                             <p class="mt-4"><strong>Page 6 Data Edits:</strong></p>
-                             <p><strong>Agreement Checkbox:</strong> ${document.getElementById('agree-terms').checked ? 'Checked' : 'Not Checked'}</p>
-                             <p class="mt-8">This data can now be manually reviewed and copied for email.</p>
-                         </body>
-                         </html>
-                     `);
-                     newWindow.document.close();
+                // Check the required checkbox on the final page
+                const agreeCheckbox = document.getElementById('agree-terms');
+                
+                if (!agreeCheckbox.checkValidity()) {
+                    agreeCheckbox.reportValidity();
+                    return;
                 }
+                
+                const summary = generateSummary();
+                const newWindow = window.open('', '_blank', 'width=800,height=600');
+                newWindow.document.write(`
+                    <html>
+                    <head>
+                        <title>Application Summary</title>
+                        <style>
+                            body { font-family: sans-serif; padding: 20px; }
+                            h2, h4 { margin-top: 20px; }
+                            p { line-height: 1.5; }
+                            .mt-4 { margin-top: 1rem; }
+                            .mt-8 { margin-top: 2rem; }
+                            .font-semibold { font-weight: 600; }
+                        </style>
+                    </head>
+                    <body>
+                        <h2>Haron Enterprises, LLC - Application Summary</h2>
+                        ${summary}
+                        <p class="mt-4"><strong>Page 6 Data Edits (Authorization & Agreement):</strong></p>
+                        <p><strong>Agreement Checkbox:</strong> ${agreeCheckbox.checked ? 'Checked' : 'Not Checked'}</p>
+                        <p class="mt-8">This data can now be manually reviewed and copied for email.</p>
+                    </body>
+                    </html>
+                `);
+                newWindow.document.close();
             });
-            // END: ADDED CODE FOR FORM SUBMISSION AND SUMMARY
+            // END: ADDED CODE FOR FORM SUBMISSION AND MANUAL REVIEW
+
+        });
+
+        function toggleExplain(radio, divId, showOnYes) {
+            const explainDiv = document.getElementById(divId);
+            const shouldShow = (radio.value === 'yes' && showOnYes) || (radio.value === 'no' && !showOnYes);
+            if (shouldShow) {
+                explainDiv.classList.remove('hidden');
+            } else {
+                explainDiv.classList.add('hidden');
+            }
+        }
+    </script>
             </script>
 </body>
 </html>
