@@ -99,7 +99,7 @@
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
-            <p class="text-sm text-gray-500">Eff date 09 27 25 v19.0 new identical formatted pdf multiple 9  </p>
+            <p class="text-sm text-gray-500">Eff date 09 27 25 v20.0 new Haron5  pdf multiple 10  </p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -290,9 +290,11 @@
                          <button type="submit" id="submit-btn" class="btn-primary" style="display: none;">Submit Application</button>
                      </div>
               </form>
-<script>
+JavaScript
+
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // v19.0: Total steps set to 6.
+            // v20.0: Total steps set to 6.
             let currentStep = 1;
             const totalSteps = 6; 
             const form = document.getElementById('rental-application-form');
@@ -383,7 +385,7 @@
             // Function to generate the FINAL, STYLED PDF HTML with data injection
             const generateFinalPdfHtml = (formData) => {
                 
-                // --- STYLING FOR PDF (V19.0 FIX APPLIED) ---
+                // --- STYLING FOR PDF (V20.0 FIX APPLIED) ---
                 const styleCss = `
                     <style>
                         body { 
@@ -391,8 +393,14 @@
                             font-size: 10pt; 
                             line-height: 1.4; 
                             margin: 0; 
-                            padding: 0.5in; 
+                            padding: 0; /* 🛑 Removed padding from body 🛑 */
                         }
+                        .pdf-content-wrapper { /* 🛑 New wrapper for padding 🛑 */
+                            padding: 0.5in;
+                            width: 100%;
+                            height: auto;
+                        }
+
                         h1 { font-size: 16pt; text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 5px; }
                         h2 { font-size: 12pt; margin-top: 20px; margin-bottom: 10px; color: #1e3a8a; border-bottom: 1px solid #000; padding-bottom: 3px; }
                         .form-section { border: 1px solid #ccc; padding: 10px; margin-bottom: 15px; }
@@ -403,9 +411,8 @@
                         .dynamic-title { font-weight: bold; margin-bottom: 5px; border-bottom: 1px solid #000; }
                         .note { font-style: italic; color: #555; margin-top: 15px; font-size: 9pt; }
                         
-                        /* Fixes applied for PDF flow */
                         .form-section, .dynamic-group { page-break-inside: avoid !important; } 
-                        .pdf-container { width: 100%; height: fit-content; display: block; }
+                        .page-break { page-break-after: always; height: 10px; display: block; }
 
                         @page { size: letter; margin: 0.5in; }
                     </style>
@@ -428,8 +435,7 @@
                     ${styleCss}
                 </head>
                 <body>
-                    <div class="pdf-container">
-                    <h1>HARON4 ENTERPRISES, LLC - RESIDENTIAL LEASE APPLICATION</h1> <div class="form-section">
+                    <div class="pdf-content-wrapper"> <h1>HARON5 ENTERPRISES, LLC - RESIDENTIAL LEASE APPLICATION</h1> <div class="form-section">
                         <h2>APPLICANT & CO-APPLICANT DATA</h2>
                         <div class="field-row"><span class="field-label">Full Name:</span> <span class="field-value">${getVal('Full Name')}</span></div>
                         <div class="field-row"><span class="field-label">Social Security:</span> <span class="field-value">${getVal('Social Security Number')}</span></div>
@@ -447,6 +453,8 @@
                         <div class="field-row"><span class="field-label">Time At Previous Address:</span> <span class="field-value">${getVal('How long at previous address')}</span></div>
                     </div>
                     
+                    <div class="page-break"></div>
+
                     <div class="form-section">
                         <h2>HOUSEHOLD MEMBERS</h2>
                         ${generateDynamicSection(dataMap, 'Household Member', ['Full Name', 'Age & DOB', 'Relationship'])}
@@ -459,6 +467,8 @@
                         <h3 class="dynamic-title" style="margin-top: 15px;">Other Income Sources:</h3>
                         ${generateDynamicSection(dataMap, 'Income Source', ['Type', 'Amount'])}
                     </div>
+
+                    <div class="page-break"></div>
                     
                     <div class="form-section">
                         <h2>ASSETS & LIABILITIES</h2>
@@ -477,8 +487,7 @@
                         <p class="note">This data confirms the applicant has reviewed and agreed to the Florida Statute and the terms of the application.</p>
                         <p class="note" style="margin-top: 20px;">Application submitted for manual review on: ${new Date().toLocaleString()}</p>
                     </div>
-                    </div>
-                </body>
+                    </div> </body>
                 </html>
                 `;
 
@@ -538,15 +547,10 @@
                 // 3. Define PDF generation options
                 const options = {
                     margin: [0.5, 0.5, 0.5, 0.5], 
-                    filename: 'Haron_Application_Filled_Form_v19_0_' + new Date().toISOString().slice(0, 10) + '.pdf',
+                    filename: 'Haron_Application_Filled_Form_v20_0_' + new Date().toISOString().slice(0, 10) + '.pdf',
                     image: { type: 'jpeg', quality: 0.98 },
-                    // 🛑 V19.0 FIX: Added width/height settings to html2canvas for better measurement 🛑
-                    html2canvas: { 
-                        scale: 2,
-                        width: tempElement.offsetWidth, 
-                        height: tempElement.offsetHeight,
-                        scrollY: -window.scrollY // Ensure capture starts from the top
-                    },
+                    // Set scale to 1 to reduce measurement errors caused by high scaling
+                    html2canvas: { scale: 1 }, 
                     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
                     pagebreak: { mode: 'avoid-all' }
                 };
