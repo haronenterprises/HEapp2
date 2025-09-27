@@ -99,7 +99,7 @@
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
-            <p class="text-sm text-gray-500">Eff date 09 27 25 v18.0 new identical formatted pdf multiple 8  </p>
+            <p class="text-sm text-gray-500">Eff date 09 27 25 v19.0 new identical formatted pdf multiple 9  </p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -290,9 +290,9 @@
                          <button type="submit" id="submit-btn" class="btn-primary" style="display: none;">Submit Application</button>
                      </div>
               </form>
- <script>
+<script>
         document.addEventListener('DOMContentLoaded', () => {
-            // v18.0: Total steps set to 6.
+            // v19.0: Total steps set to 6.
             let currentStep = 1;
             const totalSteps = 6; 
             const form = document.getElementById('rental-application-form');
@@ -383,7 +383,7 @@
             // Function to generate the FINAL, STYLED PDF HTML with data injection
             const generateFinalPdfHtml = (formData) => {
                 
-                // --- STYLING FOR PDF (V18.0 FIX APPLIED) ---
+                // --- STYLING FOR PDF (V19.0 FIX APPLIED) ---
                 const styleCss = `
                     <style>
                         body { 
@@ -403,19 +403,10 @@
                         .dynamic-title { font-weight: bold; margin-bottom: 5px; border-bottom: 1px solid #000; }
                         .note { font-style: italic; color: #555; margin-top: 15px; font-size: 9pt; }
                         
-                        /* 🛑 V18.0 CRITICAL CSS FIXES 🛑 */
-                        .pdf-container { width: 7.5in; display: block; height: fit-content; } /* Set explicit width/height */
-                        .form-section, .dynamic-group { page-break-inside: avoid !important; } /* Prevents breaking inside large blocks */
-                        
-                        /* Aggressive page break element */
-                        .page-break { 
-                            page-break-before: always; 
-                            display: block; 
-                            height: 0; 
-                            width: 100%;
-                            clear: both;
-                            margin-top: 20px;
-                        } 
+                        /* Fixes applied for PDF flow */
+                        .form-section, .dynamic-group { page-break-inside: avoid !important; } 
+                        .pdf-container { width: 100%; height: fit-content; display: block; }
+
                         @page { size: letter; margin: 0.5in; }
                     </style>
                 `;
@@ -438,9 +429,7 @@
                 </head>
                 <body>
                     <div class="pdf-container">
-                    <h1>HARON3 ENTERPRISES, LLC - RESIDENTIAL LEASE APPLICATION</h1>
-
-                    <div class="form-section">
+                    <h1>HARON4 ENTERPRISES, LLC - RESIDENTIAL LEASE APPLICATION</h1> <div class="form-section">
                         <h2>APPLICANT & CO-APPLICANT DATA</h2>
                         <div class="field-row"><span class="field-label">Full Name:</span> <span class="field-value">${getVal('Full Name')}</span></div>
                         <div class="field-row"><span class="field-label">Social Security:</span> <span class="field-value">${getVal('Social Security Number')}</span></div>
@@ -458,7 +447,7 @@
                         <div class="field-row"><span class="field-label">Time At Previous Address:</span> <span class="field-value">${getVal('How long at previous address')}</span></div>
                     </div>
                     
-                    <div class="page-break"></div> <div class="form-section">
+                    <div class="form-section">
                         <h2>HOUSEHOLD MEMBERS</h2>
                         ${generateDynamicSection(dataMap, 'Household Member', ['Full Name', 'Age & DOB', 'Relationship'])}
                     </div>
@@ -470,8 +459,8 @@
                         <h3 class="dynamic-title" style="margin-top: 15px;">Other Income Sources:</h3>
                         ${generateDynamicSection(dataMap, 'Income Source', ['Type', 'Amount'])}
                     </div>
-
-                    <div class="page-break"></div> <div class="form-section">
+                    
+                    <div class="form-section">
                         <h2>ASSETS & LIABILITIES</h2>
                         <h3 class="dynamic-title">Assets:</h3>
                         ${generateDynamicSection(dataMap, 'Asset', ['Type', 'Value', 'Interest Rate'])}
@@ -549,9 +538,15 @@
                 // 3. Define PDF generation options
                 const options = {
                     margin: [0.5, 0.5, 0.5, 0.5], 
-                    filename: 'Haron_Application_Filled_Form_v18_0_' + new Date().toISOString().slice(0, 10) + '.pdf',
+                    filename: 'Haron_Application_Filled_Form_v19_0_' + new Date().toISOString().slice(0, 10) + '.pdf',
                     image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { scale: 2 },
+                    // 🛑 V19.0 FIX: Added width/height settings to html2canvas for better measurement 🛑
+                    html2canvas: { 
+                        scale: 2,
+                        width: tempElement.offsetWidth, 
+                        height: tempElement.offsetHeight,
+                        scrollY: -window.scrollY // Ensure capture starts from the top
+                    },
                     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
                     pagebreak: { mode: 'avoid-all' }
                 };
