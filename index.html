@@ -99,7 +99,7 @@
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
-            <p class="text-sm text-gray-500">Eff date 09 26 25 v14.0 new pdf </p>
+            <p class="text-sm text-gray-500">Eff date 09 26 25 v14.1 new formatted pdf </p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -290,9 +290,9 @@
                          <button type="submit" id="submit-btn" class="btn-primary" style="display: none;">Submit Application</button>
                      </div>
               </form>
-    <script>
+   <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // v13.7.summary.pdf: Total steps set to 6.
+            // v13.7.styled.pdf: Total steps set to 6.
             let currentStep = 1;
             const totalSteps = 6; 
             const form = document.getElementById('rental-application-form');
@@ -335,7 +335,7 @@
                 }
             };
 
-            // Consolidated Next button logic. Validates required fields, then advances.
+            // Navigation functions (Next and Previous) - working correctly
             nextBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 const currentSection = document.getElementById(`section-${currentStep}`);
@@ -360,7 +360,6 @@
                 }
             });
 
-            // Consolidated Previous button logic.
             prevBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 if (currentStep > 1) {
@@ -372,7 +371,7 @@
                 }
             });
             
-            // Dynamic form block creation functions (Household, Employment, etc.)
+            // Dynamic form block creation functions (Household, Employment, etc.) - retained for functionality
             const createDynamicBlock = (containerId, titlePrefix, innerHTMLCallback) => {
                 const container = document.getElementById(containerId);
                 const count = container.querySelectorAll('.dynamic-item').length + 1;
@@ -440,33 +439,97 @@
             updateButtons();
             updateProgressBar();
             
-            // Function to generate a clean HTML summary string
-            const generateSummaryHtml = () => {
+            // Function to generate a clean, styled HTML document string
+            const generateStyledPdfHtml = () => {
                 const formData = new FormData(form);
-                let summaryOutput = '<div style="font-family: Arial, sans-serif; padding: 20px;">';
-                summaryOutput += '<h1>Haron Enterprises, LLC - Application Summary</h1>';
+                let summaryOutput = `
+                <html>
+                <head>
+                    <title>Rental Application Submission</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; font-size: 10pt; line-height: 1.4; padding: 0.5in; }
+                        h1 { font-size: 16pt; text-align: center; margin-bottom: 20px; border-bottom: 2px solid #333; padding-bottom: 5px; }
+                        h2 { font-size: 12pt; margin-top: 20px; margin-bottom: 5px; color: #1f2937; border-bottom: 1px solid #ccc; padding-bottom: 3px; }
+                        .data-point { margin: 0; padding: 2px 0; display: block; }
+                        .data-label { font-weight: bold; color: #4b5563; display: inline-block; width: 150px; }
+                        .section-title { font-size: 14pt; margin-top: 30px; margin-bottom: 10px; color: #1e3a8a; border-bottom: 3px double #1e3a8a; padding-bottom: 5px; }
+                        .dynamic-group { border: 1px solid #ddd; padding: 10px; margin-top: 10px; border-radius: 4px; }
+                        .dynamic-group h3 { font-size: 11pt; color: #333; margin-top: 0; margin-bottom: 5px; }
+                        @page { size: letter; margin: 0.5in; }
+                    </style>
+                </head>
+                <body>
+                    <h1>Haron Enterprises, LLC - Submitted Rental Application</h1>
+                `;
 
+                // Collect data into sections
+                const data = {};
                 for (const [key, value] of formData.entries()) {
                     if (key && value && !key.startsWith('file_')) {
-                        const displayKey = key.trim().replace(/\s+/g, ' ').replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
-                        // Use basic HTML tags for styling that translates well to PDF
-                        summaryOutput += `<p style="margin: 5px 0;"><strong>${displayKey}:</strong> ${value}</p>`;
+                        data[key.trim()] = value;
                     }
                 }
 
-                // Clean up and format for better readability in PDF
-                summaryOutput = summaryOutput.replace(/Household Member (\d+) Full Name/g, '<h2 style="margin-top: 20px; font-size: 1.2em; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Household Member $1</h2><p><strong>Full Name:</strong>');
-                summaryOutput = summaryOutput.replace(/Employment (\d+) Employer Name/g, '<h2 style="margin-top: 20px; font-size: 1.2em; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Employment $1</h2><p><strong>Employer Name:</strong>');
-                summaryOutput = summaryOutput.replace(/Income (\d+) Type/g, '<h2 style="margin-top: 20px; font-size: 1.2em; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Other Income $1</h2><p><strong>Type of Income:</strong>');
-                summaryOutput = summaryOutput.replace(/Asset (\d+) Type/g, '<h2 style="margin-top: 20px; font-size: 1.2em; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Asset $1</h2><p><strong>Type of Asset:</strong>');
-                summaryOutput = summaryOutput.replace(/Liability (\d+) Type/g, '<h2 style="margin-top: 20px; font-size: 1.2em; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Liability $1</h2><p><strong>Type of Credit/Loan:</strong>');
+                // Define order and display titles
+                const sections = [
+                    { title: 'Applicant Information', keys: [
+                        'Full Name', 'Date of Birth', 'Email Address', 'Social Security Number', 'Driver\'s License #',
+                        'Phone', 'Current Address', 'How long at current address', 'Previous Address', 'How long at previous address'
+                    ]},
+                    { title: 'Household Members', keys: Object.keys(data).filter(k => k.startsWith('Household Member')) },
+                    { title: 'Employment & Income', keys: Object.keys(data).filter(k => k.startsWith('Employment') || k.startsWith('Income')) },
+                    { title: 'Credit & Assets', keys: Object.keys(data).filter(k => k.startsWith('Asset') || k.startsWith('Liability')) },
+                    // Add more sections as needed based on your form fields
+                ];
 
-                // Add Page 6 checkbox status at the end
+                // Append data to the output HTML
+                for (const section of sections) {
+                    const dynamicKeys = section.keys.filter(k => k.includes('Member') || k.includes('Employment') || k.includes('Income') || k.includes('Asset') || k.includes('Liability'));
+                    
+                    summaryOutput += `<div class="section-title">${section.title}</div>`;
+
+                    let processedDynamicKeys = [];
+                    
+                    // Process dynamic groups first
+                    for (const key of dynamicKeys) {
+                        const parts = key.split(' ');
+                        const type = parts[0]; // e.g., 'Household'
+                        const index = parts[1]; // e.g., 'Member'
+                        const number = parts[2]; // e.g., '1'
+                        
+                        const groupKey = `${type} ${index} ${number}`; // e.g., 'Household Member 1'
+                        
+                        if (!processedDynamicKeys.includes(groupKey)) {
+                            processedDynamicKeys.push(groupKey);
+                            
+                            summaryOutput += `<div class="dynamic-group"><h3>${groupKey.replace('Household Member', 'Member')} Details</h3>`;
+                            
+                            // Find all keys belonging to this group
+                            const groupKeys = Object.keys(data).filter(k => k.startsWith(groupKey));
+                            for (const gk of groupKeys) {
+                                const cleanKey = gk.replace(`${groupKey} `, '');
+                                summaryOutput += `<div class="data-point"><span class="data-label">${cleanKey}:</span> ${data[gk]}</div>`;
+                            }
+                            summaryOutput += `</div>`;
+                        }
+                    }
+
+                    // Process static keys next
+                    const staticKeys = section.keys.filter(k => !dynamicKeys.includes(k));
+                    for (const key of staticKeys) {
+                         if (data[key]) {
+                            summaryOutput += `<div class="data-point"><span class="data-label">${key}:</span> ${data[key]}</div>`;
+                        }
+                    }
+                }
+
+                // Add Page 6 Authorization/Agreement
                 const agreeCheckbox = document.getElementById('agree-terms');
-                summaryOutput += '<h2 style="margin-top: 20px; font-size: 1.2em; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Page 6 Authorization</h2>';
-                summaryOutput += `<p style="margin: 5px 0;"><strong>Agreement Checkbox:</strong> ${agreeCheckbox?.checked ? 'Checked' : 'Not Checked'}</p>`;
-                
-                summaryOutput += '</div>';
+                summaryOutput += `<div class="section-title">Authorizations & Agreement</div>`;
+                summaryOutput += `<div class="data-point"><span class="data-label">Agreement Checkbox:</span> ${agreeCheckbox?.checked ? 'CHECKED (All information is true and accurate)' : 'NOT CHECKED'}</div>`;
+                summaryOutput += `<p style="margin-top: 20px; font-style: italic;">Application submitted on: ${new Date().toLocaleString()}</p>`;
+
+                summaryOutput += '</body></html>';
                 return summaryOutput;
             };
 
@@ -481,18 +544,18 @@
                     return;
                 }
                 
-                // 1. Generate the clean HTML summary string
-                const summaryHtml = generateSummaryHtml();
+                // 1. Generate the clean, styled HTML string
+                const styledHtml = generateStyledPdfHtml();
                 
-                // 2. Create a temporary element to hold the summary
+                // 2. Create a temporary element to hold the styled HTML
                 const tempElement = document.createElement('div');
-                tempElement.innerHTML = summaryHtml;
-                document.body.appendChild(tempElement);
+                tempElement.innerHTML = styledHtml;
+                document.body.appendChild(tempElement); // Must be attached to the body for html2pdf to process styles
 
                 // 3. Define PDF generation options
                 const options = {
                     margin: [0.5, 0.5, 0.5, 0.5], 
-                    filename: 'Haron_Application_Summary_' + new Date().toISOString().slice(0, 10) + '.pdf',
+                    filename: 'Haron_Application_Submitted_' + new Date().toISOString().slice(0, 10) + '.pdf',
                     image: { type: 'jpeg', quality: 0.98 },
                     html2canvas: { scale: 2 },
                     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
@@ -521,7 +584,7 @@
                 explainDiv.classList.add('hidden');
             }
         }
-    </script>     
+    </script>
    
 </body>
 </html>
