@@ -99,7 +99,7 @@
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
-            <p class="text-sm text-gray-500">Eff date 09 27 25 v20.0 new Haron5  pdf multiple 10  </p>
+            <p class="text-sm text-gray-500">Eff date 09 27 25 v21.0 new Haron 6  pdf multiple  </p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -292,9 +292,9 @@
               </form>
 JavaScript
 
-    <script>
+   <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // v20.0: Total steps set to 6.
+            // v21.0: Total steps set to 6.
             let currentStep = 1;
             const totalSteps = 6; 
             const form = document.getElementById('rental-application-form');
@@ -385,7 +385,7 @@ JavaScript
             // Function to generate the FINAL, STYLED PDF HTML with data injection
             const generateFinalPdfHtml = (formData) => {
                 
-                // --- STYLING FOR PDF (V20.0 FIX APPLIED) ---
+                // --- STYLING FOR PDF (V21.0 FIX APPLIED) ---
                 const styleCss = `
                     <style>
                         body { 
@@ -393,9 +393,9 @@ JavaScript
                             font-size: 10pt; 
                             line-height: 1.4; 
                             margin: 0; 
-                            padding: 0; /* 🛑 Removed padding from body 🛑 */
+                            padding: 0;
                         }
-                        .pdf-content-wrapper { /* 🛑 New wrapper for padding 🛑 */
+                        .pdf-content-wrapper { 
                             padding: 0.5in;
                             width: 100%;
                             height: auto;
@@ -411,6 +411,7 @@ JavaScript
                         .dynamic-title { font-weight: bold; margin-bottom: 5px; border-bottom: 1px solid #000; }
                         .note { font-style: italic; color: #555; margin-top: 15px; font-size: 9pt; }
                         
+                        /* Fixes applied for PDF flow */
                         .form-section, .dynamic-group { page-break-inside: avoid !important; } 
                         .page-break { page-break-after: always; height: 10px; display: block; }
 
@@ -435,7 +436,8 @@ JavaScript
                     ${styleCss}
                 </head>
                 <body>
-                    <div class="pdf-content-wrapper"> <h1>HARON5 ENTERPRISES, LLC - RESIDENTIAL LEASE APPLICATION</h1> <div class="form-section">
+                    <div class="pdf-content-wrapper">
+                    <h1>HARON6 ENTERPRISES, LLC - RESIDENTIAL LEASE APPLICATION</h1> <div class="form-section">
                         <h2>APPLICANT & CO-APPLICANT DATA</h2>
                         <div class="field-row"><span class="field-label">Full Name:</span> <span class="field-value">${getVal('Full Name')}</span></div>
                         <div class="field-row"><span class="field-label">Social Security:</span> <span class="field-value">${getVal('Social Security Number')}</span></div>
@@ -487,7 +489,8 @@ JavaScript
                         <p class="note">This data confirms the applicant has reviewed and agreed to the Florida Statute and the terms of the application.</p>
                         <p class="note" style="margin-top: 20px;">Application submitted for manual review on: ${new Date().toLocaleString()}</p>
                     </div>
-                    </div> </body>
+                    </div>
+                </body>
                 </html>
                 `;
 
@@ -539,18 +542,20 @@ JavaScript
                 // 1. Generate the final, styled HTML string
                 const styledHtml = generateFinalPdfHtml(new FormData(form));
                 
-                // 2. Create a temporary element to hold the styled HTML
-                const tempElement = document.createElement('div');
-                tempElement.innerHTML = styledHtml;
-                document.body.appendChild(tempElement); 
+                // 2. The most reliable method: Target the HTML content directly, not a wrapper element.
+                const sourceElement = document.createElement('div');
+                sourceElement.innerHTML = styledHtml;
+                document.body.appendChild(sourceElement); 
 
                 // 3. Define PDF generation options
                 const options = {
                     margin: [0.5, 0.5, 0.5, 0.5], 
-                    filename: 'Haron_Application_Filled_Form_v20_0_' + new Date().toISOString().slice(0, 10) + '.pdf',
+                    filename: 'Haron_Application_Filled_Form_v21_0_' + new Date().toISOString().slice(0, 10) + '.pdf',
                     image: { type: 'jpeg', quality: 0.98 },
-                    // Set scale to 1 to reduce measurement errors caused by high scaling
-                    html2canvas: { scale: 1 }, 
+                    html2canvas: { 
+                        scale: 1,
+                        scrollY: 0 // Start capture at the very top of the rendered content
+                    },
                     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
                     pagebreak: { mode: 'avoid-all' }
                 };
@@ -559,11 +564,11 @@ JavaScript
                 setTimeout(() => {
                     html2pdf()
                         .set(options)
-                        .from(tempElement)
+                        .from(sourceElement.querySelector('.pdf-content-wrapper')) // Target the inner wrapper for size calculation
                         .save()
                         .then(() => {
-                            // 5. Clean up: Remove the temporary element from the document body
-                            document.body.removeChild(tempElement);
+                            // 5. Clean up
+                            document.body.removeChild(sourceElement);
                         });
                 }, 100); 
             });
