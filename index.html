@@ -99,7 +99,7 @@
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
-            <p class="text-sm text-gray-500">Eff date 09 27 25 v17.0 new identical formatted pdf multiple 7  </p>
+            <p class="text-sm text-gray-500">Eff date 09 27 25 v18.0 new identical formatted pdf multiple 8  </p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -292,7 +292,7 @@
               </form>
  <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // v17.0: Total steps set to 6.
+            // v18.0: Total steps set to 6.
             let currentStep = 1;
             const totalSteps = 6; 
             const form = document.getElementById('rental-application-form');
@@ -383,7 +383,7 @@
             // Function to generate the FINAL, STYLED PDF HTML with data injection
             const generateFinalPdfHtml = (formData) => {
                 
-                // --- STYLING FOR PDF (V17.0 FIX APPLIED) ---
+                // --- STYLING FOR PDF (V18.0 FIX APPLIED) ---
                 const styleCss = `
                     <style>
                         body { 
@@ -402,10 +402,20 @@
                         .dynamic-group { margin-top: 10px; padding: 8px; border: 1px solid #888; border-radius: 3px; }
                         .dynamic-title { font-weight: bold; margin-bottom: 5px; border-bottom: 1px solid #000; }
                         .note { font-style: italic; color: #555; margin-top: 15px; font-size: 9pt; }
-                        /* Ensure content flows using the tool's internal page breaking */
-                        .form-section, .dynamic-group {
-                            page-break-inside: avoid !important; 
-                        }
+                        
+                        /* 🛑 V18.0 CRITICAL CSS FIXES 🛑 */
+                        .pdf-container { width: 7.5in; display: block; height: fit-content; } /* Set explicit width/height */
+                        .form-section, .dynamic-group { page-break-inside: avoid !important; } /* Prevents breaking inside large blocks */
+                        
+                        /* Aggressive page break element */
+                        .page-break { 
+                            page-break-before: always; 
+                            display: block; 
+                            height: 0; 
+                            width: 100%;
+                            clear: both;
+                            margin-top: 20px;
+                        } 
                         @page { size: letter; margin: 0.5in; }
                     </style>
                 `;
@@ -448,7 +458,7 @@
                         <div class="field-row"><span class="field-label">Time At Previous Address:</span> <span class="field-value">${getVal('How long at previous address')}</span></div>
                     </div>
                     
-                    <div class="form-section">
+                    <div class="page-break"></div> <div class="form-section">
                         <h2>HOUSEHOLD MEMBERS</h2>
                         ${generateDynamicSection(dataMap, 'Household Member', ['Full Name', 'Age & DOB', 'Relationship'])}
                     </div>
@@ -460,8 +470,8 @@
                         <h3 class="dynamic-title" style="margin-top: 15px;">Other Income Sources:</h3>
                         ${generateDynamicSection(dataMap, 'Income Source', ['Type', 'Amount'])}
                     </div>
-                    
-                    <div class="form-section">
+
+                    <div class="page-break"></div> <div class="form-section">
                         <h2>ASSETS & LIABILITIES</h2>
                         <h3 class="dynamic-title">Assets:</h3>
                         ${generateDynamicSection(dataMap, 'Asset', ['Type', 'Value', 'Interest Rate'])}
@@ -536,14 +546,14 @@
                 tempElement.innerHTML = styledHtml;
                 document.body.appendChild(tempElement); 
 
-                // 3. Define PDF generation options (V17.0 Fix applied here)
+                // 3. Define PDF generation options
                 const options = {
                     margin: [0.5, 0.5, 0.5, 0.5], 
-                    filename: 'Haron_Application_Filled_Form_v17_0_' + new Date().toISOString().slice(0, 10) + '.pdf',
+                    filename: 'Haron_Application_Filled_Form_v18_0_' + new Date().toISOString().slice(0, 10) + '.pdf',
                     image: { type: 'jpeg', quality: 0.98 },
                     html2canvas: { scale: 2 },
                     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-                    pagebreak: { mode: 'avoid-all' } // 🛑 CRITICAL FIX 🛑
+                    pagebreak: { mode: 'avoid-all' }
                 };
 
                 // 4. Generate and download the PDF from the temporary element
