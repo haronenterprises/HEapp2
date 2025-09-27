@@ -6,6 +6,7 @@
     <title>Haron Enterprises, LLC - Residential Lease Application</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
         body {
             background-color: #f8f7f4; 
@@ -98,7 +99,7 @@
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
-            <p class="text-sm text-gray-500">Eff date 09 26 25 v13.7 new script </p>
+            <p class="text-sm text-gray-500">Eff date 09 26 25 v14.0 new pdf </p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -289,10 +290,9 @@
                          <button type="submit" id="submit-btn" class="btn-primary" style="display: none;">Submit Application</button>
                      </div>
               </form>
-        
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Set totalSteps to 6, making page 6 the final submission page.
+            // v13.7.summary.pdf: Total steps set to 6.
             let currentStep = 1;
             const totalSteps = 6; 
             const form = document.getElementById('rental-application-form');
@@ -302,20 +302,16 @@
             const spacer = document.getElementById('spacer');
             
             const updateButtons = () => {
-                // Show Previous button only if not on Page 1
                 prevBtn.style.display = currentStep > 1 ? 'block' : 'none';
-                // Show spacer only on Page 1
                 spacer.style.display = currentStep === 1 ? 'block' : 'none';
-                // Show Next button only if not on the final page (Page 6)
                 nextBtn.style.display = currentStep < totalSteps ? 'block' : 'none';
-                // Show Submit button only on the final page (Page 6)
                 submitBtn.style.display = currentStep === totalSteps ? 'block' : 'none';
             };
 
             const updateProgressBar = () => {
                 for (let i = 1; i <= totalSteps; i++) {
                     const step = document.getElementById(`step-${i}`);
-                    if (!step) continue; // Skip if a step doesn't exist (e.g., if there's no step 7)
+                    if (!step) continue; 
                     
                     step.classList.remove('step-item-active', 'step-item-complete');
                     step.querySelector('div').classList.remove('border-blue-500', 'text-blue-600', 'border-green-500', 'text-green-600');
@@ -339,7 +335,7 @@
                 }
             };
 
-            // Consolidated Next button logic.
+            // Consolidated Next button logic. Validates required fields, then advances.
             nextBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 const currentSection = document.getElementById(`section-${currentStep}`);
@@ -439,92 +435,80 @@
                         <div><label class="label-text text-xs">Monthly Payment</label><input type="text" name="Liability ${count} Monthly Payment" class="input-field text-sm"></div>
                      </div>`);
             });
-            // Ensure at least one employment block is created at start
-            if (document.getElementById('employment-container')) {
-                createEmploymentBlock();
-            }
-
+            
             showSection(1);
             updateButtons();
             updateProgressBar();
             
-            // START: CODE FOR FORM SUBMISSION AND MANUAL REVIEW 
-            const generateSummary = () => {
+            // Function to generate a clean HTML summary string
+            const generateSummaryHtml = () => {
                 const formData = new FormData(form);
-                let summaryOutput = '';
+                let summaryOutput = '<div style="font-family: Arial, sans-serif; padding: 20px;">';
+                summaryOutput += '<h1>Haron Enterprises, LLC - Application Summary</h1>';
 
                 for (const [key, value] of formData.entries()) {
                     if (key && value && !key.startsWith('file_')) {
                         const displayKey = key.trim().replace(/\s+/g, ' ').replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
-                        summaryOutput += `<p><strong>${displayKey}:</strong> ${value}</p>`;
+                        // Use basic HTML tags for styling that translates well to PDF
+                        summaryOutput += `<p style="margin: 5px 0;"><strong>${displayKey}:</strong> ${value}</p>`;
                     }
                 }
 
-                // Special handling for dynamic sections to improve readability
-                summaryOutput = summaryOutput.replace(/Household Member (\d+) Full Name/g, '<h4 class="font-semibold mt-4">Household Member $1</h4><p><strong>Full Name:</strong>');
-                summaryOutput = summaryOutput.replace(/Household Member (\d+) Age & Dob/g, '<strong>Age & DOB:</strong>');
-                summaryOutput = summaryOutput.replace(/Household Member (\d+) Relationship/g, '<strong>Relationship to Applicant:</strong>');
+                // Clean up and format for better readability in PDF
+                summaryOutput = summaryOutput.replace(/Household Member (\d+) Full Name/g, '<h2 style="margin-top: 20px; font-size: 1.2em; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Household Member $1</h2><p><strong>Full Name:</strong>');
+                summaryOutput = summaryOutput.replace(/Employment (\d+) Employer Name/g, '<h2 style="margin-top: 20px; font-size: 1.2em; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Employment $1</h2><p><strong>Employer Name:</strong>');
+                summaryOutput = summaryOutput.replace(/Income (\d+) Type/g, '<h2 style="margin-top: 20px; font-size: 1.2em; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Other Income $1</h2><p><strong>Type of Income:</strong>');
+                summaryOutput = summaryOutput.replace(/Asset (\d+) Type/g, '<h2 style="margin-top: 20px; font-size: 1.2em; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Asset $1</h2><p><strong>Type of Asset:</strong>');
+                summaryOutput = summaryOutput.replace(/Liability (\d+) Type/g, '<h2 style="margin-top: 20px; font-size: 1.2em; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Liability $1</h2><p><strong>Type of Credit/Loan:</strong>');
+
+                // Add Page 6 checkbox status at the end
+                const agreeCheckbox = document.getElementById('agree-terms');
+                summaryOutput += '<h2 style="margin-top: 20px; font-size: 1.2em; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Page 6 Authorization</h2>';
+                summaryOutput += `<p style="margin: 5px 0;"><strong>Agreement Checkbox:</strong> ${agreeCheckbox?.checked ? 'Checked' : 'Not Checked'}</p>`;
                 
-                summaryOutput = summaryOutput.replace(/Employment (\d+) Employer Name/g, '<h4 class="font-semibold mt-4">Employment $1</h4><p><strong>Employer Name:</strong>');
-                summaryOutput = summaryOutput.replace(/Employment (\d+) Phone Number/g, '<strong>Phone Number:</strong>');
-                summaryOutput = summaryOutput.replace(/Employment (\d+) Address/g, '<strong>Address:</strong>');
-                summaryOutput = summaryOutput.replace(/Employment (\d+) Position/g, '<strong>Position:</strong>');
-                summaryOutput = summaryOutput.replace(/Employment (\d+) Pay Rate/g, '<strong>Pay Rate:</strong>');
-                summaryOutput = summaryOutput.replace(/Employment (\d+) Annual Income/g, '<strong>Annual Income:</strong>');
-                summaryOutput = summaryOutput.replace(/Employment (\d+) Time Employed/g, '<strong>Time Employed:</strong>');
-
-                summaryOutput = summaryOutput.replace(/Income (\d+) Type/g, '<h4 class="font-semibold mt-4">Other Income $1</h4><p><strong>Type of Income:</strong>');
-                summaryOutput = summaryOutput.replace(/Income (\d+) Amount/g, '<strong>Gross Annual Amount:</strong>');
-
-                summaryOutput = summaryOutput.replace(/Asset (\d+) Type/g, '<h4 class="font-semibold mt-4">Asset $1</h4><p><strong>Type of Asset:</strong>');
-                summaryOutput = summaryOutput.replace(/Asset (\d+) Value/g, '<strong>Asset Value:</strong>');
-                summaryOutput = summaryOutput.replace(/Asset (\d+) Interest Rate/g, '<strong>Interest Rate:</strong>');
-
-                summaryOutput = summaryOutput.replace(/Liability (\d+) Type/g, '<h4 class="font-semibold mt-4">Liability $1</h4><p><strong>Type of Credit/Loan:</strong>');
-                summaryOutput = summaryOutput.replace(/Liability (\d+) Creditor's Name/g, '<strong>Creditor\'s Name:</strong>');
-                summaryOutput = summaryOutput.replace(/Liability (\d+) Balance Owed/g, '<strong>Balance Owed:</strong>');
-                summaryOutput = summaryOutput.replace(/Liability (\d+) Monthly Payment/g, '<strong>Monthly Payment:</strong>');
-
+                summaryOutput += '</div>';
                 return summaryOutput;
             };
 
+            // START: CODE FOR FORM SUBMISSION AND PDF GENERATION
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
-                // Check the required checkbox on the final page
-                const agreeCheckbox = document.getElementById('agree-terms');
                 
-                if (!agreeCheckbox.checkValidity()) {
+                // Check the required checkbox on the final page (Page 6)
+                const agreeCheckbox = document.getElementById('agree-terms');
+                if (!agreeCheckbox?.checkValidity()) {
                     agreeCheckbox.reportValidity();
                     return;
                 }
                 
-                const summary = generateSummary();
-                const newWindow = window.open('', '_blank', 'width=800,height=600');
-                newWindow.document.write(`
-                    <html>
-                    <head>
-                        <title>Application Summary</title>
-                        <style>
-                            body { font-family: sans-serif; padding: 20px; }
-                            h2, h4 { margin-top: 20px; }
-                            p { line-height: 1.5; }
-                            .mt-4 { margin-top: 1rem; }
-                            .mt-8 { margin-top: 2rem; }
-                            .font-semibold { font-weight: 600; }
-                        </style>
-                    </head>
-                    <body>
-                        <h2>Haron Enterprises, LLC - Application Summary</h2>
-                        ${summary}
-                        <p class="mt-4"><strong>Page 6 Data Edits (Authorization & Agreement):</strong></p>
-                        <p><strong>Agreement Checkbox:</strong> ${agreeCheckbox.checked ? 'Checked' : 'Not Checked'}</p>
-                        <p class="mt-8">This data can now be manually reviewed and copied for email.</p>
-                    </body>
-                    </html>
-                `);
-                newWindow.document.close();
+                // 1. Generate the clean HTML summary string
+                const summaryHtml = generateSummaryHtml();
+                
+                // 2. Create a temporary element to hold the summary
+                const tempElement = document.createElement('div');
+                tempElement.innerHTML = summaryHtml;
+                document.body.appendChild(tempElement);
+
+                // 3. Define PDF generation options
+                const options = {
+                    margin: [0.5, 0.5, 0.5, 0.5], 
+                    filename: 'Haron_Application_Summary_' + new Date().toISOString().slice(0, 10) + '.pdf',
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2 },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
+
+                // 4. Generate and download the PDF from the temporary element
+                html2pdf()
+                    .set(options)
+                    .from(tempElement)
+                    .save()
+                    .then(() => {
+                        // 5. Clean up: Remove the temporary element from the document body
+                        document.body.removeChild(tempElement);
+                    });
             });
-            // END: CODE FOR FORM SUBMISSION AND MANUAL REVIEW
+            // END: CODE FOR FORM SUBMISSION AND PDF GENERATION
 
         });
 
@@ -537,6 +521,7 @@
                 explainDiv.classList.add('hidden');
             }
         }
-    </script>
+    </script>     
+   
 </body>
 </html>
