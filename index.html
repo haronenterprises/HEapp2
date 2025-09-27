@@ -99,7 +99,7 @@
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
-            <p class="text-sm text-gray-500">Eff date 09 26 25 v15.0 new identical formatted pdf multiple 4  </p>
+            <p class="text-sm text-gray-500">Eff date 09 26 25 v16.0 new identical formatted pdf multiple 6  </p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -292,7 +292,7 @@
               </form>
  <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // v15.0: Total steps set to 6.
+            // v16.0: Total steps set to 6.
             let currentStep = 1;
             const totalSteps = 6; 
             const form = document.getElementById('rental-application-form');
@@ -383,10 +383,16 @@
             // Function to generate the FINAL, STYLED PDF HTML with data injection
             const generateFinalPdfHtml = (formData) => {
                 
-                // --- STYLING FOR PDF ---
+                // --- STYLING FOR PDF (V16.0 FIX APPLIED) ---
                 const styleCss = `
                     <style>
-                        body { font-family: 'Times New Roman', serif; font-size: 10pt; line-height: 1.4; margin: 0; padding: 0.5in; }
+                        body { 
+                            font-family: 'Times New Roman', serif; 
+                            font-size: 10pt; 
+                            line-height: 1.4; 
+                            margin: 0; 
+                            padding: 0.5in; 
+                        }
                         h1 { font-size: 16pt; text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 5px; }
                         h2 { font-size: 12pt; margin-top: 20px; margin-bottom: 10px; color: #1e3a8a; border-bottom: 1px solid #000; padding-bottom: 3px; }
                         .form-section { border: 1px solid #ccc; padding: 10px; margin-bottom: 15px; }
@@ -396,9 +402,14 @@
                         .dynamic-group { margin-top: 10px; padding: 8px; border: 1px solid #888; border-radius: 3px; }
                         .dynamic-title { font-weight: bold; margin-bottom: 5px; border-bottom: 1px solid #000; }
                         .note { font-style: italic; color: #555; margin-top: 15px; font-size: 9pt; }
-                        /* 🛑 V15.0 FIX: Aggressive page breaking 🛑 */
+                        
+                        /* 🛑 V16.0 CRITICAL CSS FIXES 🛑 */
                         .page-break { page-break-after: always; height: 10px; display: block; } 
                         .pdf-container { width: 100%; height: auto; display: block; }
+                        .form-section, .dynamic-group {
+                            page-break-inside: avoid !important; /* Prevents breaking inside large blocks */
+                        }
+
                         @page { size: letter; margin: 0.5in; }
                     </style>
                 `;
@@ -421,9 +432,7 @@
                 </head>
                 <body>
                     <div class="pdf-container">
-                    <h1>HARON2 ENTERPRISES, LLC - RESIDENTIAL LEASE APPLICATION</h1>
-
-                    <div class="form-section">
+                    <h1>HARON3 ENTERPRISES, LLC - RESIDENTIAL LEASE APPLICATION</h1> <div class="form-section">
                         <h2>APPLICANT & CO-APPLICANT DATA</h2>
                         <div class="field-row"><span class="field-label">Full Name:</span> <span class="field-value">${getVal('Full Name')}</span></div>
                         <div class="field-row"><span class="field-label">Social Security:</span> <span class="field-value">${getVal('Social Security Number')}</span></div>
@@ -532,21 +541,24 @@
                 // 3. Define PDF generation options
                 const options = {
                     margin: [0.5, 0.5, 0.5, 0.5], 
-                    filename: 'Haron_Application_Filled_Form_v15_0_' + new Date().toISOString().slice(0, 10) + '.pdf',
+                    filename: 'Haron_Application_Filled_Form_v16_0_' + new Date().toISOString().slice(0, 10) + '.pdf',
                     image: { type: 'jpeg', quality: 0.98 },
                     html2canvas: { scale: 2 },
                     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
                 };
 
                 // 4. Generate and download the PDF from the temporary element
-                html2pdf()
-                    .set(options)
-                    .from(tempElement)
-                    .save()
-                    .then(() => {
-                        // 5. Clean up: Remove the temporary element from the document body
-                        document.body.removeChild(tempElement);
-                    });
+                // A small delay ensures the content is fully rendered before capturing
+                setTimeout(() => {
+                    html2pdf()
+                        .set(options)
+                        .from(tempElement)
+                        .save()
+                        .then(() => {
+                            // 5. Clean up: Remove the temporary element from the document body
+                            document.body.removeChild(tempElement);
+                        });
+                }, 100); // 100ms delay
             });
             // END: CODE FOR FORM SUBMISSION AND PDF GENERATION
 
@@ -562,6 +574,7 @@
             }
         }
     </script>
+
    
 </body>
 </html>
