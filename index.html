@@ -99,7 +99,7 @@
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
-            <p class="text-sm text-gray-500">Eff date 09 28 25 v22.0 new Haron 7  pdf multiple  </p>
+            <p class="text-sm text-gray-500">Eff date 09 28 25 v23.0 new Haron 8  pdf multiple  </p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -291,9 +291,9 @@
                      </div>
               </form>
 JavaScript
-<script>
+ <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // v22.0: Total steps set to 6.
+            // v23.0: Total steps set to 6.
             let currentStep = 1;
             const totalSteps = 6; 
             const form = document.getElementById('rental-application-form');
@@ -384,7 +384,7 @@ JavaScript
             // Function to generate the FINAL, STYLED PDF HTML with data injection
             const generateFinalPdfHtml = (formData) => {
                 
-                // --- STYLING FOR PDF (V22.0 FIX APPLIED) ---
+                // --- STYLING FOR PDF (V23.0 FIX APPLIED) ---
                 const styleCss = `
                     <style>
                         body { 
@@ -410,7 +410,7 @@ JavaScript
                         .dynamic-title { font-weight: bold; margin-bottom: 5px; border-bottom: 1px solid #000; }
                         .note { font-style: italic; color: #555; margin-top: 15px; font-size: 9pt; }
                         
-                        /* Fixes applied for PDF flow */
+                        /* Ensure blocks do not split across pages */
                         .form-section, .dynamic-group { page-break-inside: avoid !important; } 
                         .page-break { page-break-after: always; height: 10px; display: block; }
 
@@ -421,11 +421,12 @@ JavaScript
                 // --- DATA EXTRACTION ---
                 let dataMap = {};
                 for (const [key, value] of formData.entries()) {
+                    // Only fill the data if it exists, otherwise it will render as N/A or Blank for blank template test
                     dataMap[key.trim()] = value;
                 }
 
                 // Function to safely retrieve a value
-                const getVal = (key) => dataMap[key] || 'N/A';
+                const getVal = (key) => dataMap[key] || '_______'; // Use lines for BLANK TEMPLATE test
 
                 // --- TEMPLATE START ---
                 let finalHtml = `
@@ -435,7 +436,8 @@ JavaScript
                     ${styleCss}
                 </head>
                 <body>
-                    <div id="pdf-source-content" class="pdf-content-wrapper"> <h1>HARON7 ENTERPRISES, LLC - RESIDENTIAL LEASE APPLICATION</h1> <div class="form-section">
+                    <div id="pdf-source-content" class="pdf-content-wrapper">
+                    <h1>HARON8 ENTERPRISES, LLC - RESIDENTIAL LEASE APPLICATION</h1> <div class="form-section">
                         <h2>APPLICANT & CO-APPLICANT DATA</h2>
                         <div class="field-row"><span class="field-label">Full Name:</span> <span class="field-value">${getVal('Full Name')}</span></div>
                         <div class="field-row"><span class="field-label">Social Security:</span> <span class="field-value">${getVal('Social Security Number')}</span></div>
@@ -457,15 +459,15 @@ JavaScript
 
                     <div class="form-section">
                         <h2>HOUSEHOLD MEMBERS</h2>
-                        ${generateDynamicSection(dataMap, 'Household Member', ['Full Name', 'Age & DOB', 'Relationship'])}
+                        ${generateDynamicSection(dataMap, 'Household Member', ['Full Name', 'Age & DOB', 'Relationship'], getVal)}
                     </div>
                     
                     <div class="form-section">
                         <h2>EMPLOYMENT & INCOME</h2>
                         <h3 class="dynamic-title">Employment Records:</h3>
-                        ${generateDynamicSection(dataMap, 'Employment Record', ['Employer Name', 'Phone Number', 'Address', 'Position', 'Pay Rate', 'Annual Income', 'Time Employed'])}
+                        ${generateDynamicSection(dataMap, 'Employment Record', ['Employer Name', 'Phone Number', 'Address', 'Position', 'Pay Rate', 'Annual Income', 'Time Employed'], getVal)}
                         <h3 class="dynamic-title" style="margin-top: 15px;">Other Income Sources:</h3>
-                        ${generateDynamicSection(dataMap, 'Income Source', ['Type', 'Amount'])}
+                        ${generateDynamicSection(dataMap, 'Income Source', ['Type', 'Amount'], getVal)}
                     </div>
 
                     <div class="page-break"></div>
@@ -473,16 +475,16 @@ JavaScript
                     <div class="form-section">
                         <h2>ASSETS & LIABILITIES</h2>
                         <h3 class="dynamic-title">Assets:</h3>
-                        ${generateDynamicSection(dataMap, 'Asset', ['Type', 'Value', 'Interest Rate'])}
+                        ${generateDynamicSection(dataMap, 'Asset', ['Type', 'Value', 'Interest Rate'], getVal)}
                         <h3 class="dynamic-title" style="margin-top: 15px;">Liabilities:</h3>
-                        ${generateDynamicSection(dataMap, 'Liability', ['Type', "Creditor's Name", 'Balance Owed', 'Monthly Payment'])}
+                        ${generateDynamicSection(dataMap, 'Liability', ['Type', "Creditor's Name", 'Balance Owed', 'Monthly Payment'], getVal)}
                     </div>
 
                     <div class="form-section">
                         <h2>AUTHORIZATION & AGREEMENT (PAGE 6 DATA EDITS)</h2>
                         <div class="field-row">
                             <span class="field-label">Agreement Check:</span>
-                            <span class="field-value">${document.getElementById('agree-terms')?.checked ? 'CHECKED (AGREED TO TERMS)' : 'NOT CHECKED'}</span>
+                            <span class="field-value">${document.getElementById('agree-terms')?.checked ? 'CHECKED (AGREED TO TERMS)' : '_______'}</span>
                         </div>
                         <p class="note">This data confirms the applicant has reviewed and agreed to the Florida Statute and the terms of the application.</p>
                         <p class="note" style="margin-top: 20px;">Application submitted for manual review on: ${new Date().toLocaleString()}</p>
@@ -493,9 +495,10 @@ JavaScript
                 `;
 
                 // --- HELPER FUNCTION FOR DYNAMIC SECTIONS ---
-                function generateDynamicSection(data, prefix, fields) {
+                function generateDynamicSection(data, prefix, fields, valueGetter) {
                     let html = '';
                     let groups = {};
+                    let hasContent = false;
 
                     // Group fields by their index (e.g., '1', '2')
                     for (const key in data) {
@@ -507,15 +510,28 @@ JavaScript
                             if (numberIndex && fieldName) {
                                 if (!groups[numberIndex]) groups[numberIndex] = {};
                                 groups[numberIndex][fieldName] = data[key];
+                                hasContent = true;
                             }
                         }
                     }
+
+                    // For the blank template test, force one instance of the section
+                    if (!hasContent && prefix === 'Household Member') {
+                        groups[1] = { 'Full Name': '', 'Age & DOB': '', 'Relationship': '' };
+                    }
+                     if (!hasContent && prefix === 'Employment Record') {
+                        groups[1] = { 'Employer Name': '', 'Position': '', 'Annual Income': '' };
+                    }
+                    // Do not force the blank template for optional Income/Asset/Liability, rely on the main sections above.
+
 
                     // Build HTML for each dynamic group
                     for (const index in groups) {
                         html += `<div class="dynamic-group"><h3>${prefix} ${index}</h3>`;
                         for (const field of fields) {
-                            html += `<div class="field-row"><span class="field-label">${field}:</span> <span class="field-value">${groups[index][field] || 'N/A'}</span></div>`;
+                            // Use the value from the map, or rely on the blank line from the valueGetter if blank
+                            const val = groups[index][field] || ''; 
+                            html += `<div class="field-row"><span class="field-label">${field}:</span> <span class="field-value">${val ? val : '_______'}</span></div>`;
                         }
                         html += `</div>`;
                     }
@@ -548,13 +564,13 @@ JavaScript
                 // 3. Define PDF generation options
                 const options = {
                     margin: [0.5, 0.5, 0.5, 0.5], 
-                    filename: 'Haron_Application_Filled_Form_v22_0_' + new Date().toISOString().slice(0, 10) + '.pdf',
+                    filename: 'Haron_Application_Filled_Form_v23_0_' + new Date().toISOString().slice(0, 10) + '.pdf',
                     image: { type: 'jpeg', quality: 0.98 },
                     html2canvas: { 
                         scale: 1,
                         scrollY: 0,
                         // Fix for capture failure: try to capture the entire height
-                        height: sourceElement.querySelector('.pdf-content-wrapper').scrollHeight 
+                        height: sourceElement.querySelector('#pdf-source-content').scrollHeight 
                     },
                     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
                     pagebreak: { mode: 'avoid-all' }
