@@ -99,7 +99,7 @@
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
-            <p class="text-sm text-gray-500">Eff date 09 27 25 v21.0 new Haron 6  pdf multiple  </p>
+            <p class="text-sm text-gray-500">Eff date 09 28 25 v22.0 new Haron 6  pdf multiple  </p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -291,10 +291,9 @@
                      </div>
               </form>
 JavaScript
-
-   <script>
+<script>
         document.addEventListener('DOMContentLoaded', () => {
-            // v21.0: Total steps set to 6.
+            // v22.0: Total steps set to 6.
             let currentStep = 1;
             const totalSteps = 6; 
             const form = document.getElementById('rental-application-form');
@@ -385,7 +384,7 @@ JavaScript
             // Function to generate the FINAL, STYLED PDF HTML with data injection
             const generateFinalPdfHtml = (formData) => {
                 
-                // --- STYLING FOR PDF (V21.0 FIX APPLIED) ---
+                // --- STYLING FOR PDF (V22.0 FIX APPLIED) ---
                 const styleCss = `
                     <style>
                         body { 
@@ -436,8 +435,7 @@ JavaScript
                     ${styleCss}
                 </head>
                 <body>
-                    <div class="pdf-content-wrapper">
-                    <h1>HARON6 ENTERPRISES, LLC - RESIDENTIAL LEASE APPLICATION</h1> <div class="form-section">
+                    <div id="pdf-source-content" class="pdf-content-wrapper"> <h1>HARON7 ENTERPRISES, LLC - RESIDENTIAL LEASE APPLICATION</h1> <div class="form-section">
                         <h2>APPLICANT & CO-APPLICANT DATA</h2>
                         <div class="field-row"><span class="field-label">Full Name:</span> <span class="field-value">${getVal('Full Name')}</span></div>
                         <div class="field-row"><span class="field-label">Social Security:</span> <span class="field-value">${getVal('Social Security Number')}</span></div>
@@ -542,7 +540,7 @@ JavaScript
                 // 1. Generate the final, styled HTML string
                 const styledHtml = generateFinalPdfHtml(new FormData(form));
                 
-                // 2. The most reliable method: Target the HTML content directly, not a wrapper element.
+                // 2. Create a temporary element and append it to the document body
                 const sourceElement = document.createElement('div');
                 sourceElement.innerHTML = styledHtml;
                 document.body.appendChild(sourceElement); 
@@ -550,21 +548,23 @@ JavaScript
                 // 3. Define PDF generation options
                 const options = {
                     margin: [0.5, 0.5, 0.5, 0.5], 
-                    filename: 'Haron_Application_Filled_Form_v21_0_' + new Date().toISOString().slice(0, 10) + '.pdf',
+                    filename: 'Haron_Application_Filled_Form_v22_0_' + new Date().toISOString().slice(0, 10) + '.pdf',
                     image: { type: 'jpeg', quality: 0.98 },
                     html2canvas: { 
                         scale: 1,
-                        scrollY: 0 // Start capture at the very top of the rendered content
+                        scrollY: 0,
+                        // Fix for capture failure: try to capture the entire height
+                        height: sourceElement.querySelector('.pdf-content-wrapper').scrollHeight 
                     },
                     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
                     pagebreak: { mode: 'avoid-all' }
                 };
 
-                // 4. Generate and download the PDF from the temporary element
+                // 4. Generate and download the PDF
                 setTimeout(() => {
                     html2pdf()
                         .set(options)
-                        .from(sourceElement.querySelector('.pdf-content-wrapper')) // Target the inner wrapper for size calculation
+                        .from(sourceElement.querySelector('#pdf-source-content')) // Target the inner wrapper explicitly
                         .save()
                         .then(() => {
                             // 5. Clean up
@@ -580,6 +580,7 @@ JavaScript
             // Retaining this function...
         }
     </script>
+  
 
    
 </body>
