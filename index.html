@@ -99,7 +99,7 @@
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
-            <p class="text-sm text-gray-500">Eff date 09 28 25 v23.0 new Haron 8  pdf multiple  </p>
+            <p class="text-sm text-gray-500">Eff date 09 28 25 v24.0 new Haron 9  pdf multiple  </p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -293,7 +293,7 @@
 JavaScript
  <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // v23.0: Total steps set to 6.
+            // v24.0: Total steps set to 6.
             let currentStep = 1;
             const totalSteps = 6; 
             const form = document.getElementById('rental-application-form');
@@ -384,35 +384,27 @@ JavaScript
             // Function to generate the FINAL, STYLED PDF HTML with data injection
             const generateFinalPdfHtml = (formData) => {
                 
-                // --- STYLING FOR PDF (V23.0 FIX APPLIED) ---
+                // --- STYLING FOR PDF (V24.0 - BASIC STYLING) ---
                 const styleCss = `
                     <style>
                         body { 
-                            font-family: 'Times New Roman', serif; 
-                            font-size: 10pt; 
-                            line-height: 1.4; 
-                            margin: 0; 
-                            padding: 0;
-                        }
-                        .pdf-content-wrapper { 
+                            font-family: Arial, sans-serif; 
+                            font-size: 11pt; 
+                            line-height: 1.5; 
                             padding: 0.5in;
-                            width: 100%;
-                            height: auto;
+                            margin: 0;
                         }
-
-                        h1 { font-size: 16pt; text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 5px; }
-                        h2 { font-size: 12pt; margin-top: 20px; margin-bottom: 10px; color: #1e3a8a; border-bottom: 1px solid #000; padding-bottom: 3px; }
-                        .form-section { border: 1px solid #ccc; padding: 10px; margin-bottom: 15px; }
-                        .field-row { display: flex; flex-wrap: wrap; margin-bottom: 5px; border-bottom: 1px dotted #ccc; padding-bottom: 2px; }
-                        .field-label { font-weight: bold; width: 150px; flex-shrink: 0; margin-right: 10px; }
-                        .field-value { border-bottom: 1px solid #000; flex-grow: 1; padding: 0 5px; min-width: 150px; color: #a00; font-weight: bold; }
-                        .dynamic-group { margin-top: 10px; padding: 8px; border: 1px solid #888; border-radius: 3px; }
-                        .dynamic-title { font-weight: bold; margin-bottom: 5px; border-bottom: 1px solid #000; }
-                        .note { font-style: italic; color: #555; margin-top: 15px; font-size: 9pt; }
+                        h1 { font-size: 18pt; text-align: center; margin-bottom: 25px; border-bottom: 2px solid #000; padding-bottom: 10px; }
+                        h2 { font-size: 14pt; margin-top: 30px; margin-bottom: 10px; color: #1e3a8a; border-bottom: 1px solid #000; padding-bottom: 5px; page-break-before: auto; }
+                        h3 { font-size: 12pt; margin-top: 15px; margin-bottom: 8px; color: #444; }
+                        .field-row { margin-bottom: 5px; }
+                        .field-label { font-weight: bold; display: inline-block; width: 180px; }
+                        .field-value { border-bottom: 1px solid #000; display: inline-block; width: 350px; padding: 0 5px; color: #a00; font-weight: bold; }
+                        .dynamic-group { margin: 10px 0 15px 0; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+                        .note { font-style: italic; color: #555; margin-top: 20px; font-size: 10pt; }
                         
-                        /* Ensure blocks do not split across pages */
-                        .form-section, .dynamic-group { page-break-inside: avoid !important; } 
-                        .page-break { page-break-after: always; height: 10px; display: block; }
+                        /* Simplistic Page Break CSS */
+                        .page-break { page-break-after: always; height: 1px; display: block; }
 
                         @page { size: letter; margin: 0.5in; }
                     </style>
@@ -421,12 +413,11 @@ JavaScript
                 // --- DATA EXTRACTION ---
                 let dataMap = {};
                 for (const [key, value] of formData.entries()) {
-                    // Only fill the data if it exists, otherwise it will render as N/A or Blank for blank template test
                     dataMap[key.trim()] = value;
                 }
 
                 // Function to safely retrieve a value
-                const getVal = (key) => dataMap[key] || '_______'; // Use lines for BLANK TEMPLATE test
+                const getVal = (key) => dataMap[key] || '_______';
 
                 // --- TEMPLATE START ---
                 let finalHtml = `
@@ -436,59 +427,47 @@ JavaScript
                     ${styleCss}
                 </head>
                 <body>
-                    <div id="pdf-source-content" class="pdf-content-wrapper">
-                    <h1>HARON8 ENTERPRISES, LLC - RESIDENTIAL LEASE APPLICATION</h1> <div class="form-section">
-                        <h2>APPLICANT & CO-APPLICANT DATA</h2>
-                        <div class="field-row"><span class="field-label">Full Name:</span> <span class="field-value">${getVal('Full Name')}</span></div>
-                        <div class="field-row"><span class="field-label">Social Security:</span> <span class="field-value">${getVal('Social Security Number')}</span></div>
-                        <div class="field-row"><span class="field-label">Date of Birth:</span> <span class="field-value">${getVal('Date of Birth')}</span></div>
-                        <div class="field-row"><span class="field-label">Driver's License #/State:</span> <span class="field-value">${getVal("Driver's License #")}</span></div>
-                        <div class="field-row"><span class="field-label">Phone:</span> <span class="field-value">${getVal('Phone')}</span></div>
-                        <div class="field-row"><span class="field-label">Email:</span> <span class="field-value">${getVal('Email Address')}</span></div>
-                    </div>
+                    <div id="pdf-source-content">
+                    <h1>HARON9 ENTERPRISES, LLC - RESIDENTIAL LEASE APPLICATION</h1> <h2>APPLICANT & CO-APPLICANT DATA</h2>
+                    <div class="field-row"><span class="field-label">Full Name:</span> <span class="field-value">${getVal('Full Name')}</span></div>
+                    <div class="field-row"><span class="field-label">Social Security:</span> <span class="field-value">${getVal('Social Security Number')}</span></div>
+                    <div class="field-row"><span class="field-label">Date of Birth:</span> <span class="field-value">${getVal('Date of Birth')}</span></div>
+                    <div class="field-row"><span class="field-label">Driver's License #/State:</span> <span class="field-value">${getVal("Driver's License #")}</span></div>
+                    <div class="field-row"><span class="field-label">Phone:</span> <span class="field-value">${getVal('Phone')}</span></div>
+                    <div class="field-row"><span class="field-label">Email:</span> <span class="field-value">${getVal('Email Address')}</span></div>
                     
-                    <div class="form-section">
-                        <h2>RESIDENCE HISTORY</h2>
-                        <div class="field-row"><span class="field-label">Current Address:</span> <span class="field-value">${getVal('Current Address')}</span></div>
-                        <div class="field-row"><span class="field-label">Time At Current Address:</span> <span class="field-value">${getVal('How long at current address')}</span></div>
-                        <div class="field-row"><span class="field-label">Previous Address:</span> <span class="field-value">${getVal('Previous Address')}</span></div>
-                        <div class="field-row"><span class="field-label">Time At Previous Address:</span> <span class="field-value">${getVal('How long at previous address')}</span></div>
-                    </div>
+                    <h2>RESIDENCE HISTORY</h2>
+                    <div class="field-row"><span class="field-label">Current Address:</span> <span class="field-value">${getVal('Current Address')}</span></div>
+                    <div class="field-row"><span class="field-label">Time At Current Address:</span> <span class="field-value">${getVal('How long at current address')}</span></div>
+                    <div class="field-row"><span class="field-label">Previous Address:</span> <span class="field-value">${getVal('Previous Address')}</span></div>
+                    <div class="field-row"><span class="field-label">Time At Previous Address:</span> <span class="field-value">${getVal('How long at previous address')}</span></div>
                     
                     <div class="page-break"></div>
 
-                    <div class="form-section">
-                        <h2>HOUSEHOLD MEMBERS</h2>
-                        ${generateDynamicSection(dataMap, 'Household Member', ['Full Name', 'Age & DOB', 'Relationship'], getVal)}
-                    </div>
+                    <h2>HOUSEHOLD MEMBERS</h2>
+                    ${generateDynamicSection(dataMap, 'Household Member', ['Full Name', 'Age & DOB', 'Relationship'], getVal)}
                     
-                    <div class="form-section">
-                        <h2>EMPLOYMENT & INCOME</h2>
-                        <h3 class="dynamic-title">Employment Records:</h3>
-                        ${generateDynamicSection(dataMap, 'Employment Record', ['Employer Name', 'Phone Number', 'Address', 'Position', 'Pay Rate', 'Annual Income', 'Time Employed'], getVal)}
-                        <h3 class="dynamic-title" style="margin-top: 15px;">Other Income Sources:</h3>
-                        ${generateDynamicSection(dataMap, 'Income Source', ['Type', 'Amount'], getVal)}
-                    </div>
+                    <h2>EMPLOYMENT & INCOME</h2>
+                    <h3>Employment Records:</h3>
+                    ${generateDynamicSection(dataMap, 'Employment Record', ['Employer Name', 'Phone Number', 'Address', 'Position', 'Pay Rate', 'Annual Income', 'Time Employed'], getVal)}
+                    <h3 style="margin-top: 15px;">Other Income Sources:</h3>
+                    ${generateDynamicSection(dataMap, 'Income Source', ['Type', 'Amount'], getVal)}
 
                     <div class="page-break"></div>
                     
-                    <div class="form-section">
-                        <h2>ASSETS & LIABILITIES</h2>
-                        <h3 class="dynamic-title">Assets:</h3>
-                        ${generateDynamicSection(dataMap, 'Asset', ['Type', 'Value', 'Interest Rate'], getVal)}
-                        <h3 class="dynamic-title" style="margin-top: 15px;">Liabilities:</h3>
-                        ${generateDynamicSection(dataMap, 'Liability', ['Type', "Creditor's Name", 'Balance Owed', 'Monthly Payment'], getVal)}
-                    </div>
+                    <h2>ASSETS & LIABILITIES</h2>
+                    <h3>Assets:</h3>
+                    ${generateDynamicSection(dataMap, 'Asset', ['Type', 'Value', 'Interest Rate'], getVal)}
+                    <h3 style="margin-top: 15px;">Liabilities:</h3>
+                    ${generateDynamicSection(dataMap, 'Liability', ['Type', "Creditor's Name", 'Balance Owed', 'Monthly Payment'], getVal)}
 
-                    <div class="form-section">
-                        <h2>AUTHORIZATION & AGREEMENT (PAGE 6 DATA EDITS)</h2>
-                        <div class="field-row">
-                            <span class="field-label">Agreement Check:</span>
-                            <span class="field-value">${document.getElementById('agree-terms')?.checked ? 'CHECKED (AGREED TO TERMS)' : '_______'}</span>
-                        </div>
-                        <p class="note">This data confirms the applicant has reviewed and agreed to the Florida Statute and the terms of the application.</p>
-                        <p class="note" style="margin-top: 20px;">Application submitted for manual review on: ${new Date().toLocaleString()}</p>
+                    <h2>AUTHORIZATION & AGREEMENT (PAGE 6 DATA EDITS)</h2>
+                    <div class="field-row">
+                        <span class="field-label">Agreement Check:</span>
+                        <span class="field-value">${document.getElementById('agree-terms')?.checked ? 'CHECKED (AGREED TO TERMS)' : '_______'}</span>
                     </div>
+                    <p class="note">This data confirms the applicant has reviewed and agreed to the Florida Statute and the terms of the application.</p>
+                    <p class="note" style="margin-top: 20px;">Application submitted for manual review on: ${new Date().toLocaleString()}</p>
                     </div>
                 </body>
                 </html>
@@ -515,21 +494,18 @@ JavaScript
                         }
                     }
 
-                    // For the blank template test, force one instance of the section
-                    if (!hasContent && prefix === 'Household Member') {
-                        groups[1] = { 'Full Name': '', 'Age & DOB': '', 'Relationship': '' };
+                    // For the blank template test, force one instance of the primary sections
+                    if (!hasContent && (prefix === 'Household Member' || prefix === 'Employment Record')) {
+                        groups[1] = {};
+                        for (const field of fields) {
+                            groups[1][field] = '';
+                        }
                     }
-                     if (!hasContent && prefix === 'Employment Record') {
-                        groups[1] = { 'Employer Name': '', 'Position': '', 'Annual Income': '' };
-                    }
-                    // Do not force the blank template for optional Income/Asset/Liability, rely on the main sections above.
-
 
                     // Build HTML for each dynamic group
                     for (const index in groups) {
                         html += `<div class="dynamic-group"><h3>${prefix} ${index}</h3>`;
                         for (const field of fields) {
-                            // Use the value from the map, or rely on the blank line from the valueGetter if blank
                             const val = groups[index][field] || ''; 
                             html += `<div class="field-row"><span class="field-label">${field}:</span> <span class="field-value">${val ? val : '_______'}</span></div>`;
                         }
@@ -564,13 +540,12 @@ JavaScript
                 // 3. Define PDF generation options
                 const options = {
                     margin: [0.5, 0.5, 0.5, 0.5], 
-                    filename: 'Haron_Application_Filled_Form_v23_0_' + new Date().toISOString().slice(0, 10) + '.pdf',
+                    filename: 'Haron_Application_Filled_Form_v24_0_' + new Date().toISOString().slice(0, 10) + '.pdf',
                     image: { type: 'jpeg', quality: 0.98 },
                     html2canvas: { 
                         scale: 1,
                         scrollY: 0,
-                        // Fix for capture failure: try to capture the entire height
-                        height: sourceElement.querySelector('#pdf-source-content').scrollHeight 
+                        // height: sourceElement.querySelector('#pdf-source-content').scrollHeight 
                     },
                     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
                     pagebreak: { mode: 'avoid-all' }
