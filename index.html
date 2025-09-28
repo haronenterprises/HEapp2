@@ -99,9 +99,8 @@
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
-            <p class="text-sm text-gray-500">Eff date 09 28 25 v25.0 new Haron 9  pdf multiple  </p>
+            <p class="text-sm text-gray-500">Eff date 09 28 25 v26.0 new Haron 10  G doc  </p>
         </header>
-
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
             <div id="progress-bar" class="p-6 border-b border-gray-200">
                 <div class="flex items-center justify-between">
@@ -290,10 +289,9 @@
                          <button type="submit" id="submit-btn" class="btn-primary" style="display: none;">Submit Application</button>
                      </div>
               </form>
-JavaScript
- <script>
+<script>
         document.addEventListener('DOMContentLoaded', () => {
-            // v25.0: Total steps set to 6.
+            // v26.0: FINAL WORKING VERSION (Print Solution)
             let currentStep = 1;
             const totalSteps = 6; 
             const form = document.getElementById('rental-application-form');
@@ -379,23 +377,26 @@ JavaScript
             updateButtons();
             updateProgressBar();
             
-            // --- PDF TEMPLATE CREATION AND INJECTION LOGIC ---
+            // --- FINAL PRINT TEMPLATE GENERATION LOGIC ---
 
-            // Function to generate the FINAL, STYLED PDF HTML with data injection
-            const generateFinalPdfHtml = (formData) => {
+            const generateFinalPrintHtml = (formData) => {
                 
-                // --- STYLING FOR PDF (V25.0 - Simple Flow CSS) ---
+                // --- STYLING FOR PRINT OUTPUT (Simple and reliable CSS) ---
                 const styleCss = `
                     <style>
-                        body { font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.5; padding: 0.5in; margin: 0; }
+                        body { font-family: 'Times New Roman', serif; font-size: 11pt; line-height: 1.4; padding: 0.5in; margin: 0; }
                         h1 { font-size: 18pt; text-align: center; margin-bottom: 25px; border-bottom: 2px solid #000; padding-bottom: 10px; }
-                        h2 { font-size: 14pt; margin-top: 30px; margin-bottom: 10px; color: #1e3a8a; border-bottom: 1px solid #000; padding-bottom: 5px; page-break-after: avoid; }
+                        h2 { font-size: 14pt; margin-top: 30px; margin-bottom: 10px; color: #1e3a8a; border-bottom: 1px solid #000; padding-bottom: 5px; page-break-before: auto; }
                         h3 { font-size: 12pt; margin-top: 15px; margin-bottom: 8px; color: #444; }
-                        .data-row { margin-bottom: 5px; }
-                        .data-label { font-weight: bold; width: 180px; display: inline-block; }
-                        .data-value { color: #a00; font-weight: bold; }
+                        
+                        .field-row { margin-bottom: 5px; display: flex; flex-wrap: wrap; }
+                        .field-label { font-weight: bold; width: 180px; flex-shrink: 0; display: inline-block; }
+                        /* This style mimics typing on a line */
+                        .field-value { border-bottom: 1px solid #000; flex-grow: 1; min-width: 250px; padding: 0 5px; color: #000; font-weight: normal; } 
+                        
                         .dynamic-group { margin: 10px 0 15px 0; padding: 10px; border: 1px solid #ccc; border-radius: 5px; page-break-inside: avoid; }
-                        .page-break { page-break-before: always; height: 1px; display: block; }
+                        .note { font-style: italic; color: #555; margin-top: 20px; font-size: 10pt; }
+                        
                         @page { size: letter; margin: 0.5in; }
                     </style>
                 `;
@@ -407,43 +408,51 @@ JavaScript
                 }
 
                 // Function to safely retrieve a value
-                const getVal = (key) => dataMap[key] || '_______';
+                const getVal = (key) => dataMap[key] || '____________________'; // Use long line for visual effect
 
                 // --- TEMPLATE START ---
                 let finalHtml = `
                 <html>
                 <head>
-                    <title>Rental Application - Filled Form</title>
+                    <title>Print Application</title>
                     ${styleCss}
                 </head>
                 <body>
-                    <div id="pdf-source-content">
-                    <h1>HARON9 ENTERPRISES, LLC - RESIDENTIAL LEASE APPLICATION</h1> <h2>APPLICANT & RESIDENCE DATA</h2>
-                    <div class="data-row"><span class="data-label">Full Name:</span> <span class="data-value">${getVal('Full Name')}</span></div>
-                    <div class="data-row"><span class="data-label">Social Security:</span> <span class="data-value">${getVal('Social Security Number')}</span></div>
-                    <div class="data-row"><span class="data-label">Email Address:</span> <span class="data-value">${getVal('Email Address')}</span></div>
-                    <div class="data-row"><span class="data-label">Current Address:</span> <span class="data-value">${getVal('Current Address')}</span></div>
-                    <div class="data-row"><span class="data-label">Previous Address:</span> <span class="data-value">${getVal('Previous Address')}</span></div>
+                    <div id="print-content">
+                    <h1>HARON9 ENTERPRISES, LLC - RESIDENTIAL LEASE APPLICATION</h1> <h2>APPLICANT & CO-APPLICANT DATA (Page 1)</h2>
+                    <div class="field-row"><span class="field-label">Full Name:</span> <span class="field-value">${getVal('Full Name')}</span></div>
+                    <div class="field-row"><span class="field-label">Social Security:</span> <span class="field-value">${getVal('Social Security Number')}</span></div>
+                    <div class="field-row"><span class="field-label">Date of Birth:</span> <span class="field-value">${getVal('Date of Birth')}</span></div>
+                    <div class="field-row"><span class="field-label">Phone:</span> <span class="field-value">${getVal('Phone')}</span></div>
+                    <div class="field-row"><span class="field-label">Email:</span> <span class="field-value">${getVal('Email Address')}</span></div>
                     
-                    <div class="page-break"></div> <h2>HOUSEHOLD MEMBERS & EMPLOYMENT (Page 2 Data)</h2>
+                    <h2>RESIDENCE HISTORY (Page 1)</h2>
+                    <div class="field-row"><span class="field-label">Current Address:</span> <span class="field-value">${getVal('Current Address')}</span></div>
+                    <div class="field-row"><span class="field-label">Time At Current Address:</span> <span class="field-value">${getVal('How long at current address')}</span></div>
+                    <div class="field-row"><span class="field-label">Previous Address:</span> <span class="field-value">${getVal('Previous Address')}</span></div>
+                    
+                    <h2>HOUSEHOLD MEMBERS (Page 2 Data)</h2>
                     ${generateDynamicSection(dataMap, 'Household Member', ['Full Name', 'Age & DOB', 'Relationship'], getVal)}
                     
-                    <h3 style="margin-top: 20px;">Employment Records:</h3>
+                    <h2 style="page-break-before: always;">EMPLOYMENT & INCOME (Page 2/3 Data)</h2>
+                    <h3>Employment Records:</h3>
                     ${generateDynamicSection(dataMap, 'Employment Record', ['Employer Name', 'Position', 'Annual Income'], getVal)}
-                    
-                    <div class="page-break"></div> <h2>INCOME, ASSETS & LIABILITIES</h2>
                     <h3 style="margin-top: 15px;">Other Income Sources:</h3>
                     ${generateDynamicSection(dataMap, 'Income Source', ['Type', 'Amount'], getVal)}
 
+                    <h2 style="page-break-before: always;">ASSETS & LIABILITIES (Page 4/5 Data)</h2>
+                    <h3>Assets:</h3>
+                    ${generateDynamicSection(dataMap, 'Asset', ['Type', 'Value', 'Interest Rate'], getVal)}
                     <h3 style="margin-top: 15px;">Liabilities:</h3>
-                    ${generateDynamicSection(dataMap, 'Liability', ['Type', "Creditor's Name", 'Balance Owed'], getVal)}
+                    ${generateDynamicSection(dataMap, 'Liability', ['Type', "Creditor's Name", 'Balance Owed', 'Monthly Payment'], getVal)}
 
-                    <h2>AUTHORIZATION & AGREEMENT (PAGE 6 DATA)</h2>
-                    <div class="data-row">
-                        <span class="data-label">Agreement Check:</span>
-                        <span class="data-value">${document.getElementById('agree-terms')?.checked ? 'CHECKED (AGREED TO TERMS)' : 'NOT CHECKED'}</span>
+                    <h2 style="page-break-before: always;">AUTHORIZATION & AGREEMENT (Page 6 Data)</h2>
+                    <div class="field-row">
+                        <span class="field-label">Agreement Check:</span>
+                        <span class="field-value">${document.getElementById('agree-terms')?.checked ? 'CHECKED (AGREED TO TERMS)' : 'NOT CHECKED'}</span>
                     </div>
-                    <p class="note">Application submitted for manual review on: ${new Date().toLocaleString()}</p>
+                    <p class="note">This document is ready for manual review and printing as a formal record of submission.</p>
+                    <p class="note" style="margin-top: 20px;">Application submitted for review on: ${new Date().toLocaleString()}</p>
                     </div>
                 </body>
                 </html>
@@ -472,7 +481,7 @@ JavaScript
                         html += `<div class="dynamic-group"><h3>${prefix} ${index}</h3>`;
                         for (const field of fields) {
                             const val = groups[index][field] || ''; 
-                            html += `<div class="data-row"><span class="data-label">${field}:</span> <span class="data-value">${val ? val : '_______'}</span></div>`;
+                            html += `<div class="field-row"><span class="field-label">${field}:</span> <span class="field-value">${val ? val : '____________________'}</span></div>`;
                         }
                         html += `</div>`;
                     }
@@ -483,7 +492,7 @@ JavaScript
             };
 
 
-            // START: CODE FOR FORM SUBMISSION AND PDF GENERATION
+            // START: CODE FOR FORM SUBMISSION AND PRINTING
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
                 
@@ -494,40 +503,21 @@ JavaScript
                     return;
                 }
                 
-                // 1. Generate the final, styled HTML string
-                const styledHtml = generateFinalPdfHtml(new FormData(form));
+                // 1. Generate the final print-ready HTML string
+                const printHtml = generateFinalPrintHtml(new FormData(form));
                 
-                // 2. Create a temporary element and append it to the document body
-                const sourceElement = document.createElement('div');
-                sourceElement.innerHTML = styledHtml;
-                document.body.appendChild(sourceElement); 
+                // 2. Open a new window with the generated HTML
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write(printHtml);
+                printWindow.document.close();
 
-                // 3. Define PDF generation options
-                const options = {
-                    margin: [0.5, 0.5, 0.5, 0.5], 
-                    filename: 'Haron_Application_Filled_Form_v25_0_' + new Date().toISOString().slice(0, 10) + '.pdf',
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { 
-                        scale: 1,
-                        scrollY: 0,
-                    },
-                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-                    pagebreak: { mode: 'avoid-all' }
+                // 3. Trigger the browser's print dialogue
+                printWindow.onload = () => {
+                    printWindow.print();
+                    // printWindow.close(); // You may want to close this window after printing
                 };
-
-                // 4. Generate and download the PDF
-                setTimeout(() => {
-                    html2pdf()
-                        .set(options)
-                        .from(sourceElement.querySelector('#pdf-source-content')) // Target the inner wrapper explicitly
-                        .save()
-                        .then(() => {
-                            // 5. Clean up
-                            document.body.removeChild(sourceElement);
-                        });
-                }, 100); 
             });
-            // END: CODE FOR FORM SUBMISSION AND PDF GENERATION
+            // END: CODE FOR FORM SUBMISSION AND PRINTING
 
         });
 
@@ -535,8 +525,5 @@ JavaScript
             // Retaining this function...
         }
     </script>
-  
-
-   
-</body>
+  </body>
 </html>
