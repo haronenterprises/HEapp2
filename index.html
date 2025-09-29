@@ -99,7 +99,7 @@
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
-            <p class="text-sm text-gray-500">Eff date 09 30 25 v30.0 new Haron 113  G doc  4dump </p>
+            <p class="text-sm text-gray-500">Eff date 09 30 25 v31.0 new Haron 14  G doc  4dump </p>
         </header>
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
             <div id="progress-bar" class="p-6 border-b border-gray-200">
@@ -291,7 +291,7 @@
               </form>
  <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // v30.0: FINAL VERSION - Uses simplified data access and includes a RAW DATA DUMP for debugging.
+            // v31.0: FINAL FIX - Uses simplified, brute-force data parsing to guarantee dynamic data capture.
             let currentStep = 1;
             const totalSteps = 6; 
             const form = document.getElementById('rental-application-form');
@@ -391,13 +391,10 @@
                         
                         .field-row { margin-bottom: 5px; display: flex; flex-wrap: wrap; }
                         .field-label { font-weight: bold; width: 180px; flex-shrink: 0; display: inline-block; }
-                        /* This style mimics typing on a line */
                         .field-value { border-bottom: 1px solid #000; flex-grow: 1; min-width: 250px; padding: 0 5px; color: #000; font-weight: normal; } 
                         
                         .dynamic-group { margin: 10px 0 15px 0; padding: 10px; border: 1px solid #ccc; border-radius: 5px; page-break-inside: avoid; }
                         .note { font-style: italic; color: #555; margin-top: 20px; font-size: 10pt; }
-                        
-                        /* Style for Raw Data Dump */
                         .data-dump { font-size: 9pt; background: #f4f4f4; padding: 10px; border: 1px dashed #aaa; white-space: pre-wrap; word-wrap: break-word; }
                         
                         @media print {
@@ -409,7 +406,7 @@
                     </style>
                 `;
 
-                // --- DATA EXTRACTION ---
+                // --- DATA EXTRACTION & DUMP ---
                 let dataMap = {};
                 let rawDataOutput = "--- RAW FORM DATA DUMP ---\n\n";
 
@@ -421,6 +418,13 @@
 
                 // Function to safely retrieve a value
                 const getVal = (key) => dataMap[key] || '____________________';
+                
+                // Helper to safely find data for fields with bad names (like "Email Address")
+                const findVal = (partialKey) => {
+                    const foundKey = Object.keys(dataMap).find(k => k.toLowerCase().includes(partialKey.toLowerCase()));
+                    return dataMap[foundKey] || '____________________';
+                };
+
 
                 // --- TEMPLATE START ---
                 let finalHtml = `
@@ -431,7 +435,7 @@
                 </head>
                 <body>
                     <div id="print-content">
-                    <h1>HARON13 ENTERPRISES, LLC - RESIDENTIAL LEASE APPLICATION</h1> <h2 style="color: red; border-bottom: 2px solid red;">FOR AGENT USE ONLY: RAW DATA DIAGNOSTIC</h2>
+                    <h1>HARON14 ENTERPRISES, LLC - RESIDENTIAL LEASE APPLICATION</h1> <h2 style="color: red; border-bottom: 2px solid red;">FOR AGENT USE ONLY: RAW DATA DIAGNOSTIC</h2>
                     <div class="data-dump">${rawDataOutput}</div>
                     
                     <div class="print-page-break"></div>
@@ -441,9 +445,7 @@
                     <div class="field-row"><span class="field-label">Social Security:</span> <span class="field-value">${getVal('Social Security Number')}</span></div>
                     <div class="field-row"><span class="field-label">Date of Birth:</span> <span class="field-value">${getVal('Date of Birth')}</span></div>
                     <div class="field-row"><span class="field-label">Phone:</span> <span class="field-value">${getVal('Phone')}</span></div>
-                    <div class="field-row"><span class="field-label">Email:</span> <span class="field-value">${getVal('Email Address')}</span></div>
-                    
-                    <h2>RESIDENCE HISTORY (Page 1)</h2>
+                    <div class="field-row"><span class="field-label">Email:</span> <span class="field-value">${findVal('email')}</span></div> <h2>RESIDENCE HISTORY (Page 1)</h2>
                     <div class="field-row"><span class="field-label">Current Address:</span> <span class="field-value">${getVal('Current Address')}</span></div>
                     <div class="field-row"><span class="field-label">Time At Current Address:</span> <span class="field-value">${getVal('How long at current address')}</span></div>
                     <div class="field-row"><span class="field-label">Previous Address:</span> <span class="field-value">${getVal('Previous Address')}</span></div>
@@ -479,7 +481,7 @@
                 </html>
                 `;
 
-                // --- HELPER FUNCTION FOR DYNAMIC SECTIONS ---
+                // --- HELPER FUNCTION FOR DYNAMIC SECTIONS (V31.0 FIX APPLIED) ---
                 function generateDynamicSection(data, prefix, fields) {
                     let html = '';
                     let groups = {};
@@ -489,11 +491,12 @@
                     for (const key in data) {
                         if (key.startsWith(prefix)) {
                             const parts = key.split(' ');
-                            const numberIndex = parts[parts.findIndex(p => p === prefix.split(' ')[1] || p === prefix) + 1];
                             
-                            // 🛑 V30.0 FIX: Correctly slices the array to get the full field name
+                            // Find the index number
+                            const numberIndex = parts.find(p => !isNaN(parseInt(p)) && p.length > 0);
+                            
+                            // Find the starting point of the field name (the word after the index number)
                             const indexStart = parts.indexOf(numberIndex);
-                            // Slices from the word AFTER the index number
                             const fieldName = (indexStart !== -1) ? parts.slice(indexStart + 1).join(' ') : ''; 
 
                             if (numberIndex && fieldName) {
@@ -508,8 +511,8 @@
                     for (const index in groups) {
                         html += `<div class="dynamic-group"><h3>${prefix} ${index}</h3>`;
                         for (const field of fields) {
+                            // Find value using the consistent field name we defined in the fields array
                             const val = groups[index][field] || ''; 
-                            // This part is robust, using the data collected in step 1
                             html += `<div class="field-row"><span class="field-label">${field}:</span> <span class="field-value">${val ? val : '____________________'}</span></div>`;
                         }
                         html += `</div>`;
@@ -554,7 +557,6 @@
                 // 3. Trigger the browser's print dialogue
                 printWindow.onload = () => {
                     printWindow.print();
-                    // printWindow.close(); 
                 };
             });
             // END: CODE FOR FORM SUBMISSION AND PRINTING
