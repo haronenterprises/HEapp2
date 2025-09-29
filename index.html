@@ -99,7 +99,7 @@
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
-            <p class="text-sm text-gray-500">Eff date 09 28 25 v29.0 new Haron 12  G doc  </p>
+            <p class="text-sm text-gray-500">Eff date 09 29 25 v29.0 new Haron 12  G doc  </p>
         </header>
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
             <div id="progress-bar" class="p-6 border-b border-gray-200">
@@ -289,9 +289,9 @@
                          <button type="submit" id="submit-btn" class="btn-primary" style="display: none;">Submit Application</button>
                      </div>
               </form>
-<script>
+ <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // v27.0: FINAL VERSION - Fixes missing Page 2/3 data and uses robust printing.
+            // v28.0: FINAL VERSION - Fixes critical dynamic data extraction bug.
             let currentStep = 1;
             const totalSteps = 6; 
             const form = document.getElementById('rental-application-form');
@@ -398,11 +398,10 @@
                         .note { font-style: italic; color: #555; margin-top: 20px; font-size: 10pt; }
                         
                         @media print {
-                            /* Forces all content to be displayed in print view */
+                            /* Ensures high-quality printing */
                             body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
                             h2, h3 { page-break-after: avoid; }
                             .dynamic-group { page-break-inside: avoid; }
-                            /* Page breaks manually inserted below will work better */
                             .print-page-break { page-break-before: always; height: 1px; display: block; } 
                         }
                     </style>
@@ -426,7 +425,7 @@
                 </head>
                 <body>
                     <div id="print-content">
-                    <h1>HARON10 ENTERPRISES, LLC - RESIDENTIAL LEASE APPLICATION</h1> <h2>APPLICANT & CO-APPLICANT DATA (Page 1)</h2>
+                    <h1>HARON11 ENTERPRISES, LLC - RESIDENTIAL LEASE APPLICATION</h1> <h2>APPLICANT & CO-APPLICANT DATA (Page 1)</h2>
                     <div class="field-row"><span class="field-label">Full Name:</span> <span class="field-value">${getVal('Full Name')}</span></div>
                     <div class="field-row"><span class="field-label">Social Security:</span> <span class="field-value">${getVal('Social Security Number')}</span></div>
                     <div class="field-row"><span class="field-label">Date of Birth:</span> <span class="field-value">${getVal('Date of Birth')}</span></div>
@@ -438,7 +437,9 @@
                     <div class="field-row"><span class="field-label">Time At Current Address:</span> <span class="field-value">${getVal('How long at current address')}</span></div>
                     <div class="field-row"><span class="field-label">Previous Address:</span> <span class="field-value">${getVal('Previous Address')}</span></div>
                     
-                    <div class="print-page-break"></div> <h2>HOUSEHOLD MEMBERS (Page 2 Data)</h2>
+                    <div class="print-page-break"></div>
+
+                    <h2>HOUSEHOLD MEMBERS (Page 2 Data)</h2>
                     ${generateDynamicSection(dataMap, 'Household Member', ['Full Name', 'Age & DOB', 'Relationship'])}
                     
                     <h2 style="margin-top: 30px;">EMPLOYMENT & INCOME (Page 2/3 Data)</h2>
@@ -447,7 +448,9 @@
                     <h3 style="margin-top: 15px;">Other Income Sources:</h3>
                     ${generateDynamicSection(dataMap, 'Income Source', ['Type', 'Amount'])}
 
-                    <div class="print-page-break"></div> <h2>ASSETS & LIABILITIES (Page 4/5 Data)</h2>
+                    <div class="print-page-break"></div>
+
+                    <h2>ASSETS & LIABILITIES (Page 4/5 Data)</h2>
                     <h3>Assets:</h3>
                     ${generateDynamicSection(dataMap, 'Asset', ['Type', 'Value', 'Interest Rate'])}
                     <h3 style="margin-top: 15px;">Liabilities:</h3>
@@ -469,8 +472,9 @@
                 function generateDynamicSection(data, prefix, fields) {
                     let html = '';
                     let groups = {};
+                    let hasContent = false;
 
-                    // Group fields by their index (e.g., '1', '2')
+                    // 1. Group fields by their index (e.g., '1', '2')
                     for (const key in data) {
                         if (key.startsWith(prefix)) {
                             const parts = key.split(' ');
@@ -480,25 +484,27 @@
                             if (numberIndex && fieldName) {
                                 if (!groups[numberIndex]) groups[numberIndex] = {};
                                 groups[numberIndex][fieldName] = data[key];
+                                if (data[key] && data[key] !== 'N/A') hasContent = true;
                             }
                         }
                     }
 
-                    // Build HTML for each dynamic group
+                    // 2. If data is missing for primary sections, show a blank line for visual formatting
+                    if (!hasContent && (prefix === 'Household Member' || prefix === 'Employment Record')) {
+                        // Force a blank row to show the formatting, if no data was entered at all
+                         groups[1] = {};
+                        for (const field of fields) {
+                            groups[1][field] = '';
+                        }
+                    }
+
+                    // 3. Build HTML for each dynamic group
                     for (const index in groups) {
                         html += `<div class="dynamic-group"><h3>${prefix} ${index}</h3>`;
                         for (const field of fields) {
                             const val = groups[index][field] || ''; 
                             // Using the long line as the fallback for blank fields
                             html += `<div class="field-row"><span class="field-label">${field}:</span> <span class="field-value">${val ? val : '____________________'}</span></div>`;
-                        }
-                        html += `</div>`;
-                    }
-                    // For the blank template test, force one instance of the primary sections if none were entered
-                    if (!html && (prefix === 'Household Member' || prefix === 'Employment Record')) {
-                        html += `<div class="dynamic-group"><h3>${prefix} 1 (No data entered)</h3>`;
-                         for (const field of fields) {
-                            html += `<div class="field-row"><span class="field-label">${field}:</span> <span class="field-value">____________________</span></div>`;
                         }
                         html += `</div>`;
                     }
