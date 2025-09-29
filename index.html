@@ -99,7 +99,7 @@
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
-            <p class="text-sm text-gray-500">Eff date 09 29 25 v29.0 new Haron 12  G doc  </p>
+            <p class="text-sm text-gray-500">Eff date 09 29 25 v29.0 new Haron 12  G doc 2 </p>
         </header>
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
             <div id="progress-bar" class="p-6 border-b border-gray-200">
@@ -289,9 +289,9 @@
                          <button type="submit" id="submit-btn" class="btn-primary" style="display: none;">Submit Application</button>
                      </div>
               </form>
- <script>
+<script>
         document.addEventListener('DOMContentLoaded', () => {
-            // v28.0: FINAL VERSION - Fixes critical dynamic data extraction bug.
+            // v29.0: FINAL VERSION - Fixes critical field name extraction bug for dynamic sections.
             let currentStep = 1;
             const totalSteps = 6; 
             const form = document.getElementById('rental-application-form');
@@ -425,7 +425,7 @@
                 </head>
                 <body>
                     <div id="print-content">
-                    <h1>HARON11 ENTERPRISES, LLC - RESIDENTIAL LEASE APPLICATION</h1> <h2>APPLICANT & CO-APPLICANT DATA (Page 1)</h2>
+                    <h1>HARON12 ENTERPRISES, LLC - RESIDENTIAL LEASE APPLICATION</h1> <h2>APPLICANT & CO-APPLICANT DATA (Page 1)</h2>
                     <div class="field-row"><span class="field-label">Full Name:</span> <span class="field-value">${getVal('Full Name')}</span></div>
                     <div class="field-row"><span class="field-label">Social Security:</span> <span class="field-value">${getVal('Social Security Number')}</span></div>
                     <div class="field-row"><span class="field-label">Date of Birth:</span> <span class="field-value">${getVal('Date of Birth')}</span></div>
@@ -479,7 +479,8 @@
                         if (key.startsWith(prefix)) {
                             const parts = key.split(' ');
                             const numberIndex = parts[parts.findIndex(p => p === prefix.split(' ')[1] || p === prefix) + 1];
-                            const fieldName = parts.slice(parts.findIndex(p => p === numberIndex) + 1).join(' ');
+                            // 🛑 FIX: Correctly slices the array to get the full field name (e.g., "Full Name")
+                            const fieldName = parts.slice(parts.indexOf(numberIndex) + 1).join(' '); 
 
                             if (numberIndex && fieldName) {
                                 if (!groups[numberIndex]) groups[numberIndex] = {};
@@ -489,22 +490,23 @@
                         }
                     }
 
-                    // 2. If data is missing for primary sections, show a blank line for visual formatting
-                    if (!hasContent && (prefix === 'Household Member' || prefix === 'Employment Record')) {
-                        // Force a blank row to show the formatting, if no data was entered at all
-                         groups[1] = {};
-                        for (const field of fields) {
-                            groups[1][field] = '';
-                        }
-                    }
-
-                    // 3. Build HTML for each dynamic group
+                    // 2. Build HTML for each dynamic group
                     for (const index in groups) {
                         html += `<div class="dynamic-group"><h3>${prefix} ${index}</h3>`;
                         for (const field of fields) {
                             const val = groups[index][field] || ''; 
                             // Using the long line as the fallback for blank fields
                             html += `<div class="field-row"><span class="field-label">${field}:</span> <span class="field-value">${val ? val : '____________________'}</span></div>`;
+                        }
+                        html += `</div>`;
+                        hasContent = true; // Mark as having content if groups were processed
+                    }
+                    
+                    // 3. If no content was found, but it's a primary section, show blank lines
+                    if (!hasContent && (prefix === 'Household Member' || prefix === 'Employment Record')) {
+                        html += `<div class="dynamic-group"><h3>${prefix} 1 (No data entered)</h3>`;
+                         for (const field of fields) {
+                            html += `<div class="field-row"><span class="field-label">${field}:</span> <span class="field-value">____________________</span></div>`;
                         }
                         html += `</div>`;
                     }
