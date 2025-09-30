@@ -99,7 +99,7 @@
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
-            <p class="text-sm text-gray-500">Eff date 09 30 25 v32.0 new Haron 14  G doc  4dump </p>
+            <p class="text-sm text-gray-500">Eff date 09 30 25 v33.0 new Haron   16 doc  dump </p>
         </header>
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
             <div id="progress-bar" class="p-6 border-b border-gray-200">
@@ -111,51 +111,69 @@
             <form id="rental-application-form" class="p-6 md:p-8">
                 <div id="status-message" class="text-sm px-4 py-2 rounded-md mb-4 hidden" role="alert"></div>
                 
-               <section id="section-1" class="form-section active">
+<section id="section-1" class="form-section active">
     <h2 class="text-2xl font-semibold mb-2 text-gray-800">APPLICANT & CO-APPLICANT DATA (Page 1)</h2>
-    <p class="text-gray-600 mb-6">Complete all fields. Please note the co-applicant section is optional.</p>
+    <p class="text-gray-600 mb-6">Complete all relevant fields below. Co-Applicant information is optional.</p>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div class="p-4 border border-blue-200 rounded-lg bg-blue-50">
-            <h3 class="font-bold text-lg mb-4 text-blue-700">Applicant Details</h3>
-            
-            <div class="space-y-4">
-                <label class="label-text">Full Name</label><input type="text" name="Applicant Full Name" class="input-field">
-                <label class="label-text">Date of Birth</label><input type="date" name="Applicant Date of Birth" class="input-field">
-                <label class="label-text">Social Security Number</label><input type="text" name="Applicant SSN" class="input-field">
-                <label class="label-text">Driver's License #/State</label><input type="text" name="Applicant DL #" class="input-field">
-                <label class="label-text">Phone</label><input type="tel" name="Applicant Phone" class="input-field">
-                <label class="label-text">Email Address</label><input type="email" name="Applicant Email" class="input-field">
-                <label class="label-text">Relationship to Co-Applicant</label><input type="text" name="Applicant Relation to Co-Applicant" class="input-field">
-                <label class="label-text">Current Employer</label><input type="text" name="Applicant Current Employer" class="input-field">
-                <label class="label-text">Monthly Income (Gross)</label><input type="number" name="Applicant Monthly Income" class="input-field">
-                <label class="label-text">Marital Status</label><input type="text" name="Applicant Marital Status" class="input-field">
-                <label class="label-text">Emergency Contact Name</label><input type="text" name="Applicant Emergency Contact Name" class="input-field">
-                <label class="label-text">Emergency Contact Phone</label><input type="tel" name="Applicant Emergency Contact Phone" class="input-field">
-                <label class="label-text">Are you a U.S. Citizen?</label><select name="Applicant Citizen Status" class="input-field"><option>Yes</option><option>No</option></select>
-            </div>
-        </div>
+    <div class="grid grid-cols-3 gap-4 border border-gray-300 rounded-lg p-2">
+        
+        <div class="font-bold text-sm bg-gray-100 p-2 rounded-tl-lg text-gray-700">Description</div>
+        <div class="font-bold text-sm bg-blue-100 p-2 text-blue-700">Applicant</div>
+        <div class="font-bold text-sm bg-gray-100 p-2 rounded-tr-lg text-gray-700">Co-Applicant (Optional)</div>
 
-        <div class="p-4 border border-gray-200 rounded-lg bg-gray-50">
-            <h3 class="font-bold text-lg mb-4 text-gray-700">Co-Applicant Details (Optional)</h3>
-            
-            <div class="space-y-4">
-                <label class="label-text">Full Name</label><input type="text" name="Co-Applicant Full Name" class="input-field">
-                <label class="label-text">Date of Birth</label><input type="date" name="Co-Applicant Date of Birth" class="input-field">
-                <label class="label-text">Social Security Number</label><input type="text" name="Co-Applicant SSN" class="input-field">
-                <label class="label-text">Driver's License #/State</label><input type="text" name="Co-Applicant DL #" class="input-field">
-                <label class="label-text">Phone</label><input type="tel" name="Co-Applicant Phone" class="input-field">
-                <label class="label-text">Email Address</label><input type="email" name="Co-Applicant Email" class="input-field">
-                <label class="label-text">Relationship to Applicant</label><input type="text" name="Co-Applicant Relation to Applicant" class="input-field">
-                <label class="label-text">Current Employer</label><input type="text" name="Co-Applicant Current Employer" class="input-field">
-                <label class="label-text">Monthly Income (Gross)</label><input type="number" name="Co-Applicant Monthly Income" class="input-field">
-                <label class="label-text">Marital Status</label><input type="text" name="Co-Applicant Marital Status" class="input-field">
-                <label class="label-text">Emergency Contact Name</label><input type="text" name="Co-Applicant Emergency Contact Name" class="input-field">
-                <label class="label-text">Emergency Contact Phone</label><input type="tel" name="Co-Applicant Emergency Contact Phone" class="input-field">
-                <label class="label-text">Are you a U.S. Citizen?</label><select name="Co-Applicant Citizen Status" class="input-field"><option>Yes</option><option>No</option></select>
-            </div>
-        </div>
+        <div class="p-2 text-sm text-gray-700 border-t border-gray-200">Full Name</div>
+        <div class="p-2 border-t border-gray-200"><input type="text" name="Applicant Full Name" class="input-field" placeholder="Full Name"></div>
+        <div class="p-2 border-t border-gray-200"><input type="text" name="Co-Applicant Full Name" class="input-field" placeholder="Full Name"></div>
+        
+        <div class="p-2 text-sm text-gray-700 border-t border-gray-200">Date of Birth</div>
+        <div class="p-2 border-t border-gray-200"><input type="date" name="Applicant Date of Birth" class="input-field"></div>
+        <div class="p-2 border-t border-gray-200"><input type="date" name="Co-Applicant Date of Birth" class="input-field"></div>
+
+        <div class="p-2 text-sm text-gray-700 border-t border-gray-200">Social Security Number</div>
+        <div class="p-2 border-t border-gray-200"><input type="text" name="Applicant SSN" class="input-field"></div>
+        <div class="p-2 border-t border-gray-200"><input type="text" name="Co-Applicant SSN" class="input-field"></div>
+        
+        <div class="p-2 text-sm text-gray-700 border-t border-gray-200">Driver's License #/State</div>
+        <div class="p-2 border-t border-gray-200"><input type="text" name="Applicant DL #" class="input-field"></div>
+        <div class="p-2 border-t border-gray-200"><input type="text" name="Co-Applicant DL #" class="input-field"></div>
+        
+        <div class="p-2 text-sm text-gray-700 border-t border-gray-200">Phone</div>
+        <div class="p-2 border-t border-gray-200"><input type="tel" name="Applicant Phone" class="input-field"></div>
+        <div class="p-2 border-t border-gray-200"><input type="tel" name="Co-Applicant Phone" class="input-field"></div>
+        
+        <div class="p-2 text-sm text-gray-700 border-t border-gray-200">Email Address</div>
+        <div class="p-2 border-t border-gray-200"><input type="email" name="Applicant Email" class="input-field"></div>
+        <div class="p-2 border-t border-gray-200"><input type="email" name="Co-Applicant Email" class="input-field"></div>
+        
+        <div class="p-2 text-sm text-gray-700 border-t border-gray-200">Relationship to Other</div>
+        <div class="p-2 border-t border-gray-200"><input type="text" name="Applicant Relation to Co-Applicant" class="input-field"></div>
+        <div class="p-2 border-t border-gray-200"><input type="text" name="Co-Applicant Relation to Applicant" class="input-field"></div>
+
+        <div class="p-2 text-sm text-gray-700 border-t border-gray-200">Current Employer</div>
+        <div class="p-2 border-t border-gray-200"><input type="text" name="Applicant Current Employer" class="input-field"></div>
+        <div class="p-2 border-t border-gray-200"><input type="text" name="Co-Applicant Current Employer" class="input-field"></div>
+        
+        <div class="p-2 text-sm text-gray-700 border-t border-gray-200">Monthly Income (Gross)</div>
+        <div class="p-2 border-t border-gray-200"><input type="number" name="Applicant Monthly Income" class="input-field"></div>
+        <div class="p-2 border-t border-gray-200"><input type="number" name="Co-Applicant Monthly Income" class="input-field"></div>
+        
+        <div class="p-2 text-sm text-gray-700 border-t border-gray-200">Marital Status</div>
+        <div class="p-2 border-t border-gray-200"><input type="text" name="Applicant Marital Status" class="input-field"></div>
+        <div class="p-2 border-t border-gray-200"><input type="text" name="Co-Applicant Marital Status" class="input-field"></div>
+        
+        <div class="p-2 text-sm text-gray-700 border-t border-gray-200">Emergency Contact Name</div>
+        <div class="p-2 border-t border-gray-200"><input type="text" name="Applicant Emergency Contact Name" class="input-field"></div>
+        <div class="p-2 border-t border-gray-200"><input type="text" name="Co-Applicant Emergency Contact Name" class="input-field"></div>
+        
+        <div class="p-2 text-sm text-gray-700 border-t border-gray-200">Emergency Contact Phone</div>
+        <div class="p-2 border-t border-gray-200"><input type="tel" name="Applicant Emergency Contact Phone" class="input-field"></div>
+        <div class="p-2 border-t border-gray-200"><input type="tel" name="Co-Applicant Emergency Contact Phone" class="input-field"></div>
+        
+        <div class="p-2 text-sm text-gray-700 border-t border-gray-200">U.S. Citizen?</div>
+        <div class="p-2 border-t border-gray-200"><select name="Applicant Citizen Status" class="input-field"><option>Yes</option><option>No</option></select></div>
+        <div class="p-2 border-t border-gray-200"><select name="Co-Applicant Citizen Status" class="input-field"><option>Yes</option><option>No</option></select></div>
     </div>
+
 
     <div class="mt-8 border-t border-gray-300 pt-6">
         <h3 class="text-xl font-bold mb-4 text-gray-800">Rental History (4 Year Minimum Required)</h3>
