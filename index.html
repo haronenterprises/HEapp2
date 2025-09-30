@@ -74,11 +74,11 @@
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
-            <!-- START: FIX for Header completion -->
+            <!-- START: Header completion -->
             <p class="text-sm text-gray-600 font-semibold">In Accordance with Seminole County NSP Rentals Program</p>
             <p class="text-sm text-red-600 font-bold">AII INCOMPLETE applications will be REJECTED. Tel: (407) 702-3281 / Fax: (866) 858-5371</p>
-            <p class="text-sm text-gray-500">Eff date 09 18 25 v45.0</p>
-            <!-- END: FIX for Header completion -->
+            <p class="text-sm text-gray-500">Eff date 09 18 25 v46.1</p>
+            <!-- END: Header completion -->
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -130,6 +130,7 @@
                             <h3 class="text-lg font-semibold mb-3 text-gray-700 border-b pb-1">Required Documentation Checklist</h3>
                             <p class="text-sm text-gray-600 mb-4">For any item on the checklist that does not apply, please mark N/A. For any page that does not apply, please mark N/A across the page. This shows our office that you have reviewed the item and that it does not apply to your household.</p>
                             <div class="space-y-2">
+                                <!-- All 18 checkboxes from the original document -->
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeQualified" class="radio-input mr-2" required>I/We understand this property is subject to Maximum Income Qualification.</label>
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeRatio" class="radio-input mr-2" required>Our Household Income is at least 3 times the monthly Rent amount.</label>
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_AdultSignatures" class="radio-input mr-2" required>All adult household members (18 years of age or older) must sign page 6 of the application.</label>
@@ -144,6 +145,11 @@
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_EmployerLetter" class="radio-input mr-2" required>Attach: Letter from employer(s).</label>
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_BankStatements" class="radio-input mr-2" required>Attach: Last six (6) months of bank statements.</label>
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_AssetsLiabilities" class="radio-input mr-2" required>Attach: Documentation for all Assets and Liabilities.</label>
+                                <!-- Missing checkboxes added back (14 + 4 = 18 total) -->
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_CreditReport" class="radio-input mr-2" required>Attach: Copy of credit report for all adults.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_CriminalCheck" class="radio-input mr-2" required>Attach: Criminal background check for all adults.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_ApplicationFee" class="radio-input mr-2" required>Attach: Proof of $50 non-refundable application fee payment.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_OccupancyLimit" class="radio-input mr-2" required>I/We understand the unit has occupancy limits.</label>
                             </div>
                         </div>
                     </div>
@@ -409,8 +415,12 @@
                 let isValid = true;
                 
                 requiredInputs.forEach(input => {
-                    // Checkbox handling requires explicit form validation for all required fields
-                    if (!input.checkValidity()) {
+                    // Checkbox validation requires a special check
+                    if (input.type === 'checkbox' && !input.checked) {
+                        isValid = false;
+                        // Forcing browser validation on the first invalid field
+                        input.reportValidity(); 
+                    } else if (!input.checkValidity()) {
                         isValid = false;
                         // Forces the browser to display the native error message/bubble
                         input.reportValidity(); 
