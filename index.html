@@ -74,10 +74,10 @@
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
-            <!-- START: FIX for Header completion (1) -->
+            <!-- START: FIX for Header completion -->
             <p class="text-sm text-gray-600 font-semibold">In Accordance with Seminole County NSP Rentals Program</p>
             <p class="text-sm text-red-600 font-bold">AII INCOMPLETE applications will be REJECTED. Tel: (407) 702-3281 / Fax: (866) 858-5371</p>
-            <p class="text-sm text-gray-500">Eff date 09 18 25 v44.0</p>
+            <p class="text-sm text-gray-500">Eff date 09 18 25 v45.0</p>
             <!-- END: FIX for Header completion -->
         </header>
 
@@ -114,7 +114,7 @@
                     <h2 class="text-2xl font-semibold mb-3 text-gray-800">APPLICATION CHECKLIST</h2>
                     <p class="text-gray-600 mb-6 border-b pb-4">Please review and confirm the initial requirements and provide your basic identification details to begin the application process.</p>
                     
-                    <!-- START: FIX for layout to be single column flow (2) -->
+                    <!-- START: FIX for layout to be single column flow -->
                     <div class="space-y-6">
                         
                         <div class="border p-4 rounded-lg bg-gray-50">
@@ -125,26 +125,25 @@
                             </div>
                         </div>
 
-                        <!-- Right Column: Checkboxes now flowed below -->
+                        <!-- Checkboxes now flowed below -->
                         <div>
                             <h3 class="text-lg font-semibold mb-3 text-gray-700 border-b pb-1">Required Documentation Checklist</h3>
-                            <!-- CRITICAL FIX: Corrected description text (3) -->
                             <p class="text-sm text-gray-600 mb-4">For any item on the checklist that does not apply, please mark N/A. For any page that does not apply, please mark N/A across the page. This shows our office that you have reviewed the item and that it does not apply to your household.</p>
                             <div class="space-y-2">
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeQualified" class="radio-input mr-2">I/We understand this property is subject to Maximum Income Qualification.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeRatio" class="radio-input mr-2">Our Household Income is at least 3 times the monthly Rent amount.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeQualified" class="radio-input mr-2" required>I/We understand this property is subject to Maximum Income Qualification.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeRatio" class="radio-input mr-2" required>Our Household Income is at least 3 times the monthly Rent amount.</label>
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_AdultSignatures" class="radio-input mr-2" required>All adult household members (18 years of age or older) must sign page 6 of the application.</label>
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_PhotoID" class="radio-input mr-2" required>Attach: Copies of photo Identification for all adult household members.</label>
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_SocialSecurityCards" class="radio-input mr-2" required>Attach: Copies of Social Security Cards for all household members.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_BirthCertificates" class="radio-input mr-2">Copies of birth certificates for all household members under the age of 18 are required.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_BirthCertificates" class="radio-input mr-2" required>Copies of birth certificates for all household members under the age of 18 are required.</label>
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_PayStubs" class="radio-input mr-2" required>Attach: SIX (6) most current pay check stubs.</label>
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_RentProof" class="radio-input mr-2" required>Attach: Proof of last SIX (6) month's rent or mortgage payments.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_SelfEmployedTax" class="radio-input mr-2">Attach: If Self-Employed, provide signed copy of last year's tax return.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeExpenseReports" class="radio-input mr-2">Attach: If Self-Employed, provide three months of income/expense reports.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_NoIncomeStatement" class="radio-input mr-2">Attach: Notarized statement for adult household members with no income.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_EmployerLetter" class="radio-input mr-2">Attach: Letter from employer(s).</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_BankStatements" class="radio-input mr-2">Attach: Last six (6) months of bank statements.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_AssetsLiabilities" class="radio-input mr-2">Attach: Documentation for all Assets and Liabilities.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_SelfEmployedTax" class="radio-input mr-2" required>Attach: If Self-Employed, provide signed copy of last year's tax return.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeExpenseReports" class="radio-input mr-2" required>Attach: If Self-Employed, provide three months of income/expense reports.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_NoIncomeStatement" class="radio-input mr-2" required>Attach: Notarized statement for adult household members with no income.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_EmployerLetter" class="radio-input mr-2" required>Attach: Letter from employer(s).</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_BankStatements" class="radio-input mr-2" required>Attach: Last six (6) months of bank statements.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_AssetsLiabilities" class="radio-input mr-2" required>Attach: Documentation for all Assets and Liabilities.</label>
                             </div>
                         </div>
                     </div>
@@ -405,15 +404,16 @@
             nextBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 const currentSection = document.getElementById(`section-${currentStep}`);
-                const requiredInputs = currentSection.querySelectorAll('[required]');
+                // Selects ALL required elements within the current section
+                const requiredInputs = currentSection.querySelectorAll('[required]'); 
                 let isValid = true;
                 
                 requiredInputs.forEach(input => {
-                    // Force browser validation to show error messages
+                    // Checkbox handling requires explicit form validation for all required fields
                     if (!input.checkValidity()) {
                         isValid = false;
-                        // reportValidity() makes the browser show the error bubble
-                        input.reportValidity();
+                        // Forces the browser to display the native error message/bubble
+                        input.reportValidity(); 
                     }
                 });
                 
