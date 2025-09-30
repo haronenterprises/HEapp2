@@ -75,7 +75,7 @@
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
             <!-- USER REQUESTED: Updated version number and date format -->
-            <p class="text-sm text-gray-500">Eff date 09 30 25 v37.0</p>
+            <p class="text-sm text-gray-500">Eff date 09 39 25 v40.0 </p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -107,29 +107,56 @@
                 <div id="status-message" class="text-sm px-4 py-2 rounded-md mb-4 hidden" role="alert"></div>
                 
                 <section id="section-1" class="form-section active">
-                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">Applicant Information</h2>
-                    <p class="text-gray-600 mb-6">This first section is about you, the primary applicant. The information you provide helps us get to know you better. Please fill out all fields completely.</p>
-                    <div class="form-grid">
-                        <div><label class="label-text" for="fullName">Full Name</label><input type="text" id="fullName" name="Full Name" class="input-field" required></div>
-                        <div><label class="label-text" for="dob">Date of Birth</label><input type="date" id="dob" name="Date of Birth" class="input-field" required></div>
-                        <div><label class="label-text" for="phone">Phone</label><input type="tel" id="phone" name="Phone" class="input-field" required></div>
-                        <div><label class="label-text" for="email">Email Address</label><input type="email" id="email" name="Email" class="input-field" required></div>
-                        <div><label class="label-text" for="ssn">Social Security Number</label><input type="text" id="ssn" name="Social Security Number" class="input-field" required></div>
-                        <div><label class="label-text" for="dl">Driver's License #</label><input type="text" id="dl" name="Driver's License #" class="input-field" required></div>
-                        <div><label class="label-text" for="vehicleMake">Vehicle Make & Model</label><input type="text" id="vehicleMake" name="Vehicle Make & Model" class="input-field"></div>
-                        <div><label class="label-text" for="vehicleTag">Vehicle Tag #</label><input type="text" id="vehicleTag" name="Vehicle Tag #" class="input-field"></div>
-                        <div class="md:col-span-2"><label class="label-text" for="relativeName">Name of Nearest Relative</label><input type="text" id="relativeName" name="Name of Nearest Relative" class="input-field" required></div>
-                        <div class="md:col-span-2"><label class="label-text" for="relativePhone">Phone of Nearest Relative</label><input type="tel" id="relativePhone" name="Phone of Nearest Relative" class="input-field" required></div>
-                         <div class="md:col-span-2 space-y-4">
-                            <div>
-                                <span class="label-text">Are you a member of the Armed Services?</span>
-                                <div class="radio-group mt-2">
+                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">Application Introduction & Details</h2>
+                    
+                    <!-- START: USER REQUESTED 3-COLUMN LAYOUT -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        
+                        <!-- Column 1: Description/Instructions -->
+                        <div class="md:col-span-1 p-4 bg-gray-50 border border-gray-200 rounded-lg space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-700">Application Checklist & Status</h3>
+                            <p class="text-sm text-gray-600">AII INCOMPLETE applications will be REJECTED. Please use this section to ensure you provide all documentation.</p>
+                            <ul class="text-xs space-y-1 list-disc list-inside text-gray-600">
+                                <li>Copies of photo Identification (Adults)</li>
+                                <li>Copies of Social Security Cards (All)</li>
+                                <li>SIX (6) most current pay stubs</li>
+                                <li>Proof of last SIX (6) month's rent/mortgage payments</li>
+                                <li>All fields in this section are required.</li>
+                            </ul>
+                            <p class="text-xs text-blue-600 font-medium">This property is subject to Maximum Income Qualification.</p>
+                        </div>
+                        
+                        <!-- Column 2: Applicant Information -->
+                        <div class="md:col-span-1 space-y-4">
+                            <h3 class="text-lg font-semibold mb-2 text-gray-800 border-b pb-1">Primary Applicant</h3>
+                            <div><label class="label-text" for="fullName">Full Name</label><input type="text" id="fullName" name="Full Name" class="input-field" required></div>
+                            <div><label class="label-text" for="dob">Date of Birth</label><input type="date" id="dob" name="Date of Birth" class="input-field" required></div>
+                            <div><label class="label-text" for="phone">Phone</label><input type="tel" id="phone" name="Phone" class="input-field" required></div>
+                            <div><label class="label-text" for="email">Email Address</label><input type="email" id="email" name="Email" class="input-field" required></div>
+                            <div><label class="label-text" for="ssn">Social Security Number</label><input type="text" id="ssn" name="Social Security Number" class="input-field" required></div>
+                            <div><label class="label-text" for="dl">Driver's License #</label><input type="text" id="dl" name="Driver's License #" class="input-field" required></div>
+                             <div class="space-y-2">
+                                <span class="label-text">Armed Services Member?</span>
+                                <div class="radio-group">
                                     <label class="radio-label"><input type="radio" name="Armed Services Member" value="yes" class="radio-input mr-2">Yes</label>
                                     <label class="radio-label"><input type="radio" name="Armed Services Member" value="no" class="radio-input mr-2" checked>No</label>
                                 </div>
                             </div>
-                         </div>
+                        </div>
+
+                        <!-- Column 3: Co-Applicant & Vehicle/Relative Info -->
+                         <div class="md:col-span-1 space-y-4">
+                            <h3 class="text-lg font-semibold mb-2 text-gray-800 border-b pb-1">Co-Applicant / Nearest Relative</h3>
+                            <div><label class="label-text" for="coApplicantName">Co-Applicant Full Name (if applicable)</label><input type="text" id="coApplicantName" name="Co-Applicant Name" class="input-field"></div>
+                            <div><label class="label-text" for="coApplicantSSN">Co-Applicant SSN</label><input type="text" id="coApplicantSSN" name="Co-Applicant SSN" class="input-field"></div>
+                            <div><label class="label-text" for="coApplicantDOB">Co-Applicant DOB</label><input type="date" id="coApplicantDOB" name="Co-Applicant DOB" class="input-field"></div>
+                            <div><label class="label-text" for="relativeName">Name of Nearest Relative</label><input type="text" id="relativeName" name="Name of Nearest Relative" class="input-field" required></div>
+                            <div><label class="label-text" for="relativePhone">Phone of Nearest Relative</label><input type="tel" id="relativePhone" name="Phone of Nearest Relative" class="input-field" required></div>
+                            <div><label class="label-text" for="vehicleMake">Vehicle Make & Model</label><input type="text" id="vehicleMake" name="Vehicle Make & Model" class="input-field"></div>
+                            <div><label class="label-text" for="vehicleTag">Vehicle Tag #</label><input type="text" id="vehicleTag" name="Vehicle Tag #" class="input-field"></div>
+                        </div>
                     </div>
+                    <!-- END: USER REQUESTED 3-COLUMN LAYOUT -->
                 </section>
 
                 <section id="section-2" class="form-section">
@@ -391,7 +418,7 @@
                     <header class="text-center mb-6 border-b pb-4">
                         <h1 class="text-2xl font-bold">HARON ENTERPRISES, LLC</h1>
                         <h2 class="text-xl">RESIDENTIAL LEASE APPLICATION SUMMARY</h2>
-                        <p class="text-xs text-gray-500">Eff date 09 18 25 v28.0 | Generated: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}</p>
+                        <p class="text-xs text-gray-500">Eff date 09 18 25 v37.0 | Generated: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}</p>
                     </header>`;
 
                 let currentCategory = '';
