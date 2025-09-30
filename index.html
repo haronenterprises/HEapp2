@@ -77,7 +77,7 @@
             <!-- START: Header completion -->
             <p class="text-sm text-gray-600 font-semibold">In Accordance with Seminole County NSP Rentals Program</p>
             <p class="text-sm text-red-600 font-bold">AII INCOMPLETE applications will be REJECTED. Tel: (407) 702-3281 / Fax: (866) 858-5371</p>
-            <p class="text-sm text-gray-500">Eff date 09 18 25 v47.2</p>
+            <p class="text-sm text-gray-500">Eff date 09 18 25 v47.3</p>
             <!-- END: Header completion -->
         </header>
 
@@ -148,7 +148,7 @@
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_CreditReport" class="radio-input mr-2" required>Attach: Copy of credit report for all adults.</label>
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_CriminalCheck" class="radio-input mr-2" required>Attach: Criminal background check for all adults.</label>
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_ApplicationFee" class="radio-input mr-2" required>Attach: Proof of $50 non-refundable application fee payment.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" id="animal-photos-check" name="Checklist_AnimalPhotos" class="radio-input mr-2" required>Attach: Photos of any animals that will be living on the premises.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_AnimalPhotos" class="radio-input mr-2" required>Attach: Photos of any animals that will be living on the premises.</label>
                             </div>
                         </div>
                     </div>
@@ -428,7 +428,7 @@
                     }
                     
                     // --- START: DIAGNOSTIC TRACE FOR ANIMAL CHECKBOX ---
-                    if (input.id === 'animal-photos-check') {
+                    if (input.name === 'Checklist_AnimalPhotos') {
                         console.log('TRACE: Animal Photos Checkbox Status:', input.checked ? 'CHECKED' : 'UNCHECKED');
                     }
                     // --- END: DIAGNOSTIC TRACE ---
