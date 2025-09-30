@@ -74,8 +74,11 @@
         <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
-            <!-- USER REQUESTED: Updated version number and date format -->
-            <p class="text-sm text-gray-500">Eff date 09 18 25 v43.0</p>
+            <!-- START: FIX for Header completion (1) -->
+            <p class="text-sm text-gray-600 font-semibold">In Accordance with Seminole County NSP Rentals Program</p>
+            <p class="text-sm text-red-600 font-bold">AII INCOMPLETE applications will be REJECTED. Tel: (407) 702-3281 / Fax: (866) 858-5371</p>
+            <p class="text-sm text-gray-500">Eff date 09 18 25 v44.0</p>
+            <!-- END: FIX for Header completion -->
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -111,19 +114,22 @@
                     <h2 class="text-2xl font-semibold mb-3 text-gray-800">APPLICATION CHECKLIST</h2>
                     <p class="text-gray-600 mb-6 border-b pb-4">Please review and confirm the initial requirements and provide your basic identification details to begin the application process.</p>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <!-- Left Column: Primary Details -->
-                        <div>
+                    <!-- START: FIX for layout to be single column flow (2) -->
+                    <div class="space-y-6">
+                        
+                        <div class="border p-4 rounded-lg bg-gray-50">
                             <h3 class="text-lg font-semibold mb-3 text-gray-700 border-b pb-1">Basic Identification</h3>
-                            <div><label class="label-text" for="fullName">Full Name</label><input type="text" id="fullName" name="Full Name" class="input-field" required></div>
-                            <div><label class="label-text" for="dob">Date of Birth</label><input type="date" id="dob" name="Date of Birth" class="input-field" required></div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div><label class="label-text" for="fullName">Full Name</label><input type="text" id="fullName" name="Full Name" class="input-field" required></div>
+                                <div><label class="label-text" for="dob">Date of Birth</label><input type="date" id="dob" name="Date of Birth" class="input-field" required></div>
+                            </div>
                         </div>
 
-                        <!-- Right Column: Checkboxes -->
+                        <!-- Right Column: Checkboxes now flowed below -->
                         <div>
                             <h3 class="text-lg font-semibold mb-3 text-gray-700 border-b pb-1">Required Documentation Checklist</h3>
-                            <!-- CRITICAL FIX: Corrected description to include full N/A verbage -->
-                            <p class="text-sm text-red-600 mb-4">For any item on the checklist that does not apply, please mark N/A. For any page that does not apply, please mark N/A across the page. This shows our office that you have reviewed the item and that it does not apply to your household.</p>
+                            <!-- CRITICAL FIX: Corrected description text (3) -->
+                            <p class="text-sm text-gray-600 mb-4">For any item on the checklist that does not apply, please mark N/A. For any page that does not apply, please mark N/A across the page. This shows our office that you have reviewed the item and that it does not apply to your household.</p>
                             <div class="space-y-2">
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeQualified" class="radio-input mr-2">I/We understand this property is subject to Maximum Income Qualification.</label>
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeRatio" class="radio-input mr-2">Our Household Income is at least 3 times the monthly Rent amount.</label>
@@ -142,6 +148,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- END: FIX for layout to be single column flow -->
                 </section>
                 <!-- END: SECTION 1 (Intro/Checklist) -->
 
