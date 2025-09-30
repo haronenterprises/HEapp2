@@ -75,14 +75,14 @@
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
             <!-- USER REQUESTED: Updated version number and date format -->
-            <p class="text-sm text-gray-500">Eff date 09 30 25 v42.0</p>
+            <p class="text-sm text-gray-500">Eff date 09 18 25 v43.0</p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
             <div id="progress-bar" class="p-6 border-b border-gray-200">
                 <div class="flex items-center justify-between">
                     <div id="step-1" class="step-item step-item-active text-center w-1/6">
-                        <div class="border-b-4 pb-2 text-xs md:text-sm font-semibold">Intro</div>
+                        <div class="border-b-4 pb-2 text-xs md:text-sm font-semibold">Checklist</div>
                     </div>
                      <div id="step-2" class="step-item text-center w-1/6">
                         <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Address</div>
@@ -106,23 +106,24 @@
             <form id="rental-application-form" class="p-6 md:p-8">
                 <div id="status-message" class="text-sm px-4 py-2 rounded-md mb-4 hidden" role="alert"></div>
                 
-                <!-- START: SECTION 1 (Intro/Checklist) -->
+                <!-- START: SECTION 1 (Intro/Checklist) - Simple Layout -->
                 <section id="section-1" class="form-section active">
-                    <h2 class="text-2xl font-semibold mb-6 text-gray-800">Welcome & Initial Checklist</h2>
+                    <h2 class="text-2xl font-semibold mb-3 text-gray-800">APPLICATION CHECKLIST</h2>
                     <p class="text-gray-600 mb-6 border-b pb-4">Please review and confirm the initial requirements and provide your basic identification details to begin the application process.</p>
                     
-                    <div class="form-grid">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <!-- Left Column: Primary Details -->
                         <div>
-                            <h3 class="text-lg font-semibold mb-3 text-gray-700">Primary Applicant Details</h3>
+                            <h3 class="text-lg font-semibold mb-3 text-gray-700 border-b pb-1">Basic Identification</h3>
                             <div><label class="label-text" for="fullName">Full Name</label><input type="text" id="fullName" name="Full Name" class="input-field" required></div>
                             <div><label class="label-text" for="dob">Date of Birth</label><input type="date" id="dob" name="Date of Birth" class="input-field" required></div>
                         </div>
 
                         <!-- Right Column: Checkboxes -->
                         <div>
-                            <h3 class="text-lg font-semibold mb-3 text-gray-700">Required Application Checklist</h3>
-                            <p class="text-sm text-red-600 mb-4">AII INCOMPLETE applications will be REJECTED. Check all that apply or mark N/A.</p>
+                            <h3 class="text-lg font-semibold mb-3 text-gray-700 border-b pb-1">Required Documentation Checklist</h3>
+                            <!-- CRITICAL FIX: Corrected description to include full N/A verbage -->
+                            <p class="text-sm text-red-600 mb-4">For any item on the checklist that does not apply, please mark N/A. For any page that does not apply, please mark N/A across the page. This shows our office that you have reviewed the item and that it does not apply to your household.</p>
                             <div class="space-y-2">
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeQualified" class="radio-input mr-2">I/We understand this property is subject to Maximum Income Qualification.</label>
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeRatio" class="radio-input mr-2">Our Household Income is at least 3 times the monthly Rent amount.</label>
@@ -146,33 +147,42 @@
 
                 <!-- START: SECTION 2 (Address/Rental History - 3 Column Layout) -->
                 <section id="section-2" class="form-section">
-                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">Rental & Address History</h2>
-                    <p class="text-gray-600 mb-6">Complete all current address details and provide history of previous residences. All fields are required to move to the next section.</p>
+                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">Detailed Applicant & Rental History</h2>
+                    <p class="text-gray-600 mb-6">Complete all identification, contact, and address fields below. Rental history must cover the last five years.</p>
                     
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                         
                         <!-- Column 1: Description/Instructions -->
-                        <div class="md:col-span-1 p-4 bg-gray-50 border border-gray-200 rounded-lg space-y-4">
-                            <h3 class="text-lg font-semibold text-gray-700">Purpose of This Section</h3>
-                            <p class="text-sm text-gray-600">This section is used to verify your current and previous residency. Rental history must cover the last five years. If you owned your previous home, you may need to provide proof of mortgage payments.</p>
-                            <p class="text-xs text-red-600 font-medium">Please include full contact details for your previous landlord(s) for verification purposes.</p>
+                        <div class="md:col-span-1 space-y-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                            <h3 class="text-lg font-semibold text-gray-700 border-b pb-1">Identification & Vehicle</h3>
+                            <div><label class="label-text" for="ssn">Social Security Number</label><input type="text" id="ssn" name="Social Security Number" class="input-field" required></div>
+                            <div><label class="label-text" for="dl">Driver's License #</label><input type="text" id="dl" name="Driver's License #" class="input-field" required></div>
+                            <div><label class="label-text" for="vehicleMake">Vehicle Make & Model</label><input type="text" id="vehicleMake" name="Vehicle Make & Model" class="input-field"></div>
+                            <div><label class="label-text" for="vehicleTag">Vehicle Tag #</label><input type="text" id="vehicleTag" name="Vehicle Tag #" class="input-field"></div>
+                            <div class="space-y-2 pt-2">
+                                <span class="label-text">Armed Services Member?</span>
+                                <div class="radio-group">
+                                    <label class="radio-label"><input type="radio" name="Armed Services Member" value="yes" class="radio-input mr-2">Yes</label>
+                                    <label class="radio-label"><input type="radio" name="Armed Services Member" value="no" class="radio-input mr-2" checked>No</label>
+                                </div>
+                            </div>
                         </div>
                         
-                        <!-- Column 2: Current Address -->
+                        <!-- Column 2: Current Address & Landlord -->
                         <div class="md:col-span-1 space-y-4">
-                            <h3 class="text-lg font-semibold mb-2 text-gray-800 border-b pb-1">Current Address</h3>
+                            <h3 class="text-lg font-semibold mb-2 text-gray-800 border-b pb-1">Current Residence Details</h3>
                             <div><label class="label-text" for="currentStreet">Street Address</label><input type="text" id="currentStreet" name="Current Street Address" class="input-field" required></div>
                             <div><label class="label-text" for="currentCity">City</label><input type="text" id="currentCity" name="Current City" class="input-field" required></div>
                             <div><label class="label-text" for="currentState">State</label><input type="text" id="currentState" name="Current State" class="input-field" required></div>
                             <div><label class="label-text" for="currentZip">Zip Code</label><input type="text" id="currentZip" name="Current Zip Code" class="input-field" required></div>
+                            <div><label class="label-text" for="timeAtCurrent">Time at Current Residence</label><input type="text" id="timeAtCurrent" name="Time at Current Residence" class="input-field" required></div>
                             <div><label class="label-text" for="currentLandlord">Current Landlord/Mortgage Co.</label><input type="text" id="currentLandlord" name="Current Landlord/Mortgage Co." class="input-field" required></div>
                             <div><label class="label-text" for="currentLandlordPhone">Landlord Phone</label><input type="tel" id="currentLandlordPhone" name="Current Landlord Phone" class="input-field" required></div>
-                            <div><label class="label-text" for="timeAtCurrent">Time at Current Residence</label><input type="text" id="timeAtCurrent" name="Time at Current Residence" class="input-field" required></div>
                         </div>
 
                         <!-- Column 3: Previous Address (Dynamic Block) -->
                          <div class="md:col-span-1 space-y-4">
-                            <h3 class="text-lg font-semibold mb-2 text-gray-800 border-b pb-1">Previous Address History</h3>
+                            <h3 class="text-lg font-semibold mb-2 text-gray-800 border-b pb-1">Previous Residence History</h3>
                              <div id="prev-address-container" class="space-y-4"></div>
                             <button type="button" id="add-prev-address-btn" class="mt-2 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200">+ Add Previous Residence</button>
                         </div>
@@ -210,6 +220,11 @@
                             </div>
                              <div id="student-explain" class="hidden mt-2"><label class="label-text">If yes, please list and attach school enrollment printout:</label><textarea class="input-field" name="Student Explanation" rows="2"></textarea></div>
                         </div>
+                        <div><label class="label-text" for="relativeName">Name of Nearest Relative</label><input type="text" id="relativeName" name="Name of Nearest Relative" class="input-field" required></div>
+                        <div><label class="label-text" for="relativePhone">Phone of Nearest Relative</label><input type="tel" id="relativePhone" name="Phone of Nearest Relative" class="input-field" required></div>
+                        <div><label class="label-text" for="coApplicantName">Co-Applicant Full Name (if applicable)</label><input type="text" id="coApplicantName" name="Co-Applicant Name" class="input-field"></div>
+                        <div><label class="label-text" for="coApplicantSSN">Co-Applicant SSN</label><input type="text" id="coApplicantSSN" name="Co-Applicant SSN" class="input-field"></div>
+                        <div><label class="label-text" for="coApplicantDOB">Co-Applicant DOB</label><input type="date" id="coApplicantDOB" name="Co-Applicant DOB" class="input-field"></div>
                     </div>
                 </section>
                 <!-- END: SECTION 3 (Household Members & Citizenship) -->
