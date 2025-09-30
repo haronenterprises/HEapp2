@@ -75,17 +75,17 @@
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
             <!-- USER REQUESTED: Updated version number and date format -->
-            <p class="text-sm text-gray-500">Eff date 09 39 25 v40.0 </p>
+            <p class="text-sm text-gray-500">Eff date 09 18 25 v41.0</p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
             <div id="progress-bar" class="p-6 border-b border-gray-200">
                 <div class="flex items-center justify-between">
                     <div id="step-1" class="step-item step-item-active text-center w-1/6">
-                        <div class="border-b-4 pb-2 text-xs md:text-sm font-semibold">Personal</div>
+                        <div class="border-b-4 pb-2 text-xs md:text-sm font-semibold">Intro</div>
                     </div>
                      <div id="step-2" class="step-item text-center w-1/6">
-                        <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Household</div>
+                        <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Details</div>
                     </div>
                      <div id="step-3" class="step-item text-center w-1/6">
                         <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">History</div>
@@ -97,7 +97,7 @@
                         <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Documents</div>
                     </div>
                     <div id="step-6" class="step-item text-center w-1/6">
-                        <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Submit</div>
+                        <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Final</div>
                     </div>
                 </div>
             </div>
@@ -106,35 +106,70 @@
             <form id="rental-application-form" class="p-6 md:p-8">
                 <div id="status-message" class="text-sm px-4 py-2 rounded-md mb-4 hidden" role="alert"></div>
                 
+                <!-- START: SECTION 1 (Intro/Checklist) -->
                 <section id="section-1" class="form-section active">
-                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">Application Introduction & Details</h2>
+                    <h2 class="text-2xl font-semibold mb-6 text-gray-800">Welcome & Initial Checklist</h2>
+                    <p class="text-gray-600 mb-6 border-b pb-4">Please review and confirm the initial requirements and provide your basic identification details to begin the application process.</p>
+                    
+                    <div class="form-grid">
+                        <!-- Left Column: Primary Details -->
+                        <div>
+                            <h3 class="text-lg font-semibold mb-3 text-gray-700">Primary Applicant Details</h3>
+                            <div><label class="label-text" for="fullName">Full Name</label><input type="text" id="fullName" name="Full Name" class="input-field" required></div>
+                            <div><label class="label-text" for="dob">Date of Birth</label><input type="date" id="dob" name="Date of Birth" class="input-field" required></div>
+                        </div>
+
+                        <!-- Right Column: Checkboxes -->
+                        <div>
+                            <h3 class="text-lg font-semibold mb-3 text-gray-700">Required Application Checklist</h3>
+                            <p class="text-sm text-red-600 mb-4">AII INCOMPLETE applications will be REJECTED. Check all that apply or mark N/A.</p>
+                            <div class="space-y-2">
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeQualified" class="radio-input mr-2">I/We understand this property is subject to Maximum Income Qualification.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeRatio" class="radio-input mr-2">Our Household Income is at least 3 times the monthly Rent amount.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_AdultSignatures" class="radio-input mr-2" required>All adult household members (18+) must sign.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_PhotoID" class="radio-input mr-2" required>Attach: Copies of photo Identification for all adult household members.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_SocialSecurityCards" class="radio-input mr-2" required>Attach: Copies of Social Security Cards for all household members.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_BirthCertificates" class="radio-input mr-2">Copies of birth certificates for all household members under the age of 18 are required.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_PayStubs" class="radio-input mr-2" required>Attach: SIX (6) most current pay check stubs.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_RentProof" class="radio-input mr-2" required>Attach: Proof of last SIX (6) month's rent or mortgage payments.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_SelfEmployedTax" class="radio-input mr-2">Attach: If Self-Employed, provide signed copy of last year's tax return.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeExpenseReports" class="radio-input mr-2">Attach: If Self-Employed, provide three months of income/expense reports.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_NoIncomeStatement" class="radio-input mr-2">Attach: Notarized statement for adult household members with no income.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_EmployerLetter" class="radio-input mr-2">Attach: Letter from employer(s).</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_BankStatements" class="radio-input mr-2">Attach: Last six (6) months of bank statements.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_AssetsLiabilities" class="radio-input mr-2">Attach: Documentation for all Assets and Liabilities.</label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- END: SECTION 1 (Intro/Checklist) -->
+
+                <!-- START: SECTION 2 (Applicant Details/3-Column Layout) -->
+                <section id="section-2" class="form-section">
+                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">Detailed Applicant & Household Information</h2>
+                    <p class="text-gray-600 mb-6">Complete all identification, contact, and household address fields below.</p>
                     
                     <!-- START: USER REQUESTED 3-COLUMN LAYOUT -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                         
-                        <!-- Column 1: Description/Instructions -->
-                        <div class="md:col-span-1 p-4 bg-gray-50 border border-gray-200 rounded-lg space-y-4">
-                            <h3 class="text-lg font-semibold text-gray-700">Application Checklist & Status</h3>
-                            <p class="text-sm text-gray-600">AII INCOMPLETE applications will be REJECTED. Please use this section to ensure you provide all documentation.</p>
-                            <ul class="text-xs space-y-1 list-disc list-inside text-gray-600">
-                                <li>Copies of photo Identification (Adults)</li>
-                                <li>Copies of Social Security Cards (All)</li>
-                                <li>SIX (6) most current pay stubs</li>
-                                <li>Proof of last SIX (6) month's rent/mortgage payments</li>
-                                <li>All fields in this section are required.</li>
-                            </ul>
-                            <p class="text-xs text-blue-600 font-medium">This property is subject to Maximum Income Qualification.</p>
+                        <!-- Column 1: Current Address -->
+                        <div class="md:col-span-1 space-y-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                            <h3 class="text-lg font-semibold text-gray-700 border-b pb-1">Current Address</h3>
+                            <div><label class="label-text" for="streetAddress">Street Address</label><input type="text" id="streetAddress" name="Street Address" class="input-field" required></div>
+                            <div><label class="label-text" for="city">City</label><input type="text" id="city" name="City" class="input-field" required></div>
+                            <div><label class="label-text" for="state">State</label><input type="text" id="state" name="State" class="input-field" required></div>
+                            <div><label class="label-text" for="zip">Zip Code</label><input type="text" id="zip" name="Zip Code" class="input-field" required></div>
                         </div>
                         
-                        <!-- Column 2: Applicant Information -->
+                        <!-- Column 2: Identification & Contact -->
                         <div class="md:col-span-1 space-y-4">
-                            <h3 class="text-lg font-semibold mb-2 text-gray-800 border-b pb-1">Primary Applicant</h3>
-                            <div><label class="label-text" for="fullName">Full Name</label><input type="text" id="fullName" name="Full Name" class="input-field" required></div>
-                            <div><label class="label-text" for="dob">Date of Birth</label><input type="date" id="dob" name="Date of Birth" class="input-field" required></div>
+                            <h3 class="text-lg font-semibold mb-2 text-gray-800 border-b pb-1">Identification & Contact</h3>
                             <div><label class="label-text" for="phone">Phone</label><input type="tel" id="phone" name="Phone" class="input-field" required></div>
                             <div><label class="label-text" for="email">Email Address</label><input type="email" id="email" name="Email" class="input-field" required></div>
                             <div><label class="label-text" for="ssn">Social Security Number</label><input type="text" id="ssn" name="Social Security Number" class="input-field" required></div>
                             <div><label class="label-text" for="dl">Driver's License #</label><input type="text" id="dl" name="Driver's License #" class="input-field" required></div>
+                            <div><label class="label-text" for="vehicleMake">Vehicle Make & Model</label><input type="text" id="vehicleMake" name="Vehicle Make & Model" class="input-field"></div>
+                            <div><label class="label-text" for="vehicleTag">Vehicle Tag #</label><input type="text" id="vehicleTag" name="Vehicle Tag #" class="input-field"></div>
                              <div class="space-y-2">
                                 <span class="label-text">Armed Services Member?</span>
                                 <div class="radio-group">
@@ -144,30 +179,18 @@
                             </div>
                         </div>
 
-                        <!-- Column 3: Co-Applicant & Vehicle/Relative Info -->
+                        <!-- Column 3: Co-Applicant & Nearest Relative -->
                          <div class="md:col-span-1 space-y-4">
-                            <h3 class="text-lg font-semibold mb-2 text-gray-800 border-b pb-1">Co-Applicant / Nearest Relative</h3>
+                            <h3 class="text-lg font-semibold mb-2 text-gray-800 border-b pb-1">Co-Applicant & Nearest Relative</h3>
                             <div><label class="label-text" for="coApplicantName">Co-Applicant Full Name (if applicable)</label><input type="text" id="coApplicantName" name="Co-Applicant Name" class="input-field"></div>
                             <div><label class="label-text" for="coApplicantSSN">Co-Applicant SSN</label><input type="text" id="coApplicantSSN" name="Co-Applicant SSN" class="input-field"></div>
                             <div><label class="label-text" for="coApplicantDOB">Co-Applicant DOB</label><input type="date" id="coApplicantDOB" name="Co-Applicant DOB" class="input-field"></div>
                             <div><label class="label-text" for="relativeName">Name of Nearest Relative</label><input type="text" id="relativeName" name="Name of Nearest Relative" class="input-field" required></div>
                             <div><label class="label-text" for="relativePhone">Phone of Nearest Relative</label><input type="tel" id="relativePhone" name="Phone of Nearest Relative" class="input-field" required></div>
-                            <div><label class="label-text" for="vehicleMake">Vehicle Make & Model</label><input type="text" id="vehicleMake" name="Vehicle Make & Model" class="input-field"></div>
-                            <div><label class="label-text" for="vehicleTag">Vehicle Tag #</label><input type="text" id="vehicleTag" name="Vehicle Tag #" class="input-field"></div>
                         </div>
                     </div>
                     <!-- END: USER REQUESTED 3-COLUMN LAYOUT -->
-                </section>
-
-                <section id="section-2" class="form-section">
-                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">Household Information</h2>
-                    <p class="text-gray-600 mb-6">In this section, please provide your current address and details about everyone who will be living in the residence. This helps us understand the composition of your household.</p>
-                     <div class="form-grid">
-                        <div class="md:col-span-2"><label class="label-text" for="streetAddress">Street Address</label><input type="text" id="streetAddress" name="Street Address" class="input-field" required></div>
-                        <div><label class="label-text" for="city">City</label><input type="text" id="city" name="City" class="input-field" required></div>
-                        <div><label class="label-text" for="state">State</label><input type="text" id="state" name="State" class="input-field" required></div>
-                        <div class="md:col-span-2"><label class="label-text" for="zip">Zip Code</label><input type="text" id="zip" name="Zip Code" class="input-field" required></div>
-                    </div>
+                    
                     <div class="mt-8">
                         <h3 class="text-lg font-semibold text-gray-700">Other Household Members</h3>
                         <div id="household-members-container" class="mt-4 space-y-4"></div>
@@ -192,6 +215,7 @@
                         </div>
                     </div>
                 </section>
+                <!-- END: SECTION 2 (Applicant Details/3-Column Layout) -->
 
                 <section id="section-3" class="form-section">
                     <h2 class="text-2xl font-semibold mb-2 text-gray-800">Background & History</h2>
@@ -418,7 +442,7 @@
                     <header class="text-center mb-6 border-b pb-4">
                         <h1 class="text-2xl font-bold">HARON ENTERPRISES, LLC</h1>
                         <h2 class="text-xl">RESIDENTIAL LEASE APPLICATION SUMMARY</h2>
-                        <p class="text-xs text-gray-500">Eff date 09 18 25 v37.0 | Generated: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}</p>
+                        <p class="text-xs text-gray-500">Eff date 09 18 25 v40.0 | Generated: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}</p>
                     </header>`;
 
                 let currentCategory = '';
