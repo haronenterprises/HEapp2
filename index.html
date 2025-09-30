@@ -77,7 +77,7 @@
             <!-- START: Header completion -->
             <p class="text-sm text-gray-600 font-semibold">In Accordance with Seminole County NSP Rentals Program</p>
             <p class="text-sm text-red-600 font-bold">AII INCOMPLETE applications will be REJECTED. Tel: (407) 702-3281 / Fax: (866) 858-5371</p>
-            <p class="text-sm text-gray-500">Eff date 09 18 25 v46.3</p>
+            <p class="text-sm text-gray-500">Eff date 09 18 25 v46.4</p>
             <!-- END: Header completion -->
         </header>
 
@@ -130,7 +130,7 @@
                             <h3 class="text-lg font-semibold mb-3 text-gray-700 border-b pb-1">Required Documentation Checklist</h3>
                             <p class="text-sm text-gray-600 mb-4">For any item on the checklist that does not apply, please mark N/A. For any page that does not apply, please mark N/A across the page. This shows our office that you have reviewed the item and that it does not apply to your household. Please use this checklist to make sure you have all the documentation needed to complete your application.</p>
                             <div class="space-y-2">
-                                <!-- All 18 checkboxes from the original document with exact wording -->
+                                <!-- All 18 checkboxes from the original document with EXACT wording -->
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeQualified" class="radio-input mr-2" required>I/We understand that this property is owned by a private company and subject to Maximum Income Qualification as established by HUD & Seminole County's Neighborhood Stabilization Program (NSP) requirements.</label>
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeRatio" class="radio-input mr-2" required>Our Household Income is at least 3 times the monthly Rent amount.</label>
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_AdultSignatures" class="radio-input mr-2" required>All adult household members (18 years of age or older) must sign page 6 of the application.</label>
@@ -229,7 +229,7 @@
                                 <label class="radio-label"><input type="radio" name="Full-Time Student" value="yes" class="radio-input mr-2" onclick="toggleExplain(this, 'student-explain', true)">Yes</label>
                                 <label class="radio-label"><input type="radio" name="Full-Time Student" value="no" class="radio-input mr-2" onclick="toggleExplain(this, 'student-explain', true)" checked>No</label>
                             </div>
-                             <div id="student-explain" class="hidden mt-2"><label class="label-text">If yes, please list and attach school enrollment printout:</label><textarea class="input-field" name="Student Explanation" rows="2"></textarea></div>
+                             <div id="student-explain" class="hidden mt-2"><label class="label-text" for="student_explain_text">If yes, please list and attach school enrollment printout:</label><textarea class="input-field" id="student_explain_text" name="Student Explanation" rows="2"></textarea></div>
                         </div>
                         <div><label class="label-text" for="relativeName">Name of Nearest Relative</label><input type="text" id="relativeName" name="Name of Nearest Relative" class="input-field" required></div>
                         <div><label class="label-text" for="relativePhone">Phone of Nearest Relative</label><input type="tel" id="relativePhone" name="Phone of Nearest Relative" class="input-field" required></div>
@@ -280,7 +280,7 @@
                                 <label class="radio-label"><input type="radio" name="Ever Evicted" value="yes" class="radio-input mr-2" onclick="toggleExplain(this, 'evicted-explain', true)">Yes</label>
                                 <label class="radio-label"><input type="radio" name="Ever Evicted" value="no" class="radio-input mr-2" onclick="toggleExplain(this, 'evicted-explain', true)" checked>No</label>
                             </div>
-                            <div id="evicted-explain" class="hidden mt-2"><label class="label-text">Please explain:</label><textarea class="input-field" name="Evicted Explanation" rows="2"></textarea></div>
+                            <div id="evicted-explain" class="hidden mt-2"><label class="label-text" for="evicted_explain_text">Please explain:</label><textarea class="input-field" id="evicted_explain_text" name="Evicted Explanation" rows="2"></textarea></div>
                         </div>
                         <div class="p-4 border border-gray-200 rounded-lg">
                             <span class="label-text">Have you ever been foreclosed on?</span>
@@ -288,7 +288,7 @@
                                 <label class="radio-label"><input type="radio" name="Ever Foreclosed" value="yes" class="radio-input mr-2" onclick="toggleExplain(this, 'foreclosed-explain', true)">Yes</label>
                                 <label class="radio-label"><input type="radio" name="Ever Foreclosed" value="no" class="radio-input mr-2" onclick="toggleExplain(this, 'foreclosed-explain', true)" checked>No</label>
                             </div>
-                            <div id="foreclosed-explain" class="hidden mt-2"><label class="label-text">Please explain:</label><textarea class="input-field" name="Foreclosed Explanation" rows="2"></textarea></div>
+                            <div id="foreclosed-explain" class="hidden mt-2"><label class="label-text" for="foreclosed_explain_text">Please explain:</label><textarea class="input-field" id="foreclosed_explain_text" name="Foreclosed Explanation" rows="2"></textarea></div>
                         </div>
                         <div class="p-4 border border-gray-200 rounded-lg">
                             <span class="label-text">Have you ever filed for bankruptcy?</span>
@@ -296,7 +296,7 @@
                                 <label class="radio-label"><input type="radio" name="Ever Filed for Bankruptcy" value="yes" class="radio-input mr-2" onclick="toggleExplain(this, 'bankruptcy-explain', true)">Yes</label>
                                 <label class="radio-label"><input type="radio" name="Ever Filed for Bankruptcy" value="no" class="radio-input mr-2" onclick="toggleExplain(this, 'bankruptcy-explain', true)" checked>No</label>
                             </div>
-                             <div id="bankruptcy-explain" class="hidden mt-2"><label class="label-text">If yes, explain:</label><textarea class="input-field" name="Bankruptcy Explanation" rows="2"></textarea></div>
+                             <div id="bankruptcy-explain" class="hidden mt-2"><label class="label-text" for="bankruptcy_explain_text">If yes, explain:</label><textarea class="input-field" id="bankruptcy_explain_text" name="Bankruptcy Explanation" rows="2"></textarea></div>
                         </div>
                         <div class="p-4 border border-gray-200 rounded-lg">
                             <span class="label-text">Have you ever been charged with a felony?</span>
@@ -304,7 +304,7 @@
                                 <label class="radio-label"><input type="radio" name="Ever Charged with a Felony" value="yes" class="radio-input mr-2" onclick="toggleExplain(this, 'felony-explain', true)">Yes</label>
                                 <label class="radio-label"><input type="radio" name="Ever Charged with a Felony" value="no" class="radio-input mr-2" onclick="toggleExplain(this, 'felony-explain', true)" checked>No</label>
                             </div>
-                             <div id="felony-explain" class="hidden mt-2"><label class="label-text">If yes, explain:</label><textarea class="input-field" name="Felony Explanation" rows="2"></textarea></div>
+                             <div id="felony-explain" class="hidden mt-2"><label class="label-text" for="felony_explain_text">If yes, explain:</label><textarea class="input-field" id="felony_explain_text" name="Felony Explanation" rows="2"></textarea></div>
                         </div>
                         <div class="p-4 border border-gray-200 rounded-lg">
                             <span class="label-text">Have you ever broken a lease or refused to pay rent?</span>
@@ -312,7 +312,7 @@
                                 <label class="radio-label"><input type="radio" name="Ever Broken Lease" value="yes" class="radio-input mr-2" onclick="toggleExplain(this, 'brokenLease-explain', true)">Yes</label>
                                 <label class="radio-label"><input type="radio" name="Ever Broken Lease" value="no" class="radio-input mr-2" onclick="toggleExplain(this, 'brokenLease-explain', true)" checked>No</label>
                             </div>
-                             <div id="brokenLease-explain" class="hidden mt-2"><label class="label-text">If yes, explain:</label><textarea class="input-field" name="Broken Lease Explanation" rows="2"></textarea></div>
+                             <div id="brokenLease-explain" class="hidden mt-2"><label class="label-text" for="brokenLease_explain_text">If yes, explain:</label><textarea class="input-field" id="brokenLease_explain_text" name="Broken Lease Explanation" rows="2"></textarea></div>
                         </div>
                     </div>
                 </section>
