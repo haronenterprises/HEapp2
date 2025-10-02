@@ -64,7 +64,7 @@
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
             <p class="text-sm text-gray-600 font-semibold">In Accordance with Seminole County NSP Rentals Program</p>
             <p class="text-sm text-red-600 font-bold">AII INCOMPLETE applications will be REJECTED. Tel: (407) 702-3281 / Fax: (866) 858-5371</p>
-            <p class="text-sm text-gray-500">Eff date 10 01 25 v49.1</p>
+            <p class="text-sm text-gray-500">Eff date 10 01 25 v49.3</p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -91,6 +91,7 @@
                 </div>
             </div>
 
+            <!-- CRITICAL FIX: Removed action attribute entirely for self-contained operation -->
             <form id="rental-application-form" class="p-6 md:p-8">
                 <div id="status-message" class="text-sm px-4 py-2 rounded-md mb-4 hidden" role="alert"></div>
                 
@@ -219,7 +220,6 @@
             const nextBtn = document.getElementById('next-btn');
             const submitBtn = document.getElementById('submit-btn');
             const spacer = document.getElementById('spacer');
-            const wizard = document.getElementById('application-wizard');
             
             // Initial dynamic block creation for Previous Address
             const createPrevAddressBlock = () => {
@@ -270,19 +270,19 @@
                 e.preventDefault();
                 const currentSection = document.getElementById(`section-${currentStep}`);
                 
-                // CRITICAL FIX: Temporarily attach section content to a form for robust validation
-                const sectionContent = currentSection.cloneNode(true);
-                const tempForm = document.createElement('form');
-                tempForm.appendChild(sectionContent);
-                document.body.appendChild(tempForm);
+                // We validate the fields in the current section
+                let isValid = true;
+                const requiredInputs = currentSection.querySelectorAll('[required]');
+
+                requiredInputs.forEach(input => {
+                    if (!input.checkValidity()) {
+                        isValid = false;
+                    }
+                });
                 
-                const isValid = tempForm.checkValidity();
-                
-                // Remove the temporary form immediately
-                document.body.removeChild(tempForm);
-                
-                // If invalid, trigger the reportValidity on the original form fields.
+                // If invalid, trigger the reportValidity on the current section.
                 if (!isValid) {
+                    // This forces the browser to show the error bubbles ("edits") on the original form.
                     const firstInvalid = currentSection.querySelector(':invalid');
                     if (firstInvalid) {
                         firstInvalid.reportValidity();
