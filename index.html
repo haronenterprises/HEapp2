@@ -64,7 +64,7 @@
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
             <p class="text-sm text-gray-600 font-semibold">In Accordance with Seminole County NSP Rentals Program</p>
             <p class="text-sm text-red-600 font-bold">AII INCOMPLETE applications will be REJECTED. Tel: (407) 702-3281 / Fax: (866) 858-5371</p>
-            <p class="text-sm text-gray-500">Eff date 10 01 25 v49.6</p>
+            <p class="text-sm text-gray-500">Eff date 10 01 25 v49.7</p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -221,18 +221,6 @@
             const submitBtn = document.getElementById('submit-btn');
             const spacer = document.getElementById('spacer');
             
-            // Initial dynamic block creation for Previous Address
-            const createPrevAddressBlock = () => {
-                 createDynamicBlock('prev-address-container', 'Previous Address', (count) => `
-                     <div class="space-y-2">
-                        <div><label class="label-text text-xs">Street Address</label><input type="text" name="Previous Address ${count} Street" class="input-field text-sm" required></div>
-                        <div><label class="label-text text-xs">City/State/Zip</label><input type="text" name="Previous Address ${count} CityStateZip" class="input-field text-sm" required></div>
-                        <div><label class="label-text text-xs">Time at Residence</label><input type="text" name="Previous Address ${count} Time" class="input-field text-sm" required></div>
-                        <div><label class="label-text text-xs">Landlord Name/Phone</label><input type="text" name="Previous Address ${count} Landlord Contact" class="input-field text-sm" required></div>
-                    </div>`);
-            };
-            createPrevAddressBlock(); // Add one block on load
-
             // Helper function to update button visibility and style
             const updateButtons = () => {
                 prevBtn.style.display = currentStep > 1 ? 'block' : 'none';
@@ -265,16 +253,18 @@
                 document.getElementById(`section-${step}`).classList.add('active');
             };
 
-            // START: CRITICAL FIX v49.4 for Next button not working (Direct Validation)
+            // START: CRITICAL FIX v49.7 for Next button not working (Direct Validation)
             nextBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 const currentSection = document.getElementById(`section-${currentStep}`);
                 
-                // Find the first required input in the current section
+                // CRITICAL FIX: The most reliable way to check validity is to trigger the form's native validation on the section.
+                // We use form.checkValidity() on the whole form, but rely on the browser's `:invalid` selector
+                // to find the first error in the current section.
                 const firstInvalidInput = currentSection.querySelector(':invalid');
 
-                // If an invalid input exists, force the browser to show the error
                 if (firstInvalidInput) {
+                    // Force the browser to show the error bubble for the first invalid field
                     firstInvalidInput.reportValidity();
                     return; // Stop execution
                 }
@@ -288,7 +278,7 @@
                     window.scrollTo(0, 0);
                 }
             });
-            // END: CRITICAL FIX v49.4 for Next button not working (Direct Validation)
+            // END: CRITICAL FIX v49.7 for Next button not working (Direct Validation)
 
             prevBtn.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -371,7 +361,8 @@
             updateButtons();
             updateProgressBar();
             // Call this to add one default "Previous Address" block to Section 2
-            document.getElementById('add-prev-address-btn').click(); 
+            document.getElementById('add-prev-address-btn').addEventListener('click', createPrevAddressBlock);
+            document.getElementById('add-prev-address-btn').click(); // Execute once to show one initial block
         });
     </script>
 </body>
