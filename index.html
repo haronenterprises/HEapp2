@@ -77,7 +77,7 @@
             <!-- START: Header completion -->
             <p class="text-sm text-gray-600 font-semibold">In Accordance with Seminole County NSP Rentals Program</p>
             <p class="text-sm text-red-600 font-bold">AII INCOMPLETE applications will be REJECTED. Tel: (407) 702-3281 / Fax: (866) 858-5371</p>
-            <p class="text-sm text-gray-500">Eff date 10 01 25 v48.1</p>
+            <p class="text-sm text-gray-500">Eff date 10 01 25 v48.2</p>
             <!-- END: Header completion -->
         </header>
 
@@ -109,12 +109,11 @@
             <form id="rental-application-form" class="p-6 md:p-8">
                 <div id="status-message" class="text-sm px-4 py-2 rounded-md mb-4 hidden" role="alert"></div>
                 
-                <!-- START: SECTION 1 (Intro/Checklist) - Simple Layout -->
+                <!-- START: SECTION 1 (Intro/Checklist) - SIMPLEST LAYOUT FOR TESTING -->
                 <section id="section-1" class="form-section active">
-                    <h2 class="text-2xl font-semibold mb-3 text-gray-800">APPLICATION CHECKLIST</h2>
-                    <p class="text-gray-600 mb-6 border-b pb-4">Please review and confirm the initial requirements and provide your basic identification details to begin the application process.</p>
+                    <h2 class="text-2xl font-semibold mb-3 text-gray-800">APPLICATION CHECKLIST (TEST MODE)</h2>
+                    <p class="text-red-500 font-semibold mb-6 border-b pb-4">ONLY FILL NAME AND DATE TO TEST ADVANCEMENT.</p>
                     
-                    <!-- START: FIX for layout to be single column flow -->
                     <div class="space-y-6">
                         
                         <div class="border p-4 rounded-lg bg-gray-50">
@@ -125,26 +124,8 @@
                             </div>
                         </div>
 
-                        <!-- Checkboxes now flowed below -->
-                        <div>
-                            <h3 class="text-lg font-semibold mb-3 text-gray-700 border-b pb-1">Required Documentation Checklist</h3>
-                            <p class="text-sm text-gray-600 mb-4">For any item on the checklist that does not apply, please mark N/A. For any page that does not apply, please mark N/A across the page. This shows our office that you have reviewed the item and that it does not apply to your household. Please use this checklist to make sure you have all the documentation needed to complete your application.</p>
-                            <div class="space-y-2">
-                                <!-- First 8 checkboxes (visible for testing) -->
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeQualified" class="radio-input mr-2" required>I/We understand that this property is owned by a private company and subject to Maximum Income Qualification as established by HUD & Seminole County's Neighborhood Stabilization Program (NSP) requirements.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeRatio" class="radio-input mr-2" required>Our Household Income is at least 3 times the monthly Rent amount.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_AdultSignatures" class="radio-input mr-2" required>All adult household members (18 years of age or older) must sign page 6 of the application.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_PhotoID" class="radio-input mr-2" required>Attach: Copies of photo Identification for all adult household members.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_SocialSecurityCards" class="radio-input mr-2" required>Attach: Copies of Social Security Cards for all household members.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_BirthCertificates" class="radio-input mr-2" required>Copies of birth certificates for all household members under the age of 18 are required.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_PayStubs" class="radio-input mr-2" required>Attach: SIX (6) most current pay check stubs for all household members who are working now.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_RentProof" class="radio-input mr-2" required>Attach: Proof of last SIX (6) month's rent or mortgage payments.</label>
-                                
-                                <!-- TEMPORARILY SKIPPING problematic checkboxes 9 through 18 to isolate NEXT button bug -->
-                            </div>
-                        </div>
+                        <!-- Checkboxes REMOVED for testing -->
                     </div>
-                    <!-- END: FIX for layout to be single column flow -->
                 </section>
                 <!-- END: SECTION 1 (Intro/Checklist) -->
 
