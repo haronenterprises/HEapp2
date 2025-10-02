@@ -64,7 +64,7 @@
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
             <p class="text-sm text-gray-600 font-semibold">In Accordance with Seminole County NSP Rentals Program</p>
             <p class="text-sm text-red-600 font-bold">AII INCOMPLETE applications will be REJECTED. Tel: (407) 702-3281 / Fax: (866) 858-5371</p>
-            <p class="text-sm text-gray-500">Eff date 10 01 25 v49.3</p>
+            <p class="text-sm text-gray-500">Eff date 10 01 25 v49.3 Final</p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -270,10 +270,12 @@
                 e.preventDefault();
                 const currentSection = document.getElementById(`section-${currentStep}`);
                 
-                // We validate the fields in the current section
+                // CRITICAL FIX: We must use the section's checkValidity() method and force the browser to show errors
+                // This is the most reliable way to make the button work.
                 let isValid = true;
                 const requiredInputs = currentSection.querySelectorAll('[required]');
 
+                // Simple loop to check required fields in the current section
                 requiredInputs.forEach(input => {
                     if (!input.checkValidity()) {
                         isValid = false;
