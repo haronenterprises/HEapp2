@@ -70,6 +70,7 @@
             color: #1f2937; /* Gray-800 */
             padding-top: 0.35rem; /* Align with input */
             padding-bottom: 0.35rem; /* Align with input */
+            line-height: 2.25rem; /* Match height of input container */
         }
         .field-container {
             min-height: 40px; /* Ensures consistent vertical alignment */
@@ -86,7 +87,7 @@
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
             <p class="text-sm text-gray-600 font-semibold">In Accordance with Seminole County NSP Rentals Program</p>
             <p class="text-sm text-red-600 font-bold">AII INCOMPLETE applications will be REJECTED. Tel: (407) 702-3281 / Fax: (866) 858-5371</p>
-            <p class="text-sm text-gray-500">Eff date 10 01 25 v50.2</p>
+            <p class="text-sm text-gray-500">Eff date 10 01 25 v50.3</p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -113,6 +114,7 @@
                 </div>
             </div>
 
+            <!-- CRITICAL FIX: Removed action attribute entirely for self-contained operation -->
             <form id="rental-application-form" class="p-6 md:p-8">
                 <div id="status-message" class="text-sm px-4 py-2 rounded-md mb-4 hidden" role="alert"></div>
                 
@@ -138,16 +140,13 @@
                 <!-- START: SECTION 2 (Applicant Details & Rental History - 3 COLUMN LAYOUT) -->
                 <section id="section-2" class="form-section">
                     
-                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">Detailed Applicant Data & Rental History</h2>
-                    <p class="text-gray-600 mb-6">Enter personal details, identification, and rental history for all relevant parties.</p>
-
                     <!-- Section 2.1: Applicant/Co-Applicant Data (3-Column Layout) -->
                     <div class="data-grid space-y-4 border p-4 rounded-lg bg-white shadow-sm">
                         
                         <!-- Row 1: Headers (b) -->
                         <div class="text-sm font-bold description-col border-b pb-2 text-gray-800">DESCRIPTION</div>
                         <div class="text-sm font-bold text-center border-b pb-2 text-gray-800">APPLICANT</div>
-                        <div class="text-sm font-bold text-center border-b pb-2 text-gray-800">CO-APPLICANT / RELATIVE</div>
+                        <div class="text-sm font-bold text-center border-b pb-2 text-gray-800">CO-APPLICANT</div>
 
                         <!-- Row 2: Social Security Number (d, e) -->
                         <div class="description-col">Social Security Number</div>
@@ -179,7 +178,7 @@
                         <div class="field-container"><input type="text" id="vehicleTag_app" name="Vehicle Tag Applicant" class="input-field"></div>
                         <div class="field-container"><input type="text" id="vehicleTag_co" name="Vehicle Tag CoApplicant" class="input-field"></div>
 
-                        <!-- Row 8: Name of Nearest Relative -->
+                        <!-- Row 8: Name of Nearest Relative (c) -->
                         <div class="description-col">Name of Nearest Relative</div>
                         <div class="field-container"></div> <!-- Applicant doesn't have a nearest relative field here -->
                         <div class="field-container"><input type="text" id="relativeName" name="Name of Nearest Relative" class="input-field"></div>
@@ -202,25 +201,27 @@
 
                     <!-- Rental History Section -->
                     <div class="mt-8">
-                        <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Current & Previous Rental History (5 Years Minimum)</h3>
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Current Address</h3>
                         
                         <!-- Current Address is required and static -->
                         <div class="mt-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
-                            <h4 class="font-semibold mb-3 text-lg">Current Residence</h4>
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                                 <div class="md:col-span-2"><label class="label-text" for="currentStreet">Street Address</label><input type="text" id="currentStreet" name="Current Street Address" class="input-field" required></div>
                                 <div><label class="label-text" for="currentCity">City</label><input type="text" id="currentCity" name="Current City" class="input-field" required></div>
                                 <div><label class="label-text" for="currentState">State</label><input type="text" id="currentState" name="Current State" class="input-field" required></div>
                                 <div><label class="label-text" for="currentZip">Zip Code</label><input type="text" id="currentZip" name="Current Zip Code" class="input-field" required></div>
-                                <div><label class="label-text" for="timeAtCurrent">Time at Current Residence</label><input type="text" id="timeAtCurrent" name="Time at Current Residence" class="input-field" required></div>
+                                <div><label class="label-text" for="timeAtCurrentFrom">From Date (mm/dd/yyyy)</label><input type="text" id="timeAtCurrentFrom" name="Time At Current From Date" class="input-field" required pattern="\d{2}/\d{2}/\d{4}" placeholder="MM/DD/YYYY"></div>
+                                <div><label class="label-text" for="timeAtCurrentTo">To Date (mm/dd/yyyy)</label><input type="text" id="timeAtCurrentTo" name="Time At Current To Date" class="input-field" required pattern="\d{2}/\d{2}/\d{4}" placeholder="MM/DD/YYYY"></div>
                                 <div class="md:col-span-2"><label class="label-text" for="currentLandlord">Current Landlord/Mortgage Co.</label><input type="text" id="currentLandlord" name="Current Landlord/Mortgage Co." class="input-field" required></div>
                                 <div><label class="label-text" for="currentLandlordPhone">Landlord Phone</label><input type="tel" id="currentLandlordPhone" name="Current Landlord Phone" class="input-field" required></div>
                             </div>
                         </div>
 
-                         <!-- Previous Address Dynamic Blocks -->
-                         <div id="prev-address-container" class="mt-6 space-y-4"></div>
-                         <button type="button" id="add-prev-address-btn" class="mt-4 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200">+ Add Previous Residence</button>
+                         <!-- Previous Address Dynamic Blocks (Hidden by default) -->
+                         <div id="prev-address-container-wrapper" class="hidden mt-6">
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Previous Address History (Required)</h3>
+                            <div id="prev-address-container" class="space-y-4"></div>
+                         </div>
                     </div>
                 </section>
                 <!-- END: SECTION 2 (Applicant Details & Rental History) -->
@@ -319,6 +320,71 @@
                 document.getElementById(`section-${step}`).classList.add('active');
             };
 
+            // Helper function to calculate residency duration
+            const calculateResidencyDuration = (fromDateStr, toDateStr) => {
+                // Parses MM/DD/YYYY string into Date object
+                const parseDate = (dateStr) => {
+                    // Check if dateStr matches the expected MM/DD/YYYY format
+                    if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) return null;
+
+                    const parts = dateStr.split('/');
+                    // Date(year, monthIndex, day)
+                    const date = new Date(parts[2], parts[0] - 1, parts[1]);
+                    
+                    // Basic check to ensure the date parts made a valid date
+                    if (date.getFullYear() != parts[2] || date.getMonth() != parts[0] - 1 || date.getDate() != parts[1]) {
+                        return null;
+                    }
+                    return date;
+                };
+
+                const fromDate = parseDate(fromDateStr);
+                const toDate = parseDate(toDateStr);
+
+                if (!fromDate || !toDate) {
+                    return 0; // Return 0 if dates are invalid
+                }
+
+                // Calculate difference in months
+                let months = (toDate.getFullYear() - fromDate.getFullYear()) * 12;
+                months -= fromDate.getMonth();
+                months += toDate.getMonth();
+                return months;
+            };
+
+            // Helper function to show/hide previous address based on 4-year rule
+            const togglePreviousAddress = () => {
+                const fromDateInput = document.getElementById('timeAtCurrentFrom');
+                const toDateInput = document.getElementById('timeAtCurrentTo');
+                const wrapper = document.getElementById('prev-address-container-wrapper');
+                
+                // Get all inputs inside the previous address container
+                const prevInputs = document.querySelectorAll('#prev-address-container input');
+
+                // Check if date fields are filled and valid (required by their pattern)
+                if (fromDateInput.checkValidity() && toDateInput.checkValidity() && fromDateInput.value && toDateInput.value) {
+                    const durationMonths = calculateResidencyDuration(fromDateInput.value, toDateInput.value);
+                    
+                    if (durationMonths < 48) { // 4 years = 48 months
+                        wrapper.classList.remove('hidden');
+                        // Make inputs required when visible
+                        prevInputs.forEach(input => input.setAttribute('required', ''));
+                        // Ensure at least one previous address block exists if required
+                        if (document.querySelectorAll('#prev-address-container .dynamic-item').length === 0) {
+                            createPrevAddressBlock(); 
+                        }
+                    } else {
+                        wrapper.classList.add('hidden');
+                        // Remove required attribute when hidden
+                        prevInputs.forEach(input => input.removeAttribute('required'));
+                    }
+                } else {
+                    // Hide and remove required if dates are not valid or not filled
+                    wrapper.classList.add('hidden');
+                    prevInputs.forEach(input => input.removeAttribute('required'));
+                }
+            };
+
             // START: CRITICAL FIX v49.7 for Next button not working (Direct Validation)
             nextBtn.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -331,6 +397,21 @@
                 if (firstInvalidInput) {
                     firstInvalidInput.reportValidity();
                     return; // Stop execution
+                }
+
+                // If on Section 2, perform the residency check after validation
+                if (currentStep === 2) {
+                    togglePreviousAddress(); // Ensure this runs after the current fields are validated
+                    const wrapper = document.getElementById('prev-address-container-wrapper');
+                    
+                    // Re-check validation if Previous Address history became required
+                    if (!wrapper.classList.contains('hidden')) {
+                        const firstInvalidPrevious = wrapper.querySelector(':invalid');
+                        if (firstInvalidPrevious) {
+                            firstInvalidPrevious.reportValidity();
+                            return;
+                        }
+                    }
                 }
                 
                 // If valid, advance the page
@@ -401,14 +482,14 @@
                 const newBlock = document.createElement('div');
                 newBlock.className = 'p-4 border border-gray-200 rounded-lg relative dynamic-item';
                 newBlock.innerHTML = `
-                    <button type="button" class="absolute top-2 right-2 text-red-500 hover:text-red-700 remove-btn" onclick="this.parentElement.remove()">&#x2715;</button>
+                    <button type="button" class="absolute top-2 right-2 text-red-500 hover:text-red-700 remove-btn" onclick="this.parentElement.remove(); togglePreviousAddress()">&#x2715;</button>
                     <h4 class="font-semibold mb-2 text-sm">${titlePrefix} ${count}</h4>
                     ${innerHTMLCallback(count)}
                 `;
                 container.appendChild(newBlock);
             };
 
-            // This function is defined but not attached to an event listener in this simplified version
+            // Previous Address Dynamic Block Creator
             const createPrevAddressBlock = () => {
                  createDynamicBlock('prev-address-container', 'Previous Address', (count) => `
                      <div class="space-y-2">
@@ -424,9 +505,29 @@
             showSection(1);
             updateButtons();
             updateProgressBar();
-            // Call this to add one default "Previous Address" block to Section 2
+            
+            // Attach event listeners for date fields to check residency duration
+            const dateFields = [
+                document.getElementById('timeAtCurrentFrom'), 
+                document.getElementById('timeAtCurrentTo')
+            ];
+
+            dateFields.forEach(field => {
+                field.addEventListener('input', () => {
+                    // Only trigger check if the date format is valid
+                    if (field.checkValidity()) { 
+                        togglePreviousAddress();
+                    }
+                });
+            });
+            
+            // Event listener for adding more previous addresses
             document.getElementById('add-prev-address-btn').addEventListener('click', createPrevAddressBlock);
-            document.getElementById('add-prev-address-btn').click(); // Execute once to show one initial block
+
+            // Initial address block setup (one block by default, required status is set by togglePreviousAddress)
+            createPrevAddressBlock();
+            document.getElementById('prev-address-container-wrapper').classList.add('hidden');
+            document.querySelectorAll('#prev-address-container input').forEach(input => input.removeAttribute('required'));
         });
     </script>
 </body>
