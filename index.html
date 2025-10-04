@@ -77,6 +77,9 @@
             display: flex;
             align-items: center;
         }
+        .input-label-row {
+            line-height: 2.25rem; /* Ensures vertical alignment for text fields */
+        }
     </style>
 </head>
 <body class="antialiased text-gray-800">
@@ -87,7 +90,7 @@
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
             <p class="text-sm text-gray-600 font-semibold">In Accordance with Seminole County NSP Rentals Program</p>
             <p class="text-sm text-red-600 font-bold">AII INCOMPLETE applications will be REJECTED. Tel: (407) 702-3281 / Fax: (866) 858-5371</p>
-            <p class="text-sm text-gray-500">Eff date 10 01 25 v50.3</p>
+            <p class="text-sm text-gray-500">Eff date 10 01 25 v50.4</p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -129,7 +132,7 @@
                             <h3 class="text-lg font-semibold mb-3 text-gray-700 border-b pb-1">Basic Identification</h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div><label class="label-text" for="fullName">Full Name</label><input type="text" id="fullName" name="Full Name" class="input-field" required></div>
-                                <div><label class="label-text" for="dob">Date of Birth</label><input type="date" id="dob" name="Date of Birth" class="input-field" required></div>
+                                <div><label class="label-text" for="date">Date</label><input type="text" id="date" name="Date" class="input-field" required readonly></div>
                             </div>
                         </div>
                         <!-- Checkboxes REMOVED for testing -->
@@ -148,43 +151,38 @@
                         <div class="text-sm font-bold text-center border-b pb-2 text-gray-800">APPLICANT</div>
                         <div class="text-sm font-bold text-center border-b pb-2 text-gray-800">CO-APPLICANT</div>
 
-                        <!-- Row 2: Social Security Number (d, e) -->
-                        <div class="description-col">Social Security Number</div>
-                        <div class="field-container"><input type="text" id="ssn_app" name="SSN Applicant" class="input-field" required pattern="[0-9]{9}" title="9 digits required"></div>
-                        <div class="field-container"><input type="text" id="ssn_co" name="SSN CoApplicant" class="input-field" pattern="[0-9]{9}" title="9 digits required"></div>
+                        <!-- Row 2: Full Name -->
+                        <div class="description-col input-label-row">Full Name</div>
+                        <div class="field-container"><input type="text" id="full_name_app" name="Full Name Applicant" class="input-field" required></div>
+                        <div class="field-container"><input type="text" id="full_name_co" name="Full Name CoApplicant" class="input-field"></div>
+                        
+                        <!-- Row 3: Date of Birth -->
+                        <div class="description-col input-label-row">Date of Birth</div>
+                        <div class="field-container"><input type="date" id="dob_app" name="DOB Applicant" class="input-field" required></div>
+                        <div class="field-container"><input type="date" id="dob_co" name="DOB CoApplicant" class="input-field"></div>
+                        
+                        <!-- Row 4: Social Security Number (d, e) -->
+                        <div class="description-col input-label-row">Social Security Number</div>
+                        <div class="field-container"><input type="text" id="ssn_app" name="SSN Applicant" class="input-field" required pattern="[0-9]{9}" title="9 numerical digits required"></div>
+                        <div class="field-container"><input type="text" id="ssn_co" name="SSN CoApplicant" class="input-field" pattern="[0-9]{9}" title="9 numerical digits required"></div>
 
-                        <!-- Row 3: Driver's License # (d) -->
-                        <div class="description-col">Driver's License #</div>
+                        <!-- Row 5: Driver's License # (d) -->
+                        <div class="description-col input-label-row">Driver's License #</div>
                         <div class="field-container"><input type="text" id="dl_app" name="DL Applicant" class="input-field" required></div>
                         <div class="field-container"><input type="text" id="dl_co" name="DL CoApplicant" class="input-field"></div>
 
-                        <!-- Row 4: Phone (d, f) -->
-                        <div class="description-col">Phone</div>
-                        <div class="field-container"><input type="tel" id="phone_app" name="Phone Applicant" class="input-field" required pattern="[0-9]{10}" title="10 digits required"></div>
-                        <div class="field-container"><input type="tel" id="phone_rel" name="Phone Nearest Relative" class="input-field" pattern="[0-9]{10}" title="10 digits required"></div>
+                        <!-- Row 6: Phone (d, f) -->
+                        <div class="description-col input-label-row">Phone</div>
+                        <div class="field-container"><input type="tel" id="phone_app" name="Phone Applicant" class="input-field" required pattern="[0-9]{10}" title="10 numerical digits required"></div>
+                        <div class="field-container"><input type="tel" id="phone_co" name="Phone CoApplicant" class="input-field" pattern="[0-9]{10}" title="10 numerical digits required"></div>
 
-                        <!-- Row 5: Email Address (d, g) -->
-                        <div class="description-col">Email Address</div>
+                        <!-- Row 7: Email Address (d, g) -->
+                        <div class="description-col input-label-row">Email Address</div>
                         <div class="field-container"><input type="email" id="email_app" name="Email Applicant" class="input-field" required></div>
-                        <div class="field-container"><input type="email" id="email_rel" name="Email CoApplicant" class="input-field"></div>
+                        <div class="field-container"><input type="email" id="email_co" name="Email CoApplicant" class="input-field"></div>
 
-                         <!-- Row 6: Vehicle Make & Model -->
-                        <div class="description-col">Vehicle Make & Model</div>
-                        <div class="field-container"><input type="text" id="vehicleMake_app" name="Vehicle Make Applicant" class="input-field"></div>
-                        <div class="field-container"><input type="text" id="vehicleMake_co" name="Vehicle Make CoApplicant" class="input-field"></div>
-
-                        <!-- Row 7: Vehicle Tag # -->
-                        <div class="description-col">Vehicle Tag #</div>
-                        <div class="field-container"><input type="text" id="vehicleTag_app" name="Vehicle Tag Applicant" class="input-field"></div>
-                        <div class="field-container"><input type="text" id="vehicleTag_co" name="Vehicle Tag CoApplicant" class="input-field"></div>
-
-                        <!-- Row 8: Name of Nearest Relative (c) -->
-                        <div class="description-col">Name of Nearest Relative</div>
-                        <div class="field-container"></div> <!-- Applicant doesn't have a nearest relative field here -->
-                        <div class="field-container"><input type="text" id="relativeName" name="Name of Nearest Relative" class="input-field"></div>
-
-                        <!-- Row 9: Armed Services -->
-                         <div class="description-col">Armed Services Member?</div>
+                         <!-- Row 8: Armed Services -->
+                         <div class="description-col input-label-row">Armed Services Member?</div>
                          <div class="field-container">
                              <div class="radio-group justify-center w-full">
                                  <label class="radio-label"><input type="radio" name="Armed Services App" value="yes" class="radio-input mr-1">Yes</label>
@@ -195,6 +193,56 @@
                               <div class="radio-group justify-center w-full">
                                  <label class="radio-label"><input type="radio" name="Armed Services CoApp" value="yes" class="radio-input mr-1">Yes</label>
                                  <label class="radio-label"><input type="radio" name="Armed Services CoApp" value="no" class="radio-input mr-1" checked>No</label>
+                             </div>
+                         </div>
+
+                        <!-- Row 9: Vehicle Make & Model -->
+                        <div class="description-col input-label-row">Vehicle Make & Model</div>
+                        <div class="field-container"><input type="text" id="vehicleMake_app" name="Vehicle Make Applicant" class="input-field"></div>
+                        <div class="field-container"><input type="text" id="vehicleMake_co" name="Vehicle Make CoApplicant" class="input-field"></div>
+
+                        <!-- Row 10: Vehicle Tag # -->
+                        <div class="description-col input-label-row">Vehicle Tag #</div>
+                        <div class="field-container"><input type="text" id="vehicleTag_app" name="Vehicle Tag Applicant" class="input-field"></div>
+                        <div class="field-container"><input type="text" id="vehicleTag_co" name="Vehicle Tag CoApplicant" class="input-field"></div>
+                        
+                        <!-- Row 11: Name of Nearest Relative -->
+                        <div class="description-col input-label-row">Name of Nearest Relative</div>
+                        <div class="field-container"></div> <!-- Applicant doesn't have a nearest relative field here -->
+                        <div class="field-container"><input type="text" id="relativeName" name="Name of Nearest Relative" class="input-field"></div>
+
+                        <!-- Row 12: Phone of Nearest Relative -->
+                        <div class="description-col input-label-row">Phone of Nearest Relative</div>
+                        <div class="field-container"></div> <!-- Applicant doesn't have a nearest relative field here -->
+                        <div class="field-container"><input type="tel" id="relativePhone" name="Phone Nearest Relative" class="input-field" pattern="[0-9]{10}" title="10 numerical digits required"></div>
+                        
+                        <!-- Row 13: Ever Been Evicted -->
+                         <div class="description-col input-label-row">Ever Been Evicted?</div>
+                         <div class="field-container">
+                             <div class="radio-group justify-center w-full">
+                                 <label class="radio-label"><input type="radio" name="Evicted App" value="yes" class="radio-input mr-1">Yes</label>
+                                 <label class="radio-label"><input type="radio" name="Evicted App" value="no" class="radio-input mr-1" checked>No</label>
+                             </div>
+                         </div>
+                          <div class="field-container">
+                              <div class="radio-group justify-center w-full">
+                                 <label class="radio-label"><input type="radio" name="Evicted CoApp" value="yes" class="radio-input mr-1">Yes</label>
+                                 <label class="radio-label"><input type="radio" name="Evicted CoApp" value="no" class="radio-input mr-1" checked>No</label>
+                             </div>
+                         </div>
+                         
+                         <!-- Row 14: Ever Been Foreclosed -->
+                         <div class="description-col input-label-row">Ever Been Foreclosed?</div>
+                         <div class="field-container">
+                             <div class="radio-group justify-center w-full">
+                                 <label class="radio-label"><input type="radio" name="Foreclosed App" value="yes" class="radio-input mr-1">Yes</label>
+                                 <label class="radio-label"><input type="radio" name="Foreclosed App" value="no" class="radio-input mr-1" checked>No</label>
+                             </div>
+                         </div>
+                          <div class="field-container">
+                              <div class="radio-group justify-center w-full">
+                                 <label class="radio-label"><input type="radio" name="Foreclosed CoApp" value="yes" class="radio-input mr-1">Yes</label>
+                                 <label class="radio-label"><input type="radio" name="Foreclosed CoApp" value="no" class="radio-input mr-1" checked>No</label>
                              </div>
                          </div>
                     </div>
@@ -210,10 +258,20 @@
                                 <div><label class="label-text" for="currentCity">City</label><input type="text" id="currentCity" name="Current City" class="input-field" required></div>
                                 <div><label class="label-text" for="currentState">State</label><input type="text" id="currentState" name="Current State" class="input-field" required></div>
                                 <div><label class="label-text" for="currentZip">Zip Code</label><input type="text" id="currentZip" name="Current Zip Code" class="input-field" required></div>
+                                
+                                <div><label class="label-text" for="currentContact">Contact Person</label><input type="text" id="currentContact" name="Current Contact Person" class="input-field" required></div>
+                                <div><label class="label-text" for="currentTitle">Title</label><input type="text" id="currentTitle" name="Current Contact Title" class="input-field" required></div>
+                                
                                 <div><label class="label-text" for="timeAtCurrentFrom">From Date (mm/dd/yyyy)</label><input type="text" id="timeAtCurrentFrom" name="Time At Current From Date" class="input-field" required pattern="\d{2}/\d{2}/\d{4}" placeholder="MM/DD/YYYY"></div>
-                                <div><label class="label-text" for="timeAtCurrentTo">To Date (mm/dd/yyyy)</label><input type="text" id="timeAtCurrentTo" name="Time At Current To Date" class="input-field" required pattern="\d{2}/\d{2}/\d{4}" placeholder="MM/DD/YYYY"></div>
+                                <div><label class="label-text" for="currentMonthlyRent">Monthly Rent</label><input type="number" id="currentMonthlyRent" name="Current Monthly Rent" class="input-field" required min="0"></div>
+
+                                <div><label class="label-text" for="securityDepositReturn">Security Deposit Return %</label><input type="text" id="securityDepositReturn" name="Security Deposit Return Percent" class="input-field" required></div>
+                                <div><label class="label-text" for="reasonForLeaving">Reason For Leaving</label><input type="text" id="reasonForLeaving" name="Reason For Leaving" class="input-field" required></div>
+                                
                                 <div class="md:col-span-2"><label class="label-text" for="currentLandlord">Current Landlord/Mortgage Co.</label><input type="text" id="currentLandlord" name="Current Landlord/Mortgage Co." class="input-field" required></div>
                                 <div><label class="label-text" for="currentLandlordPhone">Landlord Phone</label><input type="tel" id="currentLandlordPhone" name="Current Landlord Phone" class="input-field" required></div>
+                                
+                                
                             </div>
                         </div>
 
@@ -287,6 +345,15 @@
             const nextBtn = document.getElementById('next-btn');
             const submitBtn = document.getElementById('submit-btn');
             const spacer = document.getElementById('spacer');
+
+            // Set current date on Page 1
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            let mm = today.getMonth() + 1; // Months start at 0
+            let dd = today.getDate();
+            if (dd < 10) dd = '0' + dd;
+            if (mm < 10) mm = '0' + mm;
+            document.getElementById('date').value = `${mm}/${dd}/${yyyy}`;
             
             // Helper function to update button visibility and style
             const updateButtons = () => {
@@ -324,13 +391,9 @@
             const calculateResidencyDuration = (fromDateStr, toDateStr) => {
                 // Parses MM/DD/YYYY string into Date object
                 const parseDate = (dateStr) => {
-                    // Check if dateStr matches the expected MM/DD/YYYY format
                     if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) return null;
-
                     const parts = dateStr.split('/');
-                    // Date(year, monthIndex, day)
                     const date = new Date(parts[2], parts[0] - 1, parts[1]);
-                    
                     // Basic check to ensure the date parts made a valid date
                     if (date.getFullYear() != parts[2] || date.getMonth() != parts[0] - 1 || date.getDate() != parts[1]) {
                         return null;
@@ -341,8 +404,8 @@
                 const fromDate = parseDate(fromDateStr);
                 const toDate = parseDate(toDateStr);
 
-                if (!fromDate || !toDate) {
-                    return 0; // Return 0 if dates are invalid
+                if (!fromDate || !toDate || fromDate >= toDate) {
+                    return 0; // Return 0 if dates are invalid or reversed
                 }
 
                 // Calculate difference in months
@@ -365,7 +428,7 @@
                 if (fromDateInput.checkValidity() && toDateInput.checkValidity() && fromDateInput.value && toDateInput.value) {
                     const durationMonths = calculateResidencyDuration(fromDateInput.value, toDateInput.value);
                     
-                    if (durationMonths < 48) { // 4 years = 48 months
+                    if (durationMonths < 48 && durationMonths > 0) { // Less than 4 years (48 months) but more than 0 months
                         wrapper.classList.remove('hidden');
                         // Make inputs required when visible
                         prevInputs.forEach(input => input.setAttribute('required', ''));
@@ -384,7 +447,7 @@
                     prevInputs.forEach(input => input.removeAttribute('required'));
                 }
             };
-
+            
             // START: CRITICAL FIX v49.7 for Next button not working (Direct Validation)
             nextBtn.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -449,6 +512,7 @@
                 }
                 
                 // 2. Data Collection and Formatting (Placeholder logic for PDF Generation)
+                // NOTE: This logic should be expanded in the final version to include all fields
                 const formData = new FormData(form);
                 let reportHTML = `<div class="p-8 bg-white border border-gray-300 rounded-lg shadow-xl print-container">
                     <header class="text-center mb-6 border-b pb-4">
@@ -525,7 +589,11 @@
             document.getElementById('add-prev-address-btn').addEventListener('click', createPrevAddressBlock);
 
             // Initial address block setup (one block by default, required status is set by togglePreviousAddress)
-            createPrevAddressBlock();
+            // Create an initial block but keep it empty of required fields until the toggle function runs.
+            const initialPrevBlockContainer = document.getElementById('prev-address-container');
+            if (initialPrevBlockContainer.children.length === 0) {
+                createPrevAddressBlock();
+            }
             document.getElementById('prev-address-container-wrapper').classList.add('hidden');
             document.querySelectorAll('#prev-address-container input').forEach(input => input.removeAttribute('required'));
         });
