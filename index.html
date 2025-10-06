@@ -90,7 +90,7 @@
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
             <p class="text-sm text-gray-600 font-semibold">In Accordance with Seminole County NSP Rentals Program</p>
             <p class="text-sm text-red-600 font-bold">AII INCOMPLETE applications will be REJECTED. Tel: (407) 702-3281 / Fax: (866) 858-5371</p>
-            <p class="text-sm text-gray-500">Eff date 10 01 25 v50.4</p>
+            <p class="text-sm text-gray-500">Eff date 10 01 25 v50.5</p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -146,7 +146,7 @@
                     <!-- Section 2.1: Applicant/Co-Applicant Data (3-Column Layout) -->
                     <div class="data-grid space-y-4 border p-4 rounded-lg bg-white shadow-sm">
                         
-                        <!-- Row 1: Headers (b) -->
+                        <!-- Row 1: Headers -->
                         <div class="text-sm font-bold description-col border-b pb-2 text-gray-800">DESCRIPTION</div>
                         <div class="text-sm font-bold text-center border-b pb-2 text-gray-800">APPLICANT</div>
                         <div class="text-sm font-bold text-center border-b pb-2 text-gray-800">CO-APPLICANT</div>
@@ -161,22 +161,22 @@
                         <div class="field-container"><input type="date" id="dob_app" name="DOB Applicant" class="input-field" required></div>
                         <div class="field-container"><input type="date" id="dob_co" name="DOB CoApplicant" class="input-field"></div>
                         
-                        <!-- Row 4: Social Security Number (d, e) -->
+                        <!-- Row 4: Social Security Number -->
                         <div class="description-col input-label-row">Social Security Number</div>
                         <div class="field-container"><input type="text" id="ssn_app" name="SSN Applicant" class="input-field" required pattern="[0-9]{9}" title="9 numerical digits required"></div>
                         <div class="field-container"><input type="text" id="ssn_co" name="SSN CoApplicant" class="input-field" pattern="[0-9]{9}" title="9 numerical digits required"></div>
 
-                        <!-- Row 5: Driver's License # (d) -->
+                        <!-- Row 5: Driver's License # -->
                         <div class="description-col input-label-row">Driver's License #</div>
                         <div class="field-container"><input type="text" id="dl_app" name="DL Applicant" class="input-field" required></div>
                         <div class="field-container"><input type="text" id="dl_co" name="DL CoApplicant" class="input-field"></div>
 
-                        <!-- Row 6: Phone (d, f) -->
+                        <!-- Row 6: Phone -->
                         <div class="description-col input-label-row">Phone</div>
                         <div class="field-container"><input type="tel" id="phone_app" name="Phone Applicant" class="input-field" required pattern="[0-9]{10}" title="10 numerical digits required"></div>
                         <div class="field-container"><input type="tel" id="phone_co" name="Phone CoApplicant" class="input-field" pattern="[0-9]{10}" title="10 numerical digits required"></div>
 
-                        <!-- Row 7: Email Address (d, g) -->
+                        <!-- Row 7: Email Address -->
                         <div class="description-col input-label-row">Email Address</div>
                         <div class="field-container"><input type="email" id="email_app" name="Email Applicant" class="input-field" required></div>
                         <div class="field-container"><input type="email" id="email_co" name="Email CoApplicant" class="input-field"></div>
@@ -279,6 +279,7 @@
                          <div id="prev-address-container-wrapper" class="hidden mt-6">
                             <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Previous Address History (Required)</h3>
                             <div id="prev-address-container" class="space-y-4"></div>
+                            <button type="button" id="add-prev-address-btn" class="mt-4 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200">+ Add Previous Address</button>
                          </div>
                     </div>
                 </section>
@@ -287,8 +288,31 @@
 
                 <!-- START: SECTION 3 (Household Members & Citizenship) -->
                 <section id="section-3" class="form-section">
-                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">Household & Citizenship Details</h2>
-                    <p class="text-gray-600 mb-6">PLACEHOLDER SECTION - Fill Page 2 to continue to Page 4.</p>
+                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">Household Members</h2>
+                    <p class="text-gray-600 mb-6">List all other persons who will occupy the unit (excluding Applicant and Co-Applicant).</p>
+
+                    <!-- Household Members Dynamic Blocks -->
+                    <div id="household-members-container" class="mt-4 space-y-4"></div>
+                    <button type="button" id="add-member-btn" class="mt-4 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200">+ Add Household Member</button>
+
+                    <div class="mt-8 space-y-6">
+                        <!-- Citizenship Status -->
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <span class="label-text">Are ALL members of the household U.S. Citizens?</span>
+                             <div class="radio-group mt-2">
+                                <label class="radio-label"><input type="radio" name="US Citizens" value="yes" class="radio-input mr-2" checked>Yes</label>
+                                <label class="radio-label"><input type="radio" name="US Citizens" value="no" class="radio-input mr-2">No</label>
+                            </div>
+                        </div>
+                         <!-- Full-Time Student Status -->
+                         <div class="p-4 border border-gray-200 rounded-lg">
+                            <span class="label-text">Is any household member (age 18+) a full-time student?</span>
+                             <div class="radio-group mt-2">
+                                <label class="radio-label"><input type="radio" name="Full-Time Student" value="yes" class="radio-input mr-2">Yes</label>
+                                <label class="radio-label"><input type="radio" name="Full-Time Student" value="no" class="radio-input mr-2" checked>No</label>
+                            </div>
+                        </div>
+                    </div>
                 </section>
                 <!-- END: SECTION 3 (Household Members & Citizenship) -->
 
@@ -464,7 +488,8 @@
 
                 // If on Section 2, perform the residency check after validation
                 if (currentStep === 2) {
-                    togglePreviousAddress(); // Ensure this runs after the current fields are validated
+                    // This must run AFTER the basic fields in section 2 are validated
+                    togglePreviousAddress(); 
                     const wrapper = document.getElementById('prev-address-container-wrapper');
                     
                     // Re-check validation if Previous Address history became required
@@ -524,7 +549,7 @@
                     <div class="grid grid-cols-2 gap-x-6 gap-y-2 mt-2 text-sm">
                         <!-- Display captured data (Simplified) -->
                         <div class="col-span-1"><span class="font-medium">Full Name:</span> ${formData.get('Full Name')}</div>
-                        <div class="col-span-1"><span class="font-medium">Date of Birth:</span> ${formData.get('Date of Birth')}</div>
+                        <div class="col-span-1"><span class="font-medium">Date:</span> ${formData.get('Date')}</div>
                         <div class="col-span-2 mt-4 text-center"><p class="text-red-600 font-bold">This is the final document. Please click the button below to save to PDF.</p></div>
                     </div>
                 
@@ -561,6 +586,18 @@
                         <div><label class="label-text text-xs">City/State/Zip</label><input type="text" name="Previous Address ${count} CityStateZip" class="input-field text-sm" required></div>
                         <div><label class="label-text text-xs">Time at Residence</label><input type="text" name="Previous Address ${count} Time" class="input-field text-sm" required></div>
                         <div><label class="label-text text-xs">Landlord Name/Phone</label><input type="text" name="Previous Address ${count} Landlord Contact" class="input-field text-sm" required></div>
+                        <div><label class="label-text text-xs">Reason for Leaving</label><input type="text" name="Previous Address ${count} Reason" class="input-field text-sm" required></div>
+                        <div><label class="label-text text-xs">Monthly Rent</label><input type="number" name="Previous Address ${count} Rent" class="input-field text-sm" required min="0"></div>
+                     </div>`);
+            };
+            
+            // Household Member Dynamic Block Creator
+            const createHouseholdMemberBlock = () => {
+                createDynamicBlock('household-members-container', 'Household Member', (count) => `
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div><label class="label-text text-xs">Full Name</label><input type="text" name="Household Member ${count} Full Name" class="input-field text-sm" required></div>
+                        <div><label class="label-text text-xs">Date of Birth</label><input type="date" name="Household Member ${count} DOB" class="input-field text-sm" required></div>
+                        <div><label class="label-text text-xs">Relationship to Applicant</label><input type="text" name="Household Member ${count} Relationship" class="input-field text-sm" required></div>
                     </div>`);
             };
             // END: Dynamic content block functions
@@ -585,8 +622,10 @@
                 });
             });
             
-            // Event listener for adding more previous addresses
+            // Event listener for adding dynamic blocks
             document.getElementById('add-prev-address-btn').addEventListener('click', createPrevAddressBlock);
+            document.getElementById('add-member-btn').addEventListener('click', createHouseholdMemberBlock);
+
 
             // Initial address block setup (one block by default, required status is set by togglePreviousAddress)
             // Create an initial block but keep it empty of required fields until the toggle function runs.
@@ -596,6 +635,12 @@
             }
             document.getElementById('prev-address-container-wrapper').classList.add('hidden');
             document.querySelectorAll('#prev-address-container input').forEach(input => input.removeAttribute('required'));
+
+            // Create initial Household Member block
+            const initialMemberBlockContainer = document.getElementById('household-members-container');
+            if (initialMemberBlockContainer.children.length === 0) {
+                createHouseholdMemberBlock();
+            }
         });
     </script>
 </body>
