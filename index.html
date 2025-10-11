@@ -20,6 +20,47 @@
         .form-section.active {
             display: block;
         }
+        
+        /* New styles for the 3-column data section */
+.data-grid-3 {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr; /* Description | Applicant | Co-Applicant */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.data-grid-3 > div {
+    padding: 8px 12px;
+    border-bottom: 1px solid #eee;
+    border-right: 1px solid #eee;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+}
+.data-grid-3 .header-col {
+    background-color: #e0eaff; /* Blue-light header */
+    font-weight: bold;
+    text-align: center;
+    border-right: 1px solid #ddd;
+}
+.data-grid-3 .desc-col {
+    background-color: #f9f9f9;
+    font-weight: 500;
+    color: #374151; /* Gray-700 */
+}
+.data-grid-3 .input-col {
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+}
+.data-grid-3 .input-field {
+    /* Override global input-field padding for alignment */
+    padding: 6px 8px;
+}
+/* Ensure the last row doesn't have border-bottom */
+.data-grid-3 div:nth-last-child(-n+3) {
+    border-bottom: none;
+}
+/* ... existing styles ... */
         .step-item-active {
             border-color: #3b82f6;
             color: #3b82f6;
@@ -90,7 +131,7 @@
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
             <p class="text-sm text-gray-600 font-semibold">In Accordance with Seminole County NSP Rentals Program</p>
             <p class="text-sm text-red-600 font-bold">AII INCOMPLETE applications will be REJECTED. Tel: (407) 702-3281 / Fax: (866) 858-5371</p>
-            <p class="text-sm text-gray-500">Eff date 10 01 25 v50.5</p>
+            <p class="text-sm text-gray-500">Eff date 10 11 25 v51.8</p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -122,22 +163,101 @@
                 <div id="status-message" class="text-sm px-4 py-2 rounded-md mb-4 hidden" role="alert"></div>
                 
                 <!-- START: SECTION 1 (Intro/Checklist) - SIMPLEST LAYOUT FOR TESTING -->
-                <section id="section-1" class="form-section active">
-                    <h2 class="text-2xl font-semibold mb-3 text-gray-800">APPLICATION CHECKLIST (TEST MODE)</h2>
-                    <p class="text-red-500 font-semibold mb-6 border-b pb-4">ONLY FILL NAME AND DATE TO TEST ADVANCEMENT.</p>
-                    
-                    <div class="space-y-6">
-                        
-                        <div class="border p-4 rounded-lg bg-gray-50">
-                            <h3 class="text-lg font-semibold mb-3 text-gray-700 border-b pb-1">Basic Identification</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div><label class="label-text" for="fullName">Full Name</label><input type="text" id="fullName" name="Full Name" class="input-field" required></div>
-                                <div><label class="label-text" for="date">Date</label><input type="text" id="date" name="Date" class="input-field" required readonly></div>
-                            </div>
-                        </div>
-                        <!-- Checkboxes REMOVED for testing -->
-                    </div>
-                </section>
+<section id="section-1" class="form-section active">
+    <h2 class="text-2xl font-semibold mb-2 text-gray-800">APPLICANT & CO-APPLICANT DATA (Page 1)</h2>
+    <p class="text-gray-600 mb-6">Complete all fields. Co-Applicant information is optional. **Required fields are marked with a red asterisk.**</p>
+
+    <div class="data-grid-3">
+        
+        <div class="desc-col header-col border-none">DESCRIPTION</div>
+        <div class="header-col">APPLICANT</div>
+        <div class="header-col">CO-APPLICANT (Optional)</div>
+
+        <div class="desc-col">Full Name *</div>
+        <div class="input-col"><input type="text" name="Applicant Full Name" class="input-field" required></div>
+        <div class="input-col"><input type="text" name="Co-Applicant Full Name" class="input-field"></div>
+        
+        <div class="desc-col">Date of Birth</div>
+        <div class="input-col"><input type="date" name="Applicant Date of Birth" class="input-field"></div>
+        <div class="input-col"><input type="date" name="Co-Applicant Date of Birth" class="input-field"></div>
+
+        <div class="desc-col">Social Security Number *</div>
+        <div class="input-col"><input type="text" name="Applicant SSN" class="input-field" required pattern="[0-9]{9}" title="9 numerical digits required"></div>
+        <div class="input-col"><input type="text" name="Co-Applicant SSN" class="input-field"></div>
+        
+        <div class="desc-col">Driver's License #/State *</div>
+        <div class="input-col"><input type="text" name="Applicant DL #" class="input-field" required></div>
+        <div class="input-col"><input type="text" name="Co-Applicant DL #" class="input-field"></div>
+        
+        <div class="desc-col">Phone *</div>
+        <div class="input-col"><input type="tel" name="Applicant Phone" class="input-field" required pattern="[0-9]{10}" title="10 numerical digits required"></div>
+        <div class="input-col"><input type="tel" name="Co-Applicant Phone" class="input-field"></div>
+        
+        <div class="desc-col">Email Address *</div>
+        <div class="input-col"><input type="email" name="Applicant Email" class="input-field" required></div>
+        <div class="input-col"><input type="email" name="Co-Applicant Email" class="input-field"></div>
+        
+        <div class="desc-col">Relationship to Other</div>
+        <div class="input-col"><input type="text" name="Applicant Relation to Co-Applicant" class="input-field"></div>
+        <div class="input-col"><input type="text" name="Co-Applicant Relation to Applicant" class="input-field"></div>
+
+        <div class="desc-col">Current Employer</div>
+        <div class="input-col"><input type="text" name="Applicant Current Employer" class="input-field"></div>
+        <div class="input-col"><input type="text" name="Co-Applicant Current Employer" class="input-field"></div>
+        
+        <div class="desc-col">Monthly Income (Gross)</div>
+        <div class="input-col"><input type="number" name="Applicant Monthly Income" class="input-field" min="0"></div>
+        <div class="input-col"><input type="number" name="Co-Applicant Monthly Income" class="input-field" min="0"></div>
+        
+        <div class="desc-col">Marital Status</div>
+        <div class="input-col"><input type="text" name="Applicant Marital Status" class="input-field"></div>
+        <div class="input-col"><input type="text" name="Co-Applicant Marital Status" class="input-field"></div>
+        
+        <div class="desc-col">Emergency Contact Name</div>
+        <div class="input-col"><input type="text" name="Applicant Emergency Contact Name" class="input-field"></div>
+        <div class="input-col"><input type="text" name="Co-Applicant Emergency Contact Name" class="input-field"></div>
+        
+        <div class="desc-col">Emergency Contact Phone</div>
+        <div class="input-col"><input type="tel" name="Applicant Emergency Contact Phone" class="input-field"></div>
+        <div class="input-col"><input type="tel" name="Co-Applicant Emergency Contact Phone" class="input-field"></div>
+        
+        <div class="desc-col">U.S. Citizen?</div>
+        <div class="input-col"><select name="Applicant Citizen Status" class="input-field"><option>Yes</option><option>No</option></select></div>
+        <div class="input-col"><select name="Co-Applicant Citizen Status" class="input-field"><option>Yes</option><option>No</option></select></div>
+        
+    </div>
+
+    <div class="mt-8 border-t border-gray-300 pt-6">
+        <h3 class="text-xl font-semibold mb-4 text-gray-800">Rental History (4 Year Minimum Required)</h3>
+        <p class="text-sm text-gray-600 mb-4">Provide details for all addresses covering a continuous 4-year period ending with your current address.</p>
+
+        <div id="rental-history-container" class="space-y-4">
+            <div class="p-4 border border-yellow-300 bg-yellow-50 rounded-lg dynamic-item" data-residence-count="1">
+                <h4 class="font-semibold mb-2">Residence 1 (Current Address)</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div><label class="label-text">Address</label><input type="text" name="Residence 1 Address" class="input-field" required></div>
+                    <div><label class="label-text">Landlord/Manager Name</label><input type="text" name="Residence 1 Landlord Name" class="input-field" required></div>
+                    <div><label class="label-text">Landlord Phone</label><input type="tel" name="Residence 1 Landlord Phone" class="input-field"></div>
+                    <div><label class="label-text">Monthly Rent</label><input type="number" name="Residence 1 Monthly Rent" class="input-field" required></div>
+                    <div><label class="label-text">Start Date</label><input type="date" id="rental-start-1" name="Residence 1 Start Date" class="input-field rent-start" required></div>
+                    <div><label class="label-text">End Date</label><input type="date" id="rental-end-1" name="Residence 1 End Date" class="input-field rent-end" required></div>
+                    <div class="md:col-span-3"><label class="label-text">REASON for Leaving</label><input type="text" name="Residence 1 Reason for Leaving" class="input-field"></div>
+                </div>
+            </div>
+        </div>
+        <button type="button" id="add-rental-btn" class="mt-4 btn-secondary text-sm px-3 py-1">Add Previous Residence</button>
+        <p id="rental-history-message" class="mt-2 text-sm font-semibold text-red-600 hidden">Required: Total residency must cover a minimum of 4 years. Please add more addresses.</p>
+    </div>
+
+    <div class="mt-8 border-t border-gray-300 pt-6">
+        <h3 class="text-xl font-bold mb-4 text-gray-800">Other Household Members (Not Applicant/Co-Applicant)</h3>
+        <p class="text-sm text-gray-600 mb-4">List up to 3 additional household members living in the home.</p>
+        
+        <div id="other-members-container" class="space-y-4">
+            </div>
+        <button type="button" id="add-member-btn" class="mt-4 btn-secondary text-sm px-3 py-1">Add Household Member</button>
+    </div>
+</section>
                 <!-- END: SECTION 1 (Intro/Checklist) -->
 
                 <!-- START: SECTION 2 (Applicant Details & Rental History - 3 COLUMN LAYOUT) -->
@@ -359,289 +479,338 @@
     
     <!-- PDF Generation/Print Summary Section (Hidden until Submission) -->
     <div id="print-summary" class="printable-only"></div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // v51.0 (HARON11): Implements 3-column HTML, 4-year validation, and fixes dynamic section logic.
+        let currentStep = 1;
+        const totalSteps = 6; 
+        const form = document.getElementById('rental-application-form');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const spacer = document.getElementById('spacer');
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            let currentStep = 1;
-            const totalSteps = 6;
-            const form = document.getElementById('rental-application-form');
-            const prevBtn = document.getElementById('prev-btn');
-            const nextBtn = document.getElementById('next-btn');
-            const submitBtn = document.getElementById('submit-btn');
-            const spacer = document.getElementById('spacer');
+        // --- Core Navigation and UI Functions ---
+        
+        const updateButtons = () => {
+            prevBtn.style.display = currentStep > 1 ? 'block' : 'none';
+            spacer.style.display = currentStep === 1 ? 'block' : 'none';
+            nextBtn.style.display = currentStep < totalSteps ? 'block' : 'none';
+            submitBtn.style.display = currentStep === totalSteps ? 'block' : 'none';
+        };
 
-            // Set current date on Page 1
-            const today = new Date();
-            const yyyy = today.getFullYear();
-            let mm = today.getMonth() + 1; // Months start at 0
-            let dd = today.getDate();
-            if (dd < 10) dd = '0' + dd;
-            if (mm < 10) mm = '0' + mm;
-            document.getElementById('date').value = `${mm}/${dd}/${yyyy}`;
+        const showSection = (step) => {
+            document.querySelectorAll('.form-section').forEach(section => section.classList.remove('active'));
+            const sectionToShow = document.getElementById(`section-${step}`);
+            if (sectionToShow) {
+                sectionToShow.classList.add('active');
+            }
+        };
+
+        // --- Rental History Logic (4-Year Validation) ---
+
+        const calculateDateDifferenceInYears = (startDate, endDate) => {
+            if (!startDate || !endDate) return 0;
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            if (end < start) return 0;
             
-            // Helper function to update button visibility and style
-            const updateButtons = () => {
-                prevBtn.style.display = currentStep > 1 ? 'block' : 'none';
-                spacer.style.display = currentStep === 1 ? 'block' : 'none';
-                nextBtn.style.display = currentStep < totalSteps ? 'block' : 'none';
-                submitBtn.style.display = currentStep === totalSteps ? 'block' : 'none';
-            };
+            const diffTime = Math.abs(end - start);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            return diffDays / 365.25;
+        };
 
-            // Helper function to update the progress bar style
-            const updateProgressBar = () => {
-                for (let i = 1; i <= totalSteps; i++) {
-                    const step = document.getElementById(`step-${i}`);
-                    step.classList.remove('step-item-active', 'step-item-complete');
-                    step.querySelector('div').classList.remove('border-blue-500', 'text-blue-600', 'border-green-500', 'text-green-600', 'bg-green-50');
-                    step.querySelector('div').classList.add('border-gray-200', 'text-gray-400');
+        const validateRentalHistory = () => {
+            const rentalItems = document.querySelectorAll('#rental-history-container .dynamic-item');
+            let totalYears = 0;
+            let isValid = true;
 
-                    if (i < currentStep) {
-                        step.classList.add('step-item-complete');
-                        step.querySelector('div').classList.add('border-green-500', 'text-green-600');
-                    } else if (i === currentStep) {
-                        step.classList.add('step-item-active');
-                        step.querySelector('div').classList.add('border-blue-500', 'text-blue-600');
-                    }
+            rentalItems.forEach(item => {
+                const startDateInput = item.querySelector('.rent-start');
+                const endDateInput = item.querySelector('.rent-end');
+
+                // Only count history if both dates are present
+                if (startDateInput && endDateInput && startDateInput.value && endDateInput.value) {
+                    totalYears += calculateDateDifferenceInYears(startDateInput.value, endDateInput.value);
                 }
-            };
+            });
+
+            const messageElement = document.getElementById('rental-history-message');
             
-            // Helper function to show the current section
-            const showSection = (step) => {
-                document.querySelectorAll('.form-section').forEach(section => section.classList.remove('active'));
-                document.getElementById(`section-${step}`).classList.add('active');
-            };
+            if (totalYears < 4) {
+                messageElement.textContent = `Required: Total residency must cover a minimum of 4 years. Currently: ${totalYears.toFixed(2)} years. Please add more addresses.`;
+                messageElement.classList.remove('hidden');
+                isValid = false;
+            } else {
+                messageElement.classList.add('hidden');
+            }
+            return isValid;
+        };
+        
+        // --- Event Listeners and Navigation ---
 
-            // Helper function to calculate residency duration
-            const calculateResidencyDuration = (fromDateStr, toDateStr) => {
-                // Parses MM/DD/YYYY string into Date object
-                const parseDate = (dateStr) => {
-                    if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) return null;
-                    const parts = dateStr.split('/');
-                    const date = new Date(parts[2], parts[0] - 1, parts[1]);
-                    // Basic check to ensure the date parts made a valid date
-                    if (date.getFullYear() != parts[2] || date.getMonth() != parts[0] - 1 || date.getDate() != parts[1]) {
-                        return null;
-                    }
-                    return date;
-                };
+        nextBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const currentSection = document.getElementById(`section-${currentStep}`);
+            let formIsValid = true;
 
-                const fromDate = parseDate(fromDateStr);
-                const toDate = parseDate(toDateStr);
+            // 1. Check all required fields in the current section
+            const firstInvalidInput = currentSection.querySelector(':invalid');
+            if (firstInvalidInput) {
+                firstInvalidInput.reportValidity();
+                formIsValid = false;
+            }
 
-                if (!fromDate || !toDate || fromDate >= toDate) {
-                    return 0; // Return 0 if dates are invalid or reversed
+            // 2. Custom Logic for Screen 1 (Rental Validation)
+            if (currentStep === 1 && formIsValid) {
+                const rentalIsValid = validateRentalHistory();
+                if (!rentalIsValid) {
+                    formIsValid = false;
                 }
+            }
 
-                // Calculate difference in months
-                let months = (toDate.getFullYear() - fromDate.getFullYear()) * 12;
-                months -= fromDate.getMonth();
-                months += toDate.getMonth();
-                return months;
-            };
-
-            // Helper function to show/hide previous address based on 4-year rule
-            const togglePreviousAddress = () => {
-                const fromDateInput = document.getElementById('timeAtCurrentFrom');
-                const toDateInput = document.getElementById('timeAtCurrentTo');
-                const wrapper = document.getElementById('prev-address-container-wrapper');
-                
-                // Get all inputs inside the previous address container
-                const prevInputs = document.querySelectorAll('#prev-address-container input');
-
-                // Check if date fields are filled and valid (required by their pattern)
-                if (fromDateInput.checkValidity() && toDateInput.checkValidity() && fromDateInput.value && toDateInput.value) {
-                    const durationMonths = calculateResidencyDuration(fromDateInput.value, toDateInput.value);
-                    
-                    if (durationMonths < 48 && durationMonths > 0) { // Less than 4 years (48 months) but more than 0 months
-                        wrapper.classList.remove('hidden');
-                        // Make inputs required when visible
-                        prevInputs.forEach(input => input.setAttribute('required', ''));
-                        // Ensure at least one previous address block exists if required
-                        if (document.querySelectorAll('#prev-address-container .dynamic-item').length === 0) {
-                            createPrevAddressBlock(); 
-                        }
-                    } else {
-                        wrapper.classList.add('hidden');
-                        // Remove required attribute when hidden
-                        prevInputs.forEach(input => input.removeAttribute('required'));
-                    }
-                } else {
-                    // Hide and remove required if dates are not valid or not filled
-                    wrapper.classList.add('hidden');
-                    prevInputs.forEach(input => input.removeAttribute('required'));
-                }
-            };
-            
-            // START: CRITICAL FIX v49.7 for Next button not working (Direct Validation)
-            nextBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const currentSection = document.getElementById(`section-${currentStep}`);
-                
-                // Find the first required input in the current section
-                const firstInvalidInput = currentSection.querySelector(':invalid');
-
-                // If an invalid input exists, force the browser to show the error
-                if (firstInvalidInput) {
-                    firstInvalidInput.reportValidity();
-                    return; // Stop execution
-                }
-
-                // If on Section 2, perform the residency check after validation
-                if (currentStep === 2) {
-                    // This must run AFTER the basic fields in section 2 are validated
-                    togglePreviousAddress(); 
-                    const wrapper = document.getElementById('prev-address-container-wrapper');
-                    
-                    // Re-check validation if Previous Address history became required
-                    if (!wrapper.classList.contains('hidden')) {
-                        const firstInvalidPrevious = wrapper.querySelector(':invalid');
-                        if (firstInvalidPrevious) {
-                            firstInvalidPrevious.reportValidity();
-                            return;
-                        }
-                    }
-                }
-                
-                // If valid, advance the page
+            if (formIsValid) {
                 if (currentStep < totalSteps) {
                     currentStep++;
                     showSection(currentStep);
                     updateButtons();
-                    updateProgressBar();
+                    // updateProgressBar(); // Keep if this function is defined
                     window.scrollTo(0, 0);
                 }
-            });
-            // END: CRITICAL FIX v49.7 for Next button not working (Direct Validation)
-
-            prevBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                if (currentStep > 1) {
-                    currentStep--;
-                    showSection(currentStep);
-                    updateButtons();
-                    updateProgressBar();
-                    window.scrollTo(0, 0);
-                }
-            });
-            
-            // START: Submit button logic
-            submitBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                
-                const agreeCheckbox = document.getElementById('agree-terms');
-
-                // 1. Final Validation Check (Page 6 Edit)
-                if (!agreeCheckbox.checkValidity()) {
-                    agreeCheckbox.reportValidity(); 
-                    return;
-                }
-                
-                // 2. Data Collection and Formatting (Placeholder logic for PDF Generation)
-                // NOTE: This logic should be expanded in the final version to include all fields
-                const formData = new FormData(form);
-                let reportHTML = `<div class="p-8 bg-white border border-gray-300 rounded-lg shadow-xl print-container">
-                    <header class="text-center mb-6 border-b pb-4">
-                        <h1 class="text-2xl font-bold">HARON ENTERPRISES, LLC</h1>
-                        <h2 class="text-xl">FINAL APPLICATION SUMMARY</h2>
-                        <p class="text-xs text-gray-500">Generated: ${new Date().toLocaleDateString()}</p>
-                    </header>
-                    <h3 class="text-lg font-semibold mt-6 border-b pb-1">Applicant Data Collected</h3>
-                    <div class="grid grid-cols-2 gap-x-6 gap-y-2 mt-2 text-sm">
-                        <!-- Display captured data (Simplified) -->
-                        <div class="col-span-1"><span class="font-medium">Full Name:</span> ${formData.get('Full Name')}</div>
-                        <div class="col-span-1"><span class="font-medium">Date:</span> ${formData.get('Date')}</div>
-                        <div class="col-span-2 mt-4 text-center"><p class="text-red-600 font-bold">This is the final document. Please click the button below to save to PDF.</p></div>
-                    </div>
-                
-                    <div class="mt-8 text-center">
-                        <button class="print-button px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow-lg" onclick="window.print()">✅ Save to PDF / Print Final Application</button>
-                    </div>
-                </div>`;
-
-                // 3. Display the Final Document
-                document.body.innerHTML = reportHTML; // Replace the entire body content with the summary
-                window.scrollTo(0, 0); // Scroll to top of the new page
-            });
-            // END: Submit button logic
-
-            // START: Dynamic content block functions (Necessary for Add Member, etc.)
-            const createDynamicBlock = (containerId, titlePrefix, innerHTMLCallback) => {
-                const container = document.getElementById(containerId);
-                const count = container.querySelectorAll('.dynamic-item').length + 1;
-                const newBlock = document.createElement('div');
-                newBlock.className = 'p-4 border border-gray-200 rounded-lg relative dynamic-item';
-                newBlock.innerHTML = `
-                    <button type="button" class="absolute top-2 right-2 text-red-500 hover:text-red-700 remove-btn" onclick="this.parentElement.remove(); togglePreviousAddress()">&#x2715;</button>
-                    <h4 class="font-semibold mb-2 text-sm">${titlePrefix} ${count}</h4>
-                    ${innerHTMLCallback(count)}
-                `;
-                container.appendChild(newBlock);
-            };
-
-            // Previous Address Dynamic Block Creator
-            const createPrevAddressBlock = () => {
-                 createDynamicBlock('prev-address-container', 'Previous Address', (count) => `
-                     <div class="space-y-2">
-                        <div><label class="label-text text-xs">Street Address</label><input type="text" name="Previous Address ${count} Street" class="input-field text-sm" required></div>
-                        <div><label class="label-text text-xs">City/State/Zip</label><input type="text" name="Previous Address ${count} CityStateZip" class="input-field text-sm" required></div>
-                        <div><label class="label-text text-xs">Time at Residence</label><input type="text" name="Previous Address ${count} Time" class="input-field text-sm" required></div>
-                        <div><label class="label-text text-xs">Landlord Name/Phone</label><input type="text" name="Previous Address ${count} Landlord Contact" class="input-field text-sm" required></div>
-                        <div><label class="label-text text-xs">Reason for Leaving</label><input type="text" name="Previous Address ${count} Reason" class="input-field text-sm" required></div>
-                        <div><label class="label-text text-xs">Monthly Rent</label><input type="number" name="Previous Address ${count} Rent" class="input-field text-sm" required min="0"></div>
-                     </div>`);
-            };
-            
-            // Household Member Dynamic Block Creator
-            const createHouseholdMemberBlock = () => {
-                createDynamicBlock('household-members-container', 'Household Member', (count) => `
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div><label class="label-text text-xs">Full Name</label><input type="text" name="Household Member ${count} Full Name" class="input-field text-sm" required></div>
-                        <div><label class="label-text text-xs">Date of Birth</label><input type="date" name="Household Member ${count} DOB" class="input-field text-sm" required></div>
-                        <div><label class="label-text text-xs">Relationship to Applicant</label><input type="text" name="Household Member ${count} Relationship" class="input-field text-sm" required></div>
-                    </div>`);
-            };
-            // END: Dynamic content block functions
-
-            // Initial setup
-            showSection(1);
-            updateButtons();
-            updateProgressBar();
-            
-            // Attach event listeners for date fields to check residency duration
-            const dateFields = [
-                document.getElementById('timeAtCurrentFrom'), 
-                document.getElementById('timeAtCurrentTo')
-            ];
-
-            dateFields.forEach(field => {
-                field.addEventListener('input', () => {
-                    // Only trigger check if the date format is valid
-                    if (field.checkValidity()) { 
-                        togglePreviousAddress();
-                    }
-                });
-            });
-            
-            // Event listener for adding dynamic blocks
-            document.getElementById('add-prev-address-btn').addEventListener('click', createPrevAddressBlock);
-            document.getElementById('add-member-btn').addEventListener('click', createHouseholdMemberBlock);
-
-
-            // Initial address block setup (one block by default, required status is set by togglePreviousAddress)
-            // Create an initial block but keep it empty of required fields until the toggle function runs.
-            const initialPrevBlockContainer = document.getElementById('prev-address-container');
-            if (initialPrevBlockContainer.children.length === 0) {
-                createPrevAddressBlock();
-            }
-            document.getElementById('prev-address-container-wrapper').classList.add('hidden');
-            document.querySelectorAll('#prev-address-container input').forEach(input => input.removeAttribute('required'));
-
-            // Create initial Household Member block
-            const initialMemberBlockContainer = document.getElementById('household-members-container');
-            if (initialMemberBlockContainer.children.length === 0) {
-                createHouseholdMemberBlock();
             }
         });
-    </script>
+
+        prevBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (currentStep > 1) {
+                currentStep--;
+                showSection(currentStep);
+                updateButtons();
+                // updateProgressBar(); // Keep if this function is defined
+                window.scrollTo(0, 0);
+            }
+        });
+
+        // --- Dynamic Block Helpers ---
+
+        const createDynamicBlock = (containerId, innerHTML) => {
+            const container = document.getElementById(containerId);
+            const count = container.querySelectorAll('.dynamic-item').length + 1;
+            const newBlock = document.createElement('div');
+            newBlock.className = 'p-4 border border-gray-200 rounded-lg relative dynamic-item';
+            newBlock.innerHTML = innerHTML(count);
+            container.appendChild(newBlock);
+        };
+
+        // Other Household Member (Page 1)
+        document.getElementById('add-member-btn')?.addEventListener('click', () => {
+            const memberCount = document.querySelectorAll('#other-members-container .dynamic-item').length;
+            if (memberCount >= 3) {
+                 alert('You can only list up to 3 additional household members.');
+                 return;
+            }
+            createDynamicBlock('other-members-container', (count) => `
+                <button type="button" class="absolute top-2 right-2 text-red-500 hover:text-red-700 remove-btn" onclick="this.parentElement.remove()">&#x2715;</button>
+                <h4 class="font-semibold mb-2">Household Member ${count}</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div><label class="label-text">Full Name</label><input type="text" name="Other Member ${count} Full Name" class="input-field"></div>
+                    <div><label class="label-text">Date of Birth</label><input type="date" name="Other Member ${count} DOB" class="input-field"></div>
+                    <div><label class="label-text">Relationship to Applicant</label><input type="text" name="Other Member ${count} Relationship" class="input-field"></div>
+                </div>
+            `);
+        });
+
+        // Rental History (Page 1)
+        document.getElementById('add-rental-btn')?.addEventListener('click', () => {
+            const count = document.querySelectorAll('#rental-history-container .dynamic-item').length + 1;
+            createDynamicBlock('rental-history-container', (count) => `
+                <button type="button" class="absolute top-2 right-2 text-red-500 hover:text-red-700 remove-btn" onclick="this.parentElement.remove(); validateRentalHistory()">&#x2715;</button>
+                <h4 class="font-semibold mb-2">Residence ${count} (Previous)</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div><label class="label-text">Address</label><input type="text" name="Residence ${count} Address" class="input-field" required></div>
+                    <div><label class="label-text">Landlord/Manager Name</label><input type="text" name="Residence ${count} Landlord Name" class="input-field" required></div>
+                    <div><label class="label-text">Landlord Phone</label><input type="tel" name="Residence ${count} Landlord Phone" class="input-field"></div>
+                    <div><label class="label-text">Monthly Rent</label><input type="number" name="Residence ${count} Monthly Rent" class="input-field" required></div>
+                    <div><label class="label-text">Start Date</label><input type="date" id="rental-start-${count}" name="Residence ${count} Start Date" class="input-field rent-start" required></div>
+                    <div><label class="label-text">End Date</label><input type="date" id="rental-end-${count}" name="Residence ${count} End Date" class="input-field rent-end" required></div>
+                    <div class="md:col-span-3"><label class="label-text">Reason for Leaving</label><input type="text" name="Residence ${count} Reason for Leaving" class="input-field"></div>
+                </div>
+            `);
+        });
+
+        // Re-validate rental history whenever dates change on Screen 1
+        document.getElementById('rental-history-container')?.addEventListener('change', (e) => {
+            if (e.target.classList.contains('rent-start') || e.target.classList.contains('rent-end')) {
+                validateRentalHistory();
+            }
+        });
+
+
+        // --- FINAL PRINT TEMPLATE GENERATION LOGIC (Simplified for reliability) ---
+
+        const generateFinalPrintHtml = (formData) => {
+            
+            const dataMap = {};
+            let rawDataOutput = "--- RAW FORM DATA DUMP ---\n\n";
+
+            for (const [key, value] of formData.entries()) {
+                const cleanedKey = key.trim();
+                dataMap[cleanedKey] = value;
+                rawDataOutput += `KEY: ${cleanedKey}\nVALUE: ${value}\n\n`;
+            }
+
+            const getVal = (key) => dataMap[key] || '____________________';
+
+            // Helper to generate dynamic groups (made robust)
+            const generateDynamicSection = (data, prefix, fields) => {
+                let html = '';
+                let groups = {};
+
+                for (const key in data) {
+                    if (key.startsWith(prefix)) {
+                        const parts = key.split(' ');
+                        const numberIndex = parts.find(p => !isNaN(parseInt(p)) && p.length > 0);
+                        const indexStart = parts.indexOf(numberIndex);
+                        const fieldName = (indexStart !== -1) ? parts.slice(indexStart + 1).join(' ') : parts.slice(prefix.split(' ').length).join(' ');
+
+                        if (numberIndex && fieldName) {
+                            if (!groups[numberIndex]) groups[numberIndex] = {};
+                            groups[numberIndex][fieldName] = data[key];
+                        }
+                    }
+                }
+
+                for (const index in groups) {
+                    html += `<div class="dynamic-group"><h3>${prefix} ${index}</h3>`;
+                    for (const field of fields) {
+                        const val = groups[index][field] || ''; 
+                        html += `<div class="data-row"><span class="data-label">${field}:</span> <span class="data-value">${val ? val : '____________________'}</span></div>`;
+                    }
+                    html += `</div>`;
+                }
+                return html || '<p class="note">No items were entered for this section.</p>';
+            };
+
+            // --- HTML TEMPLATE START (Reflecting the new 3-column layout) ---
+            let finalHtml = `
+            <html>
+            <head>
+                <title>Print Application</title>
+                <style>
+                    body { font-family: 'Times New Roman', serif; font-size: 11pt; line-height: 1.4; padding: 0.5in; margin: 0; }
+                    h1 { font-size: 18pt; text-align: center; margin-bottom: 25px; border-bottom: 2px solid #000; padding-bottom: 10px; }
+                    h2 { font-size: 14pt; margin-top: 30px; margin-bottom: 10px; color: #1e3a8a; border-bottom: 1px solid #000; padding-bottom: 5px; }
+                    h3 { font-size: 12pt; margin-top: 15px; margin-bottom: 8px; color: #444; }
+                    .data-row { margin-bottom: 5px; }
+                    .data-label { font-weight: bold; width: 200px; display: inline-block; }
+                    .data-value { color: #000; font-weight: normal; border-bottom: 1px solid #000; padding: 0 5px; display: inline-block; min-width: 250px; }
+                    .dynamic-group { margin: 10px 0 15px 0; padding: 10px; border: 1px solid #ccc; border-radius: 5px; page-break-inside: avoid; }
+                    .print-page-break { page-break-before: always; height: 1px; display: block; }
+                    
+                    /* Print Table Styles */
+                    .three-col-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+                    .three-col-table th, .three-col-table td { border: 1px solid #ddd; padding: 8px; text-align: left; font-size: 10pt; }
+                    .three-col-table th { background-color: #f2f2f2; font-weight: bold; }
+                    .grid-label { font-weight: bold; background: #fafafa; width: 30%; }
+                    .grid-value { font-weight: normal; }
+                </style>
+            </head>
+            <body>
+                <div id="print-content">
+                <h1>HARON17 ENTERPRISES, LLC - RESIDENTIAL LEASE APPLICATION (Page 1)</h1>
+
+                <h2>APPLICANT & CO-APPLICANT DATA</h2>
+                
+                <table class="three-col-table">
+                    <tr>
+                        <th class="grid-header">Description</th>
+                        <th class="grid-header" style="background: #e0eaff;">Applicant</th>
+                        <th class="grid-header">Co-Applicant</th>
+                    </tr>
+                    ${[
+                        "Full Name", "Date of Birth", "Social Security Number", "Driver's License #", "Phone", "Email Address",
+                        "Relation to Co-Applicant", "Current Employer", "Monthly Income", "Marital Status", 
+                        "Emergency Contact Name", "Emergency Contact Phone", "Citizen Status"
+                    ].map(field => `
+                        <tr>
+                            <td class="grid-label">${field.replace(' Relation to Co-Applicant', 'Relationship')}</td>
+                            <td class="grid-value">${getVal(`Applicant ${field}`)}</td>
+                            <td class="grid-value">${getVal(`Co-Applicant ${field}`)}</td>
+                        </tr>
+                    `).join('')}
+                    
+                    <tr><td colspan="3" class="grid-label">Armed Services Member?</td></tr>
+                    <tr>
+                        <td class="grid-label">Yes/No</td>
+                        <td>${getVal('Armed Services App')}</td>
+                        <td>${getVal('Armed Services CoApp')}</td>
+                    </tr>
+                    
+                    <tr><td colspan="3" class="grid-label">Ever Been Evicted?</td></tr>
+                    <tr>
+                        <td class="grid-label">Yes/No</td>
+                        <td>${getVal('Evicted App')}</td>
+                        <td>${getVal('Evicted CoApp')}</td>
+                    </tr>
+                    
+                    <tr><td colspan="3" class="grid-label">Ever Been Foreclosed?</td></tr>
+                    <tr>
+                        <td class="grid-label">Yes/No</td>
+                        <td>${getVal('Foreclosed App')}</td>
+                        <td>${getVal('Foreclosed CoApp')}</td>
+                    </tr>
+
+                </table>
+                
+                <h2>RENTAL HISTORY (4 Year Minimum)</h2>
+                ${generateDynamicSection(dataMap, 'Residence', ['Address', 'Landlord Name', 'Start Date', 'End Date', 'Monthly Rent', 'Reason for Leaving'])}
+
+                <div class="print-page-break"></div>
+
+                <h2>OTHER HOUSEHOLD MEMBERS</h2>
+                ${generateDynamicSection(dataMap, 'Other Member', ['Full Name', 'DOB', 'Relationship'])}
+                
+                </div>
+            </body>
+            </html>
+            `;
+            // --- HTML TEMPLATE END ---
+
+            return finalHtml;
+        };
+
+
+        // START: CODE FOR FORM SUBMISSION AND PRINTING
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const agreeCheckbox = document.getElementById('agree-terms');
+            if (agreeCheckbox && !agreeCheckbox.checkValidity()) {
+                agreeCheckbox.reportValidity();
+                return;
+            }
+            
+            const printHtml = generateFinalPrintHtml(new FormData(form));
+            
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(printHtml);
+            printWindow.document.close();
+
+            printWindow.onload = () => {
+                printWindow.print();
+            };
+        });
+        // END: CODE FOR FORM SUBMISSION AND PRINTING
+
+        // Initial setup
+        showSection(1);
+        updateButtons();
+    });
+
+    function toggleExplain(radio, divId, showOnYes) {
+        // Retaining this function...
+    }
+</script>
+
 </body>
 </html>
