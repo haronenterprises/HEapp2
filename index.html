@@ -6,7 +6,7 @@
     <title>Haron Enterprises, LLC - Residential Lease Application</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chosen Palette: Professional Neutral -->
-    <!-- Application Structure Plan: Multi-step wizard (5 steps total). Combines all applicant personal/address data into Page 2. Client-side PDF generation on final step. -->
+    <!-- Application Structure Plan: Multi-step wizard (5 steps total). Combines all applicant personal/address data into Page 2. Page 3 is for Background History. Client-side PDF generation on final step. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
@@ -80,6 +80,18 @@
         .input-label-row {
             line-height: 2.25rem; /* Ensures vertical alignment for text fields */
         }
+        .explain-block {
+            transition: all 0.3s ease-in-out;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            margin-top: 0;
+        }
+        .explain-block.active {
+            max-height: 150px;
+            opacity: 1;
+            margin-top: 0.75rem;
+        }
     </style>
 </head>
 <body class="antialiased text-gray-800">
@@ -90,7 +102,7 @@
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
             <p class="text-sm text-gray-600 font-semibold">In Accordance with Seminole County NSP Rentals Program</p>
             <p class="text-sm text-red-600 font-bold">AII INCOMPLETE applications will be REJECTED. Tel: (407) 702-3281 / Fax: (866) 858-5371</p>
-            <p class="text-sm text-gray-500">Eff date 10 01 2025 v55.0</p>
+            <p class="text-sm text-gray-500">Eff date 10 01 2025 v56.0</p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -121,7 +133,8 @@
                 
                 <!-- START: SECTION 1 (Page 1 - Intro/Checklist) -->
                 <section id="section-1" class="form-section active">
-                    <h2 class="text-2xl font-semibold mb-3 text-gray-800">APPLICATION CHECKLIST</h2>
+                    <h2 class="text-2xl font-semibold mb-3 text-gray-800">PAGE 1</h2>
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">APPLICATION CHECKLIST</h3>
                     <p class="text-red-500 font-semibold mb-6 border-b pb-4">Please check all boxes below to confirm documentation is available or is marked N/A where not applicable. Failure to check all boxes will result in an error.</p>
                     
                     <div class="space-y-6">
@@ -390,7 +403,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             let currentStep = 1;
-            const totalSteps = 5; // Updated to 5 total steps
+            const totalSteps = 5; // Updated to 5 total steps (1, 2, 3, 4, 5)
             const form = document.getElementById('rental-application-form');
             const prevBtn = document.getElementById('prev-btn');
             const nextBtn = document.getElementById('next-btn');
