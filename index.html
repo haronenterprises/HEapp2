@@ -90,7 +90,7 @@
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
             <p class="text-sm text-gray-600 font-semibold">In Accordance with Seminole County NSP Rentals Program</p>
             <p class="text-sm text-red-600 font-bold">AII INCOMPLETE applications will be REJECTED. Tel: (407) 702-3281 / Fax: (866) 858-5371</p>
-            <p class="text-sm text-gray-500">Eff date 10 01 2025 v54.3</p>
+            <p class="text-sm text-gray-500">Eff date 10 01 2025 v54.4</p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -164,11 +164,12 @@
                 </section>
                 <!-- END: SECTION 1 (Page 1 - Intro/Checklist) -->
 
-                <!-- START: SECTION 2 (Page 2 - Applicant Details) -->
+                <!-- START: SECTION 2 (Page 2 - Applicant Details & Rental History) -->
                 <section id="section-2" class="form-section">
                     <h2 class="text-2xl font-semibold mb-3 text-gray-800">PAGE 2</h2>
 
                     <!-- Section 2.1: Applicant/Co-Applicant Data (3-Column Layout) -->
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Applicant & Co-Applicant Details</h3>
                     <div class="data-grid space-y-4 border p-4 rounded-lg bg-white shadow-sm">
                         
                         <!-- Row 1: Headers -->
@@ -233,13 +234,13 @@
                         
                         <!-- Row 11: Name of Nearest Relative -->
                         <div class="description-col input-label-row">Name of Nearest Relative</div>
-                        <div class="field-container"></div> <!-- Applicant doesn't have a nearest relative field here -->
-                        <div class="field-container"><input type="text" id="relativeName" name="Name of Nearest Relative" class="input-field"></div>
+                        <div class="field-container"><input type="text" id="relativeName" name="Name of Nearest Relative" class="input-field" required></div> 
+                        <div class="field-container"></div> 
 
                         <!-- Row 12: Phone of Nearest Relative -->
                         <div class="description-col input-label-row">Phone of Nearest Relative</div>
-                        <div class="field-container"></div> <!-- Applicant doesn't have a nearest relative field here -->
-                        <div class="field-container"><input type="tel" id="relativePhone" name="Phone Nearest Relative" class="input-field" pattern="[0-9]{10}" title="10 numerical digits required"></div>
+                        <div class="field-container"><input type="tel" id="relativePhone" name="Phone Nearest Relative" class="input-field" required pattern="[0-9]{10}" title="10 numerical digits required"></div>
+                        <div class="field-container"></div> 
                         
                         <!-- Row 13: Ever Been Evicted -->
                          <div class="description-col input-label-row">Ever Been Evicted?</div>
@@ -271,57 +272,48 @@
                              </div>
                          </div>
                     </div>
-                </section>
-                <!-- END: SECTION 2 (Page 2 - Applicant Details) -->
-
-
-                <!-- START: SECTION 3 (Page 3 - Address & Residency) -->
-                <section id="section-3" class="form-section">
-                    <h2 class="text-2xl font-semibold mb-3 text-gray-800">PAGE 3</h2>
-
-                    <!-- Rental History Section -->
-                    <div class="mt-4">
-                        <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Current Address & Residency</h3>
+                    
+                    <!-- Rental History Section (Moved from Page 3) -->
+                    <h3 class="text-xl font-semibold mb-3 mt-8 text-gray-800 border-b pb-1">Current Address & Residency</h3>
                         
-                        <!-- Current Address is required and static -->
-                        <div class="mt-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
-                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                <!-- Col 1 & 2 -->
-                                <div class="md:col-span-2"><label class="label-text" for="currentStreet">Street Address</label><input type="text" id="currentStreet" name="Current Street Address" class="input-field" required></div>
-                                <div><label class="label-text" for="currentCity">City</label><input type="text" id="currentCity" name="Current City" class="input-field" required></div>
-                                <div><label class="label-text" for="currentState">State</label><input type="text" id="currentState" name="Current State" class="input-field" required></div>
-                                <div><label class="label-text" for="currentZip">Zip Code</label><input type="text" id="currentZip" name="Current Zip Code" class="input-field" required></div>
-                                
-                                <div><label class="label-text" for="currentContact">Contact Person</label><input type="text" id="currentContact" name="Current Contact Person" class="input-field" required></div>
-                                <div><label class="label-text" for="currentTitle">Title</label><input type="text" id="currentTitle" name="Current Contact Title" class="input-field" required></div>
-                                
-                                <div><label class="label-text" for="timeAtCurrentFrom">From Date (YYYY-MM-DD)</label><input type="date" id="timeAtCurrentFrom" name="Time At Current From Date" class="input-field" required></div>
-                                <div><label class="label-text" for="timeAtCurrentTo">To Date (YYYY-MM-DD)</label><input type="date" id="timeAtCurrentTo" name="Time At Current To Date" class="input-field" required></div>
+                    <!-- Current Address is required and static -->
+                    <div class="mt-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <!-- Col 1 & 2 -->
+                            <div class="md:col-span-2"><label class="label-text" for="currentStreet">Street Address</label><input type="text" id="currentStreet" name="Current Street Address" class="input-field" required></div>
+                            <div><label class="label-text" for="currentCity">City</label><input type="text" id="currentCity" name="Current City" class="input-field" required></div>
+                            <div><label class="label-text" for="currentState">State</label><input type="text" id="currentState" name="Current State" class="input-field" required></div>
+                            <div><label class="label-text" for="currentZip">Zip Code</label><input type="text" id="currentZip" name="Current Zip Code" class="input-field" required></div>
+                            
+                            <div><label class="label-text" for="currentContact">Contact Person</label><input type="text" id="currentContact" name="Current Contact Person" class="input-field" required></div>
+                            <div><label class="label-text" for="currentTitle">Title</label><input type="text" id="currentTitle" name="Current Contact Title" class="input-field" required></div>
+                            
+                            <div><label class="label-text" for="timeAtCurrentFrom">From Date (YYYY-MM-DD)</label><input type="date" id="timeAtCurrentFrom" name="Time At Current From Date" class="input-field" required></div>
+                            <div><label class="label-text" for="timeAtCurrentTo">To Date (YYYY-MM-DD)</label><input type="date" id="timeAtCurrentTo" name="Time At Current To Date" class="input-field" required></div>
 
-                                <div><label class="label-text" for="currentMonthlyRent">Monthly Rent</label><input type="number" id="currentMonthlyRent" name="Current Monthly Rent" class="input-field" required min="0"></div>
+                            <div><label class="label-text" for="currentMonthlyRent">Monthly Rent</label><input type="number" id="currentMonthlyRent" name="Current Monthly Rent" class="input-field" required min="0"></div>
 
-                                <div><label class="label-text" for="securityDepositReturn">Security Deposit Return %</label><input type="text" id="securityDepositReturn" name="Security Deposit Return Percent" class="input-field" required></div>
-                                <div><label class="label-text" for="reasonForLeaving">Reason For Leaving</label><input type="text" id="reasonForLeaving" name="Reason For Leaving" class="input-field" required></div>
-                                
-                                <div class="md:col-span-2"><label class="label-text" for="currentLandlord">Current Landlord/Mortgage Co.</label><input type="text" id="currentLandlord" name="Current Landlord/Mortgage Co." class="input-field" required></div>
-                                <div><label class="label-text" for="currentLandlordPhone">Landlord Phone</label><input type="tel" id="currentLandlordPhone" name="Current Landlord Phone" class="input-field" required></div>
-                            </div>
+                            <div><label class="label-text" for="securityDepositReturn">Security Deposit Return %</label><input type="text" id="securityDepositReturn" name="Security Deposit Return Percent" class="input-field" required></div>
+                            <div><label class="label-text" for="reasonForLeaving">Reason For Leaving</label><input type="text" id="reasonForLeaving" name="Reason For Leaving" class="input-field" required></div>
+                            
+                            <div class="md:col-span-2"><label class="label-text" for="currentLandlord">Current Landlord/Mortgage Co.</label><input type="text" id="currentLandlord" name="Current Landlord/Mortgage Co." class="input-field" required></div>
+                            <div><label class="label-text" for="currentLandlordPhone">Landlord Phone</label><input type="tel" id="currentLandlordPhone" name="Current Landlord Phone" class="input-field" required></div>
                         </div>
-
-                         <!-- Previous Address Dynamic Blocks (Hidden by default, triggered by 4-year rule) -->
-                         <div id="prev-address-container-wrapper" class="hidden mt-6">
-                            <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Previous Address History (Required if less than 4 years at current address)</h3>
-                            <div id="prev-address-container" class="space-y-4"></div>
-                            <button type="button" id="add-prev-address-btn" class="mt-4 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200">+ Add Previous Address</button>
-                         </div>
                     </div>
+
+                     <!-- Previous Address Dynamic Blocks (Hidden by default, triggered by 4-year rule) -->
+                     <div id="prev-address-container-wrapper" class="hidden mt-6">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Previous Address History (Required if less than 4 years at current address)</h3>
+                        <div id="prev-address-container" class="space-y-4"></div>
+                        <button type="button" id="add-prev-address-btn" class="mt-4 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200">+ Add Previous Address</button>
+                     </div>
                 </section>
-                <!-- END: SECTION 3 (Page 3 - Address & Residency) -->
+                <!-- END: SECTION 2 (Page 2 - Applicant Details & Rental History) -->
 
 
-                <!-- START: SECTION 4 (Page 4 - Household Members) -->
-                <section id="section-4" class="form-section">
-                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">PAGE 4</h2>
+                <!-- START: SECTION 3 (Page 3 - Household Members) -->
+                <section id="section-3" class="form-section">
+                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">PAGE 3</h2>
                     <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Household Members</h3>
                     <p class="text-gray-600 mb-6">List all other persons who will occupy the unit (excluding Applicant and Co-Applicant).</p>
 
@@ -348,15 +340,22 @@
                         </div>
                     </div>
                 </section>
-                <!-- END: SECTION 4 (Page 4 - Household Members) -->
+                <!-- END: SECTION 3 (Page 3 - Household Members) -->
 
 
-                <!-- START: SECTION 5 (Page 5 - Financial & Employment - Placeholder) -->
-                <section id="section-5" class="form-section">
-                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">PAGE 5</h2>
+                <!-- START: SECTION 4 (Page 4 - Financial & Employment) -->
+                <section id="section-4" class="form-section">
+                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">PAGE 4</h2>
                     <p class="text-gray-600 mb-6">Placeholder for Financial & Employment Information.</p>
                 </section>
-                <!-- END: SECTION 5 (Page 5 - Financial & Employment - Placeholder) -->
+                <!-- END: SECTION 4 (Page 4 - Financial & Employment) -->
+
+                <!-- START: SECTION 5 (Page 5 - Background & History) -->
+                <section id="section-5" class="form-section">
+                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">PAGE 5</h2>
+                    <p class="text-gray-600 mb-6">Placeholder for Background & History.</p>
+                </section>
+                <!-- END: SECTION 5 (Page 5 - Background & History) -->
 
                 <!-- START: SECTION 6 (Page 6 - Authorization) -->
                 <section id="section-6" class="form-section">
@@ -523,8 +522,8 @@
                     return; // Stop execution
                 }
 
-                // Run validation for Section 3 (Address) before advancing
-                if (currentStep === 3) {
+                // Run validation for Section 2 (Address) before advancing
+                if (currentStep === 2) {
                     togglePreviousAddress(); 
                     const wrapper = document.getElementById('prev-address-container-wrapper');
                     
