@@ -90,7 +90,7 @@
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
             <p class="text-sm text-gray-600 font-semibold">In Accordance with Seminole County NSP Rentals Program</p>
             <p class="text-sm text-red-600 font-bold">AII INCOMPLETE applications will be REJECTED. Tel: (407) 702-3281 / Fax: (866) 858-5371</p>
-            <p class="text-sm text-gray-500">Eff date 10 01 2025 v53.0</p>
+            <p class="text-sm text-gray-500">Eff date 10 01 2025 v54.1</p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -121,21 +121,43 @@
             <form id="rental-application-form" class="p-6 md:p-8">
                 <div id="status-message" class="text-sm px-4 py-2 rounded-md mb-4 hidden" role="alert"></div>
                 
-                <!-- START: SECTION 1 (Intro/Checklist) - SIMPLEST LAYOUT FOR TESTING -->
+                <!-- START: SECTION 1 (Intro/Checklist) - FULL CONTENT RESTORED -->
                 <section id="section-1" class="form-section active">
-                    <h2 class="text-2xl font-semibold mb-3 text-gray-800">APPLICANT IDENTIFICATION (TEST MODE)</h2>
-                    <p class="text-red-500 font-semibold mb-6 border-b pb-4">ONLY FILL NAME AND DATE OF BIRTH TO TEST ADVANCEMENT.</p>
+                    <h2 class="text-2xl font-semibold mb-3 text-gray-800">APPLICATION CHECKLIST</h2>
+                    <p class="text-red-500 font-semibold mb-6 border-b pb-4">Please check all boxes below to confirm documentation is available or is marked N/A where not applicable. Failure to check all boxes will result in an error.</p>
                     
                     <div class="space-y-6">
                         
                         <div class="border p-4 rounded-lg bg-gray-50">
-                            <h3 class="text-lg font-semibold mb-3 text-gray-700 border-b pb-1">Basic Identification</h3>
+                            <h3 class="text-lg font-semibold mb-3 text-gray-700 border-b pb-1">Basic Identification & Acknowledgment</h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div><label class="label-text" for="fullName">Full Name</label><input type="text" id="fullName" name="Full Name" class="input-field" required></div>
-                                <div><label class="label-text" for="dob">Date of Birth</label><input type="date" id="dob" name="Date of Birth" class="input-field" required></div>
+                                <div><label class="label-text" for="date">Date</label><input type="text" id="date" name="Date" class="input-field" required></div>
                             </div>
                         </div>
-                        <!-- Checkboxes REMOVED for testing -->
+
+                        <div class="space-y-3 p-4 border rounded-lg">
+                            <h3 class="text-lg font-semibold mb-3 text-gray-700 border-b pb-1">Required Documents/Actions (Check All)</h3>
+                            <!-- Checkboxes 1-18 (Exact Wording Restored) -->
+                            <div class="flex items-start"><input type="checkbox" name="Checklist 1" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">I/We understand that this property is owned by a private company and subject to Maximum Income Qualification as established by HUD & Seminole County's Neighborhood Stabilization Program (NSP) requirements.</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="Checklist 2" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">Our Household Income is at least 3 times the monthly Rent amount.</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="Checklist 3" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">All adult household members (18 years of age or older) must sign page 6 of the application.</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="Checklist 4" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">Attach: Copies of photo Identification for all adult household members.</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="Checklist 5" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">Attach: Copies of Social Security Cards for all household members.</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="Checklist 6" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">Attach: Copies of birth certificates for all household members under the age of 18 are required.</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="Checklist 7" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">Attach: SIX (6) most current pay check stubs for all household members who are working now.</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="Checklist 8" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">Attach: Proof of last SIX (6) month's rent or mortgage payments.</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="Checklist 9" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">Attach: If Self-Employed, please provide a signed copy of last year's tax return.</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="Checklist 10" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">Attach: If Self-Employed, provide three months of income/expense reports.</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="Checklist 11" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">Attach: Notarized statement for adult household members with no income.</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="Checklist 12" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">Attach: Letter from employer(s).</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="Checklist 13" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">Attach: Last six (6) months of bank statements.</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="Checklist 14" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">Attach: Documentation for all Assets and Liabilities.</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="Checklist 15" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">Attach: Copy of credit report for all adults.</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="Checklist 16" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">Attach: Criminal background check for all adults.</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="Checklist 17" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">Attach: Proof of $50 non-refundable application fee payment.</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="Checklist 18" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">Attach: Photos of any animals that will be living on the premises.</label></div>
+                        </div>
                     </div>
                 </section>
                 <!-- END: SECTION 1 (Intro/Checklist) -->
@@ -377,7 +399,8 @@
             let dd = today.getDate();
             if (dd < 10) dd = '0' + dd;
             if (mm < 10) mm = '0' + mm;
-            document.getElementById('date').value = `${mm}/${dd}/${yyyy}`;
+            // Removed document.getElementById('date').value = `${mm}/${dd}/${yyyy}`; as that field is not on screen 1 in v54.0
+
             
             // Helper function to update button visibility and style
             const updateButtons = () => {
