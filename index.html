@@ -35,6 +35,18 @@
         .label-text {
             @apply block text-sm font-medium text-gray-800 py-1;
         }
+        .radio-group {
+            @apply flex items-center gap-x-4;
+        }
+        .radio-label {
+            @apply flex items-center text-sm text-gray-700;
+        }
+        .radio-input {
+            @apply h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500;
+        }
+        .radio-group-sm {
+            @apply flex items-center gap-x-2 text-sm font-medium;
+        }
         /* START: FIX for Red X on dynamic items */
         .dynamic-item .remove-btn { 
             display: none; 
@@ -80,6 +92,10 @@
         .input-label-row {
             line-height: 2.25rem; /* Ensures vertical alignment for text fields */
         }
+        .explain-box {
+            display: none;
+            margin-top: 0.5rem;
+        }
     </style>
 </head>
 <body class="antialiased text-gray-800">
@@ -90,7 +106,7 @@
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
             <p class="text-sm text-gray-600 font-semibold">In Accordance with Seminole County NSP Rentals Program</p>
             <p class="text-sm text-red-600 font-bold">AII INCOMPLETE applications will be REJECTED. Tel: (407) 702-3281 / Fax: (866) 858-5371</p>
-            <p class="text-sm text-gray-500">Eff date 10 01 2025 v57.0</p>
+            <p class="text-sm text-gray-500">Eff date 10 01 2025 v57.2</p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -137,6 +153,7 @@
 
                         <div class="space-y-3 p-4 border rounded-lg">
                             <h3 class="text-lg font-semibold mb-3 text-gray-700 border-b pb-1">Required Documents/Actions (Check All)</h3>
+                            
                             <!-- Checkboxes 1-5 are REQUIRED; others optional -->
                             <div class="flex items-start"><input type="checkbox" name="Checklist 1" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">I/We understand that this property is owned by a private company and subject to Maximum Income Qualification as established by HUD & Seminole County's Neighborhood Stabilization Program (NSP) requirements.</label></div>
                             <div class="flex items-start"><input type="checkbox" name="Checklist 2" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">Our Household Income is at least 3 times the monthly Rent amount.</label></div>
@@ -144,8 +161,8 @@
                             <div class="flex items-start"><input type="checkbox" name="Checklist 4" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">Attach: Copies of photo Identification for all adult household members.</label></div>
                             <div class="flex items-start"><input type="checkbox" name="Checklist 5" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">Attach: Copies of Social Security Cards for all household members.</label></div>
                             
-                            <!-- Checkboxes 6-18 are OPTIONAL (required attribute removed) -->
-                            <div class="flex items-start"><input type="checkbox" name="Checklist 6" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3"><label class="text-sm text-gray-700">Attach: Copies of birth certificates for all household members under the age of 18 are required.</label></div>
+                            <!-- Checkboxes 6-18 are OPTIONAL (required attribute removed) - Wording Finalized in v47.3/47.7 fix attempts -->
+                            <div class="flex items-start"><input type="checkbox" name="Checklist 6" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3"><label class="text-sm text-gray-700">Copies of birth certificates for all household members under the age of 18 are required.</label></div>
                             <div class="flex items-start"><input type="checkbox" name="Checklist 7" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3"><label class="text-sm text-gray-700">Attach: SIX (6) most current pay check stubs for all household members who are working now.</label></div>
                             <div class="flex items-start"><input type="checkbox" name="Checklist 8" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3"><label class="text-sm text-gray-700">Attach: Proof of last SIX (6) month's rent or mortgage payments.</label></div>
                             <div class="flex items-start"><input type="checkbox" name="Checklist 9" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3"><label class="text-sm text-gray-700">Attach: If Self-Employed, please provide a signed copy of last year's tax return.</label></div>
@@ -272,7 +289,7 @@
                          </div>
                     </div>
                     
-                    <!-- Rental History Section (Moved from Page 3) -->
+                    <!-- Rental History Section (Current Address) -->
                     <h3 class="text-xl font-semibold mb-3 mt-8 text-gray-800 border-b pb-1">Current Address & Residency</h3>
                         
                     <!-- Current Address is required and static -->
@@ -307,7 +324,7 @@
                         <button type="button" id="add-prev-address-btn" class="mt-4 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200">+ Add Previous Address</button>
                      </div>
                      
-                     <!-- START: Household Members (Moved from Page 3) -->
+                     <!-- START: Household Members -->
                     <div class="mt-8">
                         <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Household Members</h3>
                         <p class="text-gray-600 mb-6">List all other persons who will occupy the unit (excluding Applicant and Co-Applicant).</p>
@@ -335,24 +352,181 @@
                             </div>
                         </div>
                     </div>
-                    <!-- END: Household Members (Moved from Page 3) -->
+                    <!-- END: Household Members -->
                 </section>
                 <!-- END: SECTION 2 (Page 2 - Applicant Details & Rental History) -->
 
 
-                <!-- START: SECTION 3 (Page 3 - Financial & Employment) -->
+                <!-- START: SECTION 3 (Page 3 - Background & History) -->
                 <section id="section-3" class="form-section">
                     <h2 class="text-2xl font-semibold mb-2 text-gray-800">PAGE 3</h2>
-                    <p class="text-gray-600 mb-6">Placeholder for Financial & Employment Information.</p>
-                </section>
-                <!-- END: SECTION 3 (Page 3 - Financial & Employment) -->
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Background & History (14 Questions)</h3>
+                    <p class="text-gray-600 mb-6">Please check Yes or No for each question. If you answer YES, you must provide a detailed explanation in the box below the question.</p>
+                    
+                    <div class="space-y-6">
+                        <!-- Questions 1-14 -->
+                        <!-- Question 1: Felony -->
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <span class="label-text">1. Have you ever been charged with a felony?</span>
+                            <div class="radio-group mt-2">
+                                <label class="radio-label"><input type="radio" name="Q1_Felony" value="yes" class="radio-input mr-2" onclick="toggleExplain(this, 'q1-explain', true)">Yes</label>
+                                <label class="radio-label"><input type="radio" name="Q1_Felony" value="no" class="radio-input mr-2" onclick="toggleExplain(this, 'q1-explain', true)" checked>No</label>
+                            </div>
+                            <div id="q1-explain" class="explain-box"><label class="label-text text-sm">Explain (Required if Yes):</label><textarea class="input-field" name="Q1_Felony_Explanation" rows="2"></textarea></div>
+                        </div>
+                         <!-- Question 2: Broken Lease -->
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <span class="label-text">2. Have you ever broken a lease or refused to pay rent?</span>
+                            <div class="radio-group mt-2">
+                                <label class="radio-label"><input type="radio" name="Q2_BrokenLease" value="yes" class="radio-input mr-2" onclick="toggleExplain(this, 'q2-explain', true)">Yes</label>
+                                <label class="radio-label"><input type="radio" name="Q2_BrokenLease" value="no" class="radio-input mr-2" onclick="toggleExplain(this, 'q2-explain', true)" checked>No</label>
+                            </div>
+                            <div id="q2-explain" class="explain-box"><label class="label-text text-sm">Explain (Required if Yes):</label><textarea class="input-field" name="Q2_BrokenLease_Explanation" rows="2"></textarea></div>
+                        </div>
+                        <!-- Question 3: Evicted -->
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <span class="label-text">3. Have you ever been evicted?</span>
+                            <div class="radio-group mt-2">
+                                <label class="radio-label"><input type="radio" name="Q3_Evicted" value="yes" class="radio-input mr-2" onclick="toggleExplain(this, 'q3-explain', true)">Yes</label>
+                                <label class="radio-label"><input type="radio" name="Q3_Evicted" value="no" class="radio-input mr-2" onclick="toggleExplain(this, 'q3-explain', true)" checked>No</label>
+                            </div>
+                            <div id="q3-explain" class="explain-box"><label class="label-text text-sm">Explain (Required if Yes):</label><textarea class="input-field" name="Q3_Evicted_Explanation" rows="2"></textarea></div>
+                        </div>
+                        <!-- Question 4: Foreclosed -->
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <span class="label-text">4. Have you ever been foreclosed?</span>
+                            <div class="radio-group mt-2">
+                                <label class="radio-label"><input type="radio" name="Q4_Foreclosed" value="yes" class="radio-input mr-2" onclick="toggleExplain(this, 'q4-explain', true)">Yes</label>
+                                <label class="radio-label"><input type="radio" name="Q4_Foreclosed" value="no" class="radio-input mr-2" onclick="toggleExplain(this, 'q4-explain', true)" checked>No</label>
+                            </div>
+                            <div id="q4-explain" class="explain-box"><label class="label-text text-sm">Explain (Required if Yes):</label><textarea class="input-field" name="Q4_Foreclosed_Explanation" rows="2"></textarea></div>
+                        </div>
+                         <!-- Question 5: Bankruptcy -->
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <span class="label-text">5. Have you ever filed for bankruptcy?</span>
+                            <div class="radio-group mt-2">
+                                <label class="radio-label"><input type="radio" name="Q5_Bankruptcy" value="yes" class="radio-input mr-2" onclick="toggleExplain(this, 'q5-explain', true)">Yes</label>
+                                <label class="radio-label"><input type="radio" name="Q5_Bankruptcy" value="no" class="radio-input mr-2" onclick="toggleExplain(this, 'q5-explain', true)" checked>No</label>
+                            </div>
+                            <div id="q5-explain" class="explain-box"><label class="label-text text-sm">Explain (Required if Yes):</label><textarea class="input-field" name="Q5_Bankruptcy_Explanation" rows="2"></textarea></div>
+                        </div>
+                         <!-- Question 6: Denied Housing -->
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <span class="label-text">6. Have you or any household member ever been denied housing?</span>
+                            <div class="radio-group mt-2">
+                                <label class="radio-label"><input type="radio" name="Q6_DeniedHousing" value="yes" class="radio-input mr-2" onclick="toggleExplain(this, 'q6-explain', true)">Yes</label>
+                                <label class="radio-label"><input type="radio" name="Q6_DeniedHousing" value="no" class="radio-input mr-2" onclick="toggleExplain(this, 'q6-explain', true)" checked>No</label>
+                            </div>
+                            <div id="q6-explain" class="explain-box"><label class="label-text text-sm">Explain (Required if Yes):</label><textarea class="input-field" name="Q6_DeniedHousing_Explanation" rows="2"></textarea></div>
+                        </div>
+                         <!-- Question 7: Drug Use -->
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <span class="label-text">7. Is there a household member who currently uses or has used illegal drugs?</span>
+                            <div class="radio-group mt-2">
+                                <label class="radio-label"><input type="radio" name="Q7_DrugUse" value="yes" class="radio-input mr-2" onclick="toggleExplain(this, 'q7-explain', true)">Yes</label>
+                                <label class="radio-label"><input type="radio" name="Q7_DrugUse" value="no" class="radio-input mr-2" onclick="toggleExplain(this, 'q7-explain', true)" checked>No</label>
+                            </div>
+                            <div id="q7-explain" class="explain-box"><label class="label-text text-sm">Explain (Required if Yes):</label><textarea class="input-field" name="Q7_DrugUse_Explanation" rows="2"></textarea></div>
+                        </div>
+                         <!-- Question 8: Criminal Activity -->
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <span class="label-text">8. Is there a household member who has engaged in criminal activity that threatened the health or safety of others?</span>
+                            <div class="radio-group mt-2">
+                                <label class="radio-label"><input type="radio" name="Q8_CriminalActivity" value="yes" class="radio-input mr-2" onclick="toggleExplain(this, 'q8-explain', true)">Yes</label>
+                                <label class="radio-label"><input type="radio" name="Q8_CriminalActivity" value="no" class="radio-input mr-2" onclick="toggleExplain(this, 'q8-explain', true)" checked>No</label>
+                            </div>
+                            <div id="q8-explain" class="explain-box"><label class="label-text text-sm">Explain (Required if Yes):</label><textarea class="input-field" name="Q8_CriminalActivity_Explanation" rows="2"></textarea></div>
+                        </div>
+                         <!-- Question 9: Fraud -->
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <span class="label-text">9. Have you or any household member ever been found guilty of fraud in connection with any Federal Housing program?</span>
+                            <div class="radio-group mt-2">
+                                <label class="radio-label"><input type="radio" name="Q9_Fraud" value="yes" class="radio-input mr-2" onclick="toggleExplain(this, 'q9-explain', true)">Yes</label>
+                                <label class="radio-label"><input type="radio" name="Q9_Fraud" value="no" class="radio-input mr-2" onclick="toggleExplain(this, 'q9-explain', true)" checked>No</label>
+                            </div>
+                            <div id="q9-explain" class="explain-box"><label class="label-text text-sm">Explain (Required if Yes):</label><textarea class="input-field" name="Q9_Fraud_Explanation" rows="2"></textarea></div>
+                        </div>
+                         <!-- Question 10: Outstanding Debt -->
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <span class="label-text">10. Do you or any household member have any outstanding debt to any Public Housing Agency (PHA) or Landlord?</span>
+                            <div class="radio-group mt-2">
+                                <label class="radio-label"><input type="radio" name="Q10_OutstandingDebt" value="yes" class="radio-input mr-2" onclick="toggleExplain(this, 'q10-explain', true)">Yes</label>
+                                <label class="radio-label"><input type="radio" name="Q10_OutstandingDebt" value="no" class="radio-input mr-2" onclick="toggleExplain(this, 'q10-explain', true)" checked>No</label>
+                            </div>
+                            <div id="q10-explain" class="explain-box"><label class="label-text text-sm">Explain (Required if Yes):</label><textarea class="input-field" name="Q10_OutstandingDebt_Explanation" rows="2"></textarea></div>
+                        </div>
+                         <!-- Question 11: Registered Sex Offender -->
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <span class="label-text">11. Is any household member subject to a lifetime registration requirement under a state sex offender registration program?</span>
+                            <div class="radio-group mt-2">
+                                <label class="radio-label"><input type="radio" name="Q11_SexOffender" value="yes" class="radio-input mr-2" onclick="toggleExplain(this, 'q11-explain', true)">Yes</label>
+                                <label class="radio-label"><input type="radio" name="Q11_SexOffender" value="no" class="radio-input mr-2" onclick="toggleExplain(this, 'q11-explain', true)" checked>No</label>
+                            </div>
+                            <div id="q11-explain" class="explain-box"><label class="label-text text-sm">Explain (Required if Yes):</label><textarea class="input-field" name="Q11_SexOffender_Explanation" rows="2"></textarea></div>
+                        </div>
+                        <!-- Question 12: Credit Issues -->
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <span class="label-text">12. Are there any known issues with credit or outstanding judgments against you?</span>
+                            <div class="radio-group mt-2">
+                                <label class="radio-label"><input type="radio" name="Q12_CreditIssues" value="yes" class="radio-input mr-2" onclick="toggleExplain(this, 'q12-explain', true)">Yes</label>
+                                <label class="radio-label"><input type="radio" name="Q12_CreditIssues" value="no" class="radio-input mr-2" onclick="toggleExplain(this, 'q12-explain', true)" checked>No</label>
+                            </div>
+                            <div id="q12-explain" class="explain-box"><label class="label-text text-sm">Explain (Required if Yes):</label><textarea class="input-field" name="Q12_CreditIssues_Explanation" rows="2"></textarea></div>
+                        </div>
+                        <!-- Question 13: Pets -->
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <span class="label-text">13. Do you have any pets (excluding Service or Emotional Support animals)?</span>
+                            <div class="radio-group mt-2">
+                                <label class="radio-label"><input type="radio" name="Q13_Pets" value="yes" class="radio-input mr-2" onclick="toggleExplain(this, 'q13-explain', true)">Yes</label>
+                                <label class="radio-label"><input type="radio" name="Q13_Pets" value="no" class="radio-input mr-2" onclick="toggleExplain(this, 'q13-explain', true)" checked>No</label>
+                            </div>
+                            <div id="q13-explain" class="explain-box"><label class="label-text text-sm">Explain (Required if Yes - describe pets):</label><textarea class="input-field" name="Q13_Pets_Explanation" rows="2"></textarea></div>
+                        </div>
+                        <!-- Question 14: Damages -->
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <span class="label-text">14. Have you ever caused property damage or violated lease terms in the past?</span>
+                            <div class="radio-group mt-2">
+                                <label class="radio-label"><input type="radio" name="Q14_Damages" value="yes" class="radio-input mr-2" onclick="toggleExplain(this, 'q14-explain', true)">Yes</label>
+                                <label class="radio-label"><input type="radio" name="Q14_Damages" value="no" class="radio-input mr-2" onclick="toggleExplain(this, 'q14-explain', true)" checked>No</label>
+                            </div>
+                            <div id="q14-explain" class="explain-box"><label class="label-text text-sm">Explain (Required if Yes):</label><textarea class="input-field" name="Q14_Damages_Explanation" rows="2"></textarea></div>
+                        </div>
 
-                <!-- START: SECTION 4 (Page 4 - Background & History) -->
+                    </div>
+                </section>
+                <!-- END: SECTION 3 (Page 3 - Background & History) -->
+
+                <!-- START: SECTION 4 (Page 4 - Financial & Employment) -->
                 <section id="section-4" class="form-section">
                     <h2 class="text-2xl font-semibold mb-2 text-gray-800">PAGE 4</h2>
-                    <p class="text-gray-600 mb-6">Placeholder for Background & History.</p>
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Financial & Employment Information</h3>
+                    <p class="text-gray-600 mb-6">List all employment, income, assets, and liabilities for all adult household members.</p>
+                     
+                    <div class="mt-6">
+                        <h4 class="text-lg font-semibold text-gray-700">Employment History (4 years minimum)</h4>
+                        <div id="employment-container" class="mt-4 space-y-4"></div>
+                        <button type="button" id="add-employment-btn" class="mt-4 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200">+ Add Employment</button>
+                    </div>
+
+                    <div class="mt-8">
+                        <h4 class="text-lg font-semibold text-gray-700">Other Income Sources</h4>
+                        <div id="income-container" class="mt-4 space-y-4"></div>
+                        <button type="button" id="add-income-btn" class="mt-4 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200">+ Add Income Source</button>
+                    </div>
+
+                    <div class="mt-8">
+                        <h4 class="text-lg font-semibold text-gray-700">Assets</h4>
+                        <div id="assets-container" class="mt-4 space-y-4"></div>
+                        <button type="button" id="add-asset-btn" class="mt-4 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200">+ Add Asset</button>
+                    </div>
+
+                    <div class="mt-8">
+                        <h4 class="text-lg font-semibold text-gray-700">Liabilities</h4>
+                        <div id="liabilities-container" class="mt-4 space-y-4"></div>
+                        <button type="button" id="add-liability-btn" class="mt-4 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200">+ Add Liability</button>
+                    </div>
                 </section>
-                <!-- END: SECTION 4 (Page 4 - Background & History) -->
+                <!-- END: SECTION 4 (Page 4 - Financial & Employment) -->
 
                 <!-- START: SECTION 5 (Page 5 - Authorization) -->
                 <section id="section-5" class="form-section">
@@ -373,7 +547,7 @@
                         <p class="text-sm text-blue-700 mt-1">A non-refundable processing fee of $50.00 is required. This fee must be paid prior to an application being accepted or processed. Upon submitting, you will be contacted with payment instructions.</p>
                     </div>
                 </section>
-                <!-- END: SECTION 6 (Page 6 - Authorization) -->
+                <!-- END: SECTION 5 (Page 5 - Authorization) -->
             </form>
             
             <div id="navigation-controls" class="p-6 bg-gray-50 border-t border-gray-200 flex justify-between items-center">
@@ -398,17 +572,15 @@
             const submitBtn = document.getElementById('submit-btn');
             const spacer = document.getElementById('spacer');
 
-            // Set current date on Page 1
-            const today = new Date();
-            const yyyy = today.getFullYear();
-            let mm = today.getMonth() + 1; // Months start at 0
-            let dd = today.getDate();
-            if (dd < 10) dd = '0' + dd;
-            if (mm < 10) mm = '0' + mm;
-            
             // Set current date on date field
             const dateInput = document.getElementById('date');
             if (dateInput) {
+                const today = new Date();
+                const yyyy = today.getFullYear();
+                let mm = today.getMonth() + 1; // Months start at 0
+                let dd = today.getDate();
+                if (dd < 10) dd = '0' + dd;
+                if (mm < 10) mm = '0' + mm;
                  dateInput.value = `${yyyy}-${mm}-${dd}`; // Set to YYYY-MM-DD for date input
             }
             
@@ -422,8 +594,8 @@
 
             // Helper function to update the progress bar style
             const updateProgressBar = () => {
-                const totalSteps = 5; // Use 5 for the progress bar
-                for (let i = 1; i <= 6; i++) { // Loop through all potential sections
+                const totalSteps = 5; 
+                for (let i = 1; i <= totalSteps; i++) { 
                     const stepElement = document.getElementById(`step-${i}`);
                     if (!stepElement) continue;
 
@@ -431,14 +603,12 @@
                     stepElement.querySelector('div').classList.remove('border-blue-500', 'text-blue-600', 'border-green-500', 'text-green-600', 'bg-green-50');
                     stepElement.querySelector('div').classList.add('border-gray-200', 'text-gray-400');
 
-                    if (i <= totalSteps) { // Only style up to the visible number of steps
-                         if (i < currentStep) {
-                            stepElement.classList.add('step-item-complete');
-                            stepElement.querySelector('div').classList.add('border-green-500', 'text-green-600');
-                        } else if (i === currentStep) {
-                            stepElement.classList.add('step-item-active');
-                            stepElement.querySelector('div').classList.add('border-blue-500', 'text-blue-600');
-                        }
+                    if (i < currentStep) {
+                        stepElement.classList.add('step-item-complete');
+                        stepElement.querySelector('div').classList.add('border-green-500', 'text-green-600');
+                    } else if (i === currentStep) {
+                        stepElement.classList.add('step-item-active');
+                        stepElement.querySelector('div').classList.add('border-blue-500', 'text-blue-600');
                     }
                 }
             };
@@ -448,6 +618,151 @@
                 document.querySelectorAll('.form-section').forEach(section => section.classList.remove('active'));
                 document.getElementById(`section-${step}`).classList.add('active');
             };
+            
+            // Function to check validity of the current section
+            const isCurrentSectionValid = () => {
+                const currentSection = document.getElementById(`section-${currentStep}`);
+                
+                // Get all required inputs in the current section
+                const requiredInputs = currentSection.querySelectorAll('[required]');
+                let isValid = true;
+
+                // Manually check validity and force reportValidity() on the first invalid one
+                for (const input of requiredInputs) {
+                    // Checkbox validation requires a special check
+                    if (input.type === 'checkbox' && !input.checked) {
+                        isValid = false;
+                        input.reportValidity();
+                        return false; 
+                    }
+                    
+                    // Standard input validation
+                    if (!input.checkValidity()) {
+                        isValid = false;
+                        input.reportValidity(); 
+                        return false; 
+                    }
+                }
+                
+                return isValid;
+            };
+
+            // START: CRITICAL FIX for Next button not working (Direct Validation)
+            nextBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                if (isCurrentSectionValid()) {
+                    // Run logic specific to the section we are *leaving*
+                    if (currentStep === 2) {
+                        togglePreviousAddress(); // Check 4-year rule and set required status
+                         // After toggle, re-validate Section 2 if Previous Address became required
+                         if (!isCurrentSectionValid()) return;
+                    }
+                    
+                    // If valid, advance the page
+                    if (currentStep < totalSteps) {
+                        currentStep++;
+                        showSection(currentStep);
+                        updateButtons();
+                        updateProgressBar();
+                        window.scrollTo(0, 0);
+                    }
+                }
+            });
+            // END: CRITICAL FIX for Next button not working (Direct Validation)
+
+            prevBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (currentStep > 1) {
+                    currentStep--;
+                    showSection(currentStep);
+                    updateButtons();
+                    updateProgressBar();
+                    window.scrollTo(0, 0);
+                }
+            });
+            
+            // START: Submit button logic
+            submitBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                if (!isCurrentSectionValid()) {
+                     return;
+                }
+
+                // 2. Data Collection and Formatting (Logic for PDF Generation)
+                const formData = new FormData(form);
+                let reportContent = '';
+                
+                // Group data for cleaner PDF output
+                const groupedData = {};
+                formData.forEach((value, key) => {
+                    // Normalize keys for display
+                    let section = 'Miscellaneous';
+                    if (key.startsWith('Full Name') || key.startsWith('DOB') || key.startsWith('SSN') || key.startsWith('DL') || key.startsWith('Phone') || key.startsWith('Email')) {
+                        section = 'Applicant/CoApplicant Details';
+                    } else if (key.startsWith('Current') || key.startsWith('Time At') || key.startsWith('Security') || key.startsWith('Reason')) {
+                         section = 'Current Address & Residency';
+                    } else if (key.startsWith('Household Member') || key.startsWith('US Citizens') || key.startsWith('Full-Time')) {
+                        section = 'Household Members';
+                    } else if (key.startsWith('Q')) {
+                        section = 'Background & History';
+                    } else if (key.startsWith('Employment') || key.startsWith('Income') || key.startsWith('Asset') || key.startsWith('Liability')) {
+                        section = 'Financial & Employment';
+                    } else if (key.startsWith('Checklist')) {
+                        section = 'Application Checklist';
+                    }
+
+                    if (!groupedData[section]) {
+                        groupedData[section] = [];
+                    }
+                    
+                    // Simple cleaning for display
+                    let displayKey = key.replace(/([A-Z])/g, ' $1').trim();
+                    displayKey = displayKey.replace(/SSN Co/g, 'SSN Co-Applicant');
+                    displayKey = displayKey.replace(/DL Co/g, 'DL Co-Applicant');
+
+                    groupedData[section].push({ key: displayKey, value: value });
+                });
+                
+                // Build the final HTML report content
+                let finalReportHTML = '';
+                for (const section in groupedData) {
+                    finalReportHTML += `<h3 class="text-lg font-bold mt-6 border-b pb-1">${section}</h3>`;
+                    finalReportHTML += `<div class="grid grid-cols-2 gap-x-6 gap-y-2 mt-2 text-sm">`;
+                    
+                    groupedData[section].forEach(item => {
+                        // Skip empty optional fields for a cleaner report
+                        if (item.value.trim() === '' || item.value.trim() === 'No') return;
+                        finalReportHTML += `<p class="text-sm"><span class="font-bold">${item.key}:</span> ${item.value}</p>`;
+                    });
+
+                    finalReportHTML += `</div>`;
+                }
+
+
+                // Final Printable HTML
+                let reportHTML = `<div class="p-8 bg-white border border-gray-300 rounded-lg shadow-xl print-container">
+                    <header class="text-center mb-6 border-b pb-4">
+                        <h1 class="text-2xl font-bold">HARON ENTERPRISES, LLC</h1>
+                        <h2 class="text-xl">FINAL APPLICATION SUMMARY (v57.2)</h2>
+                        <p class="text-xs text-gray-500">Generated: ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}</p>
+                    </header>
+                    
+                    ${finalReportHTML}
+                
+                    <div class="mt-8 text-center no-print">
+                        <p class="text-lg text-red-600 font-bold mb-4">TO FINALIZE: You must save this page as a PDF.</p>
+                        <button class="print-button px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow-lg" onclick="window.print()">✅ Click to Save to PDF / Print</button>
+                        <p class="text-sm text-gray-500 mt-2">Then, email the saved PDF to your landlord.</p>
+                    </div>
+                </div>`;
+
+                // 3. Display the Final Document
+                document.body.innerHTML = reportHTML; // Replace the entire body content with the summary
+                window.scrollTo(0, 0); // Scroll to top of the new page
+            });
+            // END: Submit button logic
 
             // Helper function to calculate residency duration (Used for Previous Address logic)
             const calculateResidencyDuration = (fromDateStr, toDateStr) => {
@@ -496,111 +811,38 @@
 
                 if (isRequired) {
                     wrapper.classList.remove('hidden');
-                    prevInputs.forEach(input => input.setAttribute('required', ''));
-                    // Ensure at least one previous address block exists if required
+                    // Mark inputs as required if the section is visible and does not have at least one entry
                     if (document.querySelectorAll('#prev-address-container .dynamic-item').length === 0) {
-                        createPrevAddressBlock(); 
+                         prevInputs.forEach(input => input.setAttribute('required', ''));
+                         // Add the first block if required and none exist
+                         if (document.querySelectorAll('#prev-address-container .dynamic-item').length === 0) createPrevAddressBlock();
                     }
                 } else {
                     wrapper.classList.add('hidden');
                     prevInputs.forEach(input => input.removeAttribute('required'));
                 }
             };
-            
-            // START: CRITICAL FIX for Next button not working (Direct Validation)
-            nextBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const currentSection = document.getElementById(`section-${currentStep}`);
-                
-                // Find the first invalid input in the current section
-                const firstInvalidInput = currentSection.querySelector(':invalid');
 
-                // If an invalid input exists, force the browser to show the error
-                if (firstInvalidInput) {
-                    firstInvalidInput.reportValidity();
-                    return; // Stop execution
-                }
+            // Function to toggle explain boxes for Background Questions
+            window.toggleExplain = (radio, divId, showOnYes) => {
+                const explainDiv = document.getElementById(divId);
+                const explainTextarea = explainDiv.querySelector('textarea');
+                
+                // Show only if 'yes' is clicked and showOnYes is true
+                const shouldShow = radio.value === 'yes';
 
-                // Run validation for Section 2 (Address) before advancing
-                if (currentStep === 2) {
-                    togglePreviousAddress(); 
-                    const wrapper = document.getElementById('prev-address-container-wrapper');
-                    
-                    // Re-check validation if Previous Address history became required
-                    if (!wrapper.classList.contains('hidden')) {
-                        const firstInvalidPrevious = wrapper.querySelector(':invalid');
-                        if (firstInvalidPrevious) {
-                            firstInvalidPrevious.reportValidity();
-                            return;
-                        }
-                    }
+                if (shouldShow) {
+                    explainDiv.classList.remove('explain-box'); // Remove display:none
+                    // Make the textarea required when visible
+                    explainTextarea.setAttribute('required', ''); 
+                } else {
+                    explainDiv.classList.add('explain-box'); // Add display:none
+                    // Remove required status when hidden
+                    explainTextarea.removeAttribute('required');
+                    explainTextarea.value = ''; // Clear value when hidden
                 }
-                
-                // If valid, advance the page
-                if (currentStep < totalSteps) {
-                    currentStep++;
-                    showSection(currentStep);
-                    updateButtons();
-                    updateProgressBar();
-                    window.scrollTo(0, 0);
-                }
-            });
-            // END: CRITICAL FIX for Next button not working (Direct Validation)
+            }
 
-            prevBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                if (currentStep > 1) {
-                    currentStep--;
-                    showSection(currentStep);
-                    updateButtons();
-                    updateProgressBar();
-                    window.scrollTo(0, 0);
-                }
-            });
-            
-            // START: Submit button logic
-            submitBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                
-                const agreeCheckbox = document.getElementById('agree-terms');
-
-                // 1. Final Validation Check (Page 5 Edit)
-                if (!agreeCheckbox.checkValidity()) {
-                    agreeCheckbox.reportValidity(); 
-                    return;
-                }
-                
-                // 2. Data Collection and Formatting (Logic for PDF Generation)
-                const formData = new FormData(form);
-                let reportContent = '';
-                
-                // Basic HTML structure for the final printable document
-                formData.forEach((value, key) => {
-                    reportContent += `<p class="text-sm"><span class="font-bold">${key}:</span> ${value || 'N/A'}</p>`;
-                });
-                
-                let reportHTML = `<div class="p-8 bg-white border border-gray-300 rounded-lg shadow-xl print-container">
-                    <header class="text-center mb-6 border-b pb-4">
-                        <h1 class="text-2xl font-bold">HARON ENTERPRISES, LLC</h1>
-                        <h2 class="text-xl">FINAL APPLICATION SUMMARY</h2>
-                        <p class="text-xs text-gray-500">Generated: ${new Date().toLocaleDateString()}</p>
-                    </header>
-                    <h3 class="text-lg font-semibold mt-6 border-b pb-1">Application Data</h3>
-                    <div class="grid grid-cols-2 gap-x-6 gap-y-2 mt-2 text-sm">
-                        ${reportContent}
-                    </div>
-                
-                    <div class="mt-8 text-center">
-                        <p class="text-lg text-red-600 font-bold mb-4">TO FINALIZE: You must save this page as a PDF.</p>
-                        <button class="print-button px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow-lg" onclick="window.print()">✅ Click to Save to PDF / Print</button>
-                    </div>
-                </div>`;
-
-                // 3. Display the Final Document
-                document.body.innerHTML = reportHTML; // Replace the entire body content with the summary
-                window.scrollTo(0, 0); // Scroll to top of the new page
-            });
-            // END: Submit button logic
 
             // START: Dynamic content block functions (Necessary for Add Member, etc.)
             const createDynamicBlock = (containerId, titlePrefix, innerHTMLCallback) => {
@@ -614,18 +856,24 @@
                     ${innerHTMLCallback(count)}
                 `;
                 container.appendChild(newBlock);
+                
+                // CRITICAL FIX: Add required listener to newly created block inputs
+                const newInputs = newBlock.querySelectorAll('input[required]');
+                newInputs.forEach(input => {
+                    input.addEventListener('input', togglePreviousAddress);
+                });
             };
 
             // Previous Address Dynamic Block Creator
             const createPrevAddressBlock = () => {
                  createDynamicBlock('prev-address-container', 'Previous Address', (count) => `
                      <div class="space-y-2">
-                        <div><label class="label-text text-xs">Street Address</label><input type="text" name="Previous Address ${count} Street" class="input-field text-sm"></div>
-                        <div><label class="label-text text-xs">City/State/Zip</label><input type="text" name="Previous Address ${count} CityStateZip" class="input-field text-sm"></div>
-                        <div><label class="label-text text-xs">Time at Residence</label><input type="text" name="Previous Address ${count} Time" class="input-field text-sm"></div>
-                        <div><label class="label-text text-xs">Landlord Name/Phone</label><input type="text" name="Previous Address ${count} Landlord Contact" class="input-field text-sm"></div>
-                        <div><label class="label-text text-xs">Reason for Leaving</label><input type="text" name="Previous Address ${count} Reason" class="input-field text-sm"></div>
-                        <div><label class="label-text text-xs">Monthly Rent</label><input type="number" name="Previous Address ${count} Rent" class="input-field text-sm" min="0"></div>
+                        <div><label class="label-text text-xs">Street Address</label><input type="text" name="Previous Address ${count} Street" class="input-field text-sm" required></div>
+                        <div><label class="label-text text-xs">City/State/Zip</label><input type="text" name="Previous Address ${count} CityStateZip" class="input-field text-sm" required></div>
+                        <div><label class="label-text text-xs">Time at Residence</label><input type="text" name="Previous Address ${count} Time" class="input-field text-sm" required></div>
+                        <div><label class="label-text text-xs">Landlord Name/Phone</label><input type="text" name="Previous Address ${count} Landlord Contact" class="input-field text-sm" required></div>
+                        <div><label class="label-text text-xs">Reason for Leaving</label><input type="text" name="Previous Address ${count} Reason" class="input-field text-sm" required></div>
+                        <div><label class="label-text text-xs">Monthly Rent</label><input type="number" name="Previous Address ${count} Rent" class="input-field text-sm" required min="0"></div>
                      </div>`);
             };
             
@@ -633,14 +881,19 @@
             const createHouseholdMemberBlock = () => {
                 createDynamicBlock('household-members-container', 'Household Member', (count) => `
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div><label class="label-text text-xs">Full Name</label><input type="text" name="Household Member ${count} Full Name" class="input-field text-sm"></div>
-                        <div><label class="label-text text-xs">Date of Birth</label><input type="date" name="Household Member ${count} DOB" class="input-field text-sm"></div>
-                        <div><label class="label-text text-xs">Relationship to Applicant</label><input type="text" name="Household Member ${count} Relationship" class="input-field text-sm"></div>
+                        <div><label class="label-text text-xs">Full Name</label><input type="text" name="Household Member ${count} Full Name" class="input-field text-sm" required></div>
+                        <div><label class="label-text text-xs">Date of Birth</label><input type="date" name="Household Member ${count} DOB" class="input-field text-sm" required></div>
+                        <div><label class="label-text text-xs">Relationship to Applicant</label><input type="text" name="Household Member ${count} Relationship" class="input-field text-sm" required></div>
                     </div>`);
             };
             // END: Dynamic content block functions
 
-            // Initial setup
+            // Event listener for adding dynamic blocks
+            document.getElementById('add-prev-address-btn').addEventListener('click', createPrevAddressBlock);
+            document.getElementById('add-member-btn').addEventListener('click', createHouseholdMemberBlock);
+
+
+            // Initial setup and event listeners for residency check on load
             showSection(1);
             updateButtons();
             updateProgressBar();
@@ -652,30 +905,12 @@
             ];
 
             dateFields.forEach(field => {
-                if(field) { // Check if the element exists
-                    field.addEventListener('input', () => {
-                        // Only trigger check if the date format is valid
-                        if (field.checkValidity()) { 
-                            togglePreviousAddress();
-                        }
-                    });
+                if(field) { 
+                    field.addEventListener('input', togglePreviousAddress);
                 }
             });
             
-            // Event listener for adding dynamic blocks
-            document.getElementById('add-prev-address-btn').addEventListener('click', createPrevAddressBlock);
-            document.getElementById('add-member-btn').addEventListener('click', createHouseholdMemberBlock);
-
-
-            // Initial address block setup (one block by default, required status is set by togglePreviousAddress)
-            // Initializing complex sections ensures no rendering errors on page load.
-            const initialPrevBlockContainer = document.getElementById('prev-address-container');
-            if (initialPrevBlockContainer && initialPrevBlockContainer.children.length === 0) {
-                // Do not create initial block here to ensure it only appears if required by residency check
-            }
-
-
-            // Create initial Household Member block
+            // Create initial Household Member block (CRITICAL FIX)
             const initialMemberBlockContainer = document.getElementById('household-members-container');
             if (initialMemberBlockContainer && initialMemberBlockContainer.children.length === 0) {
                 createHouseholdMemberBlock();
