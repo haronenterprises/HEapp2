@@ -90,29 +90,29 @@
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
             <p class="text-sm text-gray-600 font-semibold">In Accordance with Seminole County NSP Rentals Program</p>
             <p class="text-sm text-red-600 font-bold">AII INCOMPLETE applications will be REJECTED. Tel: (407) 702-3281 / Fax: (866) 858-5371</p>
-            <p class="text-sm text-gray-500">Eff date 10 01 2025 v54.2</p>
+            <p class="text-sm text-gray-500">Eff date 10 01 2025 v54.3</p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
             <div id="progress-bar" class="p-6 border-b border-gray-200">
                 <div class="flex items-center justify-between">
                     <div id="step-1" class="step-item step-item-active text-center w-1/6">
-                        <div class="border-b-4 pb-2 text-xs md:text-sm font-semibold">Checklist</div>
+                        <div class="border-b-4 pb-2 text-xs md:text-sm font-semibold">Page 1</div>
                     </div>
                      <div id="step-2" class="step-item text-center w-1/6">
-                        <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Address</div>
+                        <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Page 2</div>
                     </div>
                      <div id="step-3" class="step-item text-center w-1/6">
-                        <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Household</div>
+                        <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Page 3</div>
                     </div>
                      <div id="step-4" class="step-item text-center w-1/6">
-                        <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Financial</div>
+                        <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Page 4</div>
                     </div>
                      <div id="step-5" class="step-item text-center w-1/6">
-                        <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">History</div>
+                        <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Page 5</div>
                     </div>
                     <div id="step-6" class="step-item text-center w-1/6">
-                        <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Final</div>
+                        <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Page 6</div>
                     </div>
                 </div>
             </div>
@@ -121,7 +121,7 @@
             <form id="rental-application-form" class="p-6 md:p-8">
                 <div id="status-message" class="text-sm px-4 py-2 rounded-md mb-4 hidden" role="alert"></div>
                 
-                <!-- START: SECTION 1 (Intro/Checklist) - FULL CONTENT RESTORED -->
+                <!-- START: SECTION 1 (Page 1 - Intro/Checklist) -->
                 <section id="section-1" class="form-section active">
                     <h2 class="text-2xl font-semibold mb-3 text-gray-800">APPLICATION CHECKLIST</h2>
                     <p class="text-red-500 font-semibold mb-6 border-b pb-4">Please check all boxes below to confirm documentation is available or is marked N/A where not applicable. Failure to check all boxes will result in an error.</p>
@@ -132,13 +132,13 @@
                             <h3 class="text-lg font-semibold mb-3 text-gray-700 border-b pb-1">Basic Identification & Acknowledgment</h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div><label class="label-text" for="fullName">Full Name</label><input type="text" id="fullName" name="Full Name" class="input-field" required></div>
-                                <div><label class="label-text" for="date">Date</label><input type="date" id="date" name="Date" class="input-field" required></div> <!-- Changed to type="date" -->
+                                <div><label class="label-text" for="date">Date</label><input type="date" id="date" name="Date" class="input-field" required></div>
                             </div>
                         </div>
 
                         <div class="space-y-3 p-4 border rounded-lg">
                             <h3 class="text-lg font-semibold mb-3 text-gray-700 border-b pb-1">Required Documents/Actions (Check All)</h3>
-                            <!-- Checkboxes 1-5 are REQUIRED -->
+                            <!-- Checkboxes 1-5 are REQUIRED; others optional -->
                             <div class="flex items-start"><input type="checkbox" name="Checklist 1" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">I/We understand that this property is owned by a private company and subject to Maximum Income Qualification as established by HUD & Seminole County's Neighborhood Stabilization Program (NSP) requirements.</label></div>
                             <div class="flex items-start"><input type="checkbox" name="Checklist 2" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">Our Household Income is at least 3 times the monthly Rent amount.</label></div>
                             <div class="flex items-start"><input type="checkbox" name="Checklist 3" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">All adult household members (18 years of age or older) must sign page 6 of the application.</label></div>
@@ -162,11 +162,12 @@
                         </div>
                     </div>
                 </section>
-                <!-- END: SECTION 1 (Intro/Checklist) -->
+                <!-- END: SECTION 1 (Page 1 - Intro/Checklist) -->
 
-                <!-- START: SECTION 2 (Applicant Details & Rental History - 3 COLUMN LAYOUT) -->
+                <!-- START: SECTION 2 (Page 2 - Applicant Details) -->
                 <section id="section-2" class="form-section">
-                    
+                    <h2 class="text-2xl font-semibold mb-3 text-gray-800">PAGE 2</h2>
+
                     <!-- Section 2.1: Applicant/Co-Applicant Data (3-Column Layout) -->
                     <div class="data-grid space-y-4 border p-4 rounded-lg bg-white shadow-sm">
                         
@@ -270,14 +271,22 @@
                              </div>
                          </div>
                     </div>
+                </section>
+                <!-- END: SECTION 2 (Page 2 - Applicant Details) -->
+
+
+                <!-- START: SECTION 3 (Page 3 - Address & Residency) -->
+                <section id="section-3" class="form-section">
+                    <h2 class="text-2xl font-semibold mb-3 text-gray-800">PAGE 3</h2>
 
                     <!-- Rental History Section -->
-                    <div class="mt-8">
-                        <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Current Address</h3>
+                    <div class="mt-4">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Current Address & Residency</h3>
                         
                         <!-- Current Address is required and static -->
                         <div class="mt-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <!-- Col 1 & 2 -->
                                 <div class="md:col-span-2"><label class="label-text" for="currentStreet">Street Address</label><input type="text" id="currentStreet" name="Current Street Address" class="input-field" required></div>
                                 <div><label class="label-text" for="currentCity">City</label><input type="text" id="currentCity" name="Current City" class="input-field" required></div>
                                 <div><label class="label-text" for="currentState">State</label><input type="text" id="currentState" name="Current State" class="input-field" required></div>
@@ -286,7 +295,9 @@
                                 <div><label class="label-text" for="currentContact">Contact Person</label><input type="text" id="currentContact" name="Current Contact Person" class="input-field" required></div>
                                 <div><label class="label-text" for="currentTitle">Title</label><input type="text" id="currentTitle" name="Current Contact Title" class="input-field" required></div>
                                 
-                                <div><label class="label-text" for="timeAtCurrentFrom">From Date (mm/dd/yyyy)</label><input type="text" id="timeAtCurrentFrom" name="Time At Current From Date" class="input-field" required pattern="\d{2}/\d{2}/\d{4}" placeholder="MM/DD/YYYY"></div>
+                                <div><label class="label-text" for="timeAtCurrentFrom">From Date (YYYY-MM-DD)</label><input type="date" id="timeAtCurrentFrom" name="Time At Current From Date" class="input-field" required></div>
+                                <div><label class="label-text" for="timeAtCurrentTo">To Date (YYYY-MM-DD)</label><input type="date" id="timeAtCurrentTo" name="Time At Current To Date" class="input-field" required></div>
+
                                 <div><label class="label-text" for="currentMonthlyRent">Monthly Rent</label><input type="number" id="currentMonthlyRent" name="Current Monthly Rent" class="input-field" required min="0"></div>
 
                                 <div><label class="label-text" for="securityDepositReturn">Security Deposit Return %</label><input type="text" id="securityDepositReturn" name="Security Deposit Return Percent" class="input-field" required></div>
@@ -294,25 +305,24 @@
                                 
                                 <div class="md:col-span-2"><label class="label-text" for="currentLandlord">Current Landlord/Mortgage Co.</label><input type="text" id="currentLandlord" name="Current Landlord/Mortgage Co." class="input-field" required></div>
                                 <div><label class="label-text" for="currentLandlordPhone">Landlord Phone</label><input type="tel" id="currentLandlordPhone" name="Current Landlord Phone" class="input-field" required></div>
-                                
-                                
                             </div>
                         </div>
 
-                         <!-- Previous Address Dynamic Blocks (Hidden by default) -->
+                         <!-- Previous Address Dynamic Blocks (Hidden by default, triggered by 4-year rule) -->
                          <div id="prev-address-container-wrapper" class="hidden mt-6">
-                            <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Previous Address History (Required)</h3>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Previous Address History (Required if less than 4 years at current address)</h3>
                             <div id="prev-address-container" class="space-y-4"></div>
                             <button type="button" id="add-prev-address-btn" class="mt-4 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200">+ Add Previous Address</button>
                          </div>
                     </div>
                 </section>
-                <!-- END: SECTION 2 (Applicant Details & Rental History) -->
+                <!-- END: SECTION 3 (Page 3 - Address & Residency) -->
 
 
-                <!-- START: SECTION 3 (Household Members & Citizenship) -->
-                <section id="section-3" class="form-section">
-                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">Household Members</h2>
+                <!-- START: SECTION 4 (Page 4 - Household Members) -->
+                <section id="section-4" class="form-section">
+                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">PAGE 4</h2>
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Household Members</h3>
                     <p class="text-gray-600 mb-6">List all other persons who will occupy the unit (excluding Applicant and Co-Applicant).</p>
 
                     <!-- Household Members Dynamic Blocks -->
@@ -338,23 +348,20 @@
                         </div>
                     </div>
                 </section>
-                <!-- END: SECTION 3 (Household Members & Citizenship) -->
+                <!-- END: SECTION 4 (Page 4 - Household Members) -->
 
 
-                <!-- START: SECTION 4 (Financial & Employment - Placeholder) -->
-                <section id="section-4" class="form-section">
-                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">Financial & Employment Information</h2>
-                    <p class="text-gray-600 mb-6">PLACEHOLDER SECTION - Fill Page 1 to continue to Page 5.</p>
-                </section>
-                <!-- END: SECTION 4 (Financial & Employment - Placeholder) -->
-
+                <!-- START: SECTION 5 (Page 5 - Financial & Employment - Placeholder) -->
                 <section id="section-5" class="form-section">
-                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">Background & History</h2>
-                    <p class="text-gray-600 mb-6">PLACEHOLDER SECTION - Fill Page 1 to continue to Page 6.</p>
+                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">PAGE 5</h2>
+                    <p class="text-gray-600 mb-6">Placeholder for Financial & Employment Information.</p>
                 </section>
+                <!-- END: SECTION 5 (Page 5 - Financial & Employment - Placeholder) -->
 
+                <!-- START: SECTION 6 (Page 6 - Authorization) -->
                 <section id="section-6" class="form-section">
-                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">Authorizations & Agreement</h2>
+                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">PAGE 6</h2>
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Authorizations & Agreement</h3>
                     <p class="text-gray-600 mb-6">You're almost done! Please read the following legal statements carefully. Your agreement is required to finalize and submit your application for review.</p>
                     <div class="prose prose-sm max-w-none text-gray-600 bg-gray-50 p-4 rounded-md border border-gray-200">
                         <p><strong>Text:</strong> I/We understand that Florida Statute 817 provides that a person is guilty of a misdemeanor in the first degree who knowingly makes a false statement in writing with the intent to mislead a landlord in repairing or leasing a dwelling unit. I CERTIFY THAT ALL THE INFORMATION PROVIDED IN THIS APPLICATION IS TRUE AND CORRECT. I, the undersigned applicant, affirm the information above is true and complete and authorize Haron Enterprises, LLC to make any and all inquiries necessary to verify said information, including but not limited to, direct contact with any person, business, or agency named above. I also understand that any false information on this application may cause this application to be rejected and may be grounds for immediate termination of the lease at the owner's option. I also agree to all the terms and conditions in the rental agreement, should this application be accepted.</p>
@@ -370,6 +377,7 @@
                         <p class="text-sm text-blue-700 mt-1">A non-refundable processing fee of $50.00 is required. This fee must be paid prior to an application being accepted or processed. Upon submitting, you will be contacted with payment instructions.</p>
                     </div>
                 </section>
+                <!-- END: SECTION 6 (Page 6 - Authorization) -->
             </form>
             
             <div id="navigation-controls" class="p-6 bg-gray-50 border-t border-gray-200 flex justify-between items-center">
@@ -478,7 +486,7 @@
 
                 let isRequired = false;
 
-                // Check if date fields are filled and valid
+                // Check if date fields are filled and valid (required by their pattern)
                 if (fromDateInput && toDateInput && fromDateInput.checkValidity() && toDateInput.checkValidity() && fromDateInput.value && toDateInput.value) {
                     const durationMonths = calculateResidencyDuration(fromDateInput.value, toDateInput.value);
                     
@@ -500,7 +508,7 @@
                 }
             };
             
-            // START: CRITICAL FIX v49.7 for Next button not working (Direct Validation)
+            // START: CRITICAL FIX for Next button not working (Direct Validation)
             nextBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 const currentSection = document.getElementById(`section-${currentStep}`);
@@ -515,6 +523,21 @@
                     return; // Stop execution
                 }
 
+                // Run validation for Section 3 (Address) before advancing
+                if (currentStep === 3) {
+                    togglePreviousAddress(); 
+                    const wrapper = document.getElementById('prev-address-container-wrapper');
+                    
+                    // Re-check validation if Previous Address history became required
+                    if (!wrapper.classList.contains('hidden')) {
+                        const firstInvalidPrevious = wrapper.querySelector(':invalid');
+                        if (firstInvalidPrevious) {
+                            firstInvalidPrevious.reportValidity();
+                            return;
+                        }
+                    }
+                }
+                
                 // If valid, advance the page
                 if (currentStep < totalSteps) {
                     currentStep++;
@@ -524,7 +547,7 @@
                     window.scrollTo(0, 0);
                 }
             });
-            // END: CRITICAL FIX v49.7 for Next button not working (Direct Validation)
+            // END: CRITICAL FIX for Next button not working (Direct Validation)
 
             prevBtn.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -650,11 +673,8 @@
             // Initializing complex sections ensures no rendering errors on page load.
             const initialPrevBlockContainer = document.getElementById('prev-address-container');
             if (initialPrevBlockContainer && initialPrevBlockContainer.children.length === 0) {
-                createPrevAddressBlock();
-                document.getElementById('prev-address-container-wrapper').classList.add('hidden');
+                // Do not create initial block here to ensure it only appears if required by residency check
             }
-            // Ensure required is removed on initial hidden block
-            document.querySelectorAll('#prev-address-container input').forEach(input => input.removeAttribute('required'));
 
 
             // Create initial Household Member block
