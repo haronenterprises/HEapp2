@@ -6,7 +6,7 @@
     <title>Haron Enterprises, LLC - Residential Lease Application</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chosen Palette: Professional Neutral -->
-    <!-- Application Structure Plan: Multi-step wizard with client-side PDF generation (most reliable method without a server). -->
+    <!-- Application Structure Plan: Multi-step wizard (5 steps total). Combines all applicant personal/address data into Page 2. Client-side PDF generation on final step. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
@@ -90,29 +90,27 @@
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
             <p class="text-sm text-gray-600 font-semibold">In Accordance with Seminole County NSP Rentals Program</p>
             <p class="text-sm text-red-600 font-bold">AII INCOMPLETE applications will be REJECTED. Tel: (407) 702-3281 / Fax: (866) 858-5371</p>
-            <p class="text-sm text-gray-500">Eff date 10 01 2025 v54.4</p>
+            <p class="text-sm text-gray-500">Eff date 10 01 2025 v55.0</p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+            <!-- Progress Bar (Updated to 5 Steps) -->
             <div id="progress-bar" class="p-6 border-b border-gray-200">
                 <div class="flex items-center justify-between">
-                    <div id="step-1" class="step-item step-item-active text-center w-1/6">
+                    <div id="step-1" class="step-item step-item-active text-center w-1/5">
                         <div class="border-b-4 pb-2 text-xs md:text-sm font-semibold">Page 1</div>
                     </div>
-                     <div id="step-2" class="step-item text-center w-1/6">
+                     <div id="step-2" class="step-item text-center w-1/5">
                         <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Page 2</div>
                     </div>
-                     <div id="step-3" class="step-item text-center w-1/6">
+                     <div id="step-3" class="step-item text-center w-1/5">
                         <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Page 3</div>
                     </div>
-                     <div id="step-4" class="step-item text-center w-1/6">
+                     <div id="step-4" class="step-item text-center w-1/5">
                         <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Page 4</div>
                     </div>
-                     <div id="step-5" class="step-item text-center w-1/6">
-                        <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Page 5</div>
-                    </div>
-                    <div id="step-6" class="step-item text-center w-1/6">
-                        <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Page 6</div>
+                    <div id="step-5" class="step-item text-center w-1/5">
+                        <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Submit</div>
                     </div>
                 </div>
             </div>
@@ -129,7 +127,7 @@
                     <div class="space-y-6">
                         
                         <div class="border p-4 rounded-lg bg-gray-50">
-                            <h3 class="text-lg font-semibold mb-3 text-gray-700 border-b pb-1">Basic Identification & Acknowledgment</h3>
+                            <h3 class="text-lg font-semibold mb-3 text-gray-700 border-b pb-1">Basic Identification & Date</h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div><label class="label-text" for="fullName">Full Name</label><input type="text" id="fullName" name="Full Name" class="input-field" required></div>
                                 <div><label class="label-text" for="date">Date</label><input type="date" id="date" name="Date" class="input-field" required></div>
@@ -164,7 +162,7 @@
                 </section>
                 <!-- END: SECTION 1 (Page 1 - Intro/Checklist) -->
 
-                <!-- START: SECTION 2 (Page 2 - Applicant Details & Rental History) -->
+                <!-- START: SECTION 2 (Page 2 - Applicant Details, Rental History, Household Members) -->
                 <section id="section-2" class="form-section">
                     <h2 class="text-2xl font-semibold mb-3 text-gray-800">PAGE 2</h2>
 
@@ -307,59 +305,57 @@
                         <div id="prev-address-container" class="space-y-4"></div>
                         <button type="button" id="add-prev-address-btn" class="mt-4 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200">+ Add Previous Address</button>
                      </div>
+                     
+                     <!-- START: Household Members (Moved from Page 3) -->
+                    <div class="mt-8">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Household Members</h3>
+                        <p class="text-gray-600 mb-6">List all other persons who will occupy the unit (excluding Applicant and Co-Applicant).</p>
+
+                        <!-- Household Members Dynamic Blocks -->
+                        <div id="household-members-container" class="mt-4 space-y-4"></div>
+                        <button type="button" id="add-member-btn" class="mt-4 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200">+ Add Household Member</button>
+
+                        <div class="mt-8 space-y-6">
+                            <!-- Citizenship Status -->
+                            <div class="p-4 border border-gray-200 rounded-lg">
+                                <span class="label-text">Are ALL members of the household U.S. Citizens?</span>
+                                 <div class="radio-group mt-2">
+                                    <label class="radio-label"><input type="radio" name="US Citizens" value="yes" class="radio-input mr-2" checked>Yes</label>
+                                    <label class="radio-label"><input type="radio" name="US Citizens" value="no" class="radio-input mr-2">No</label>
+                                </div>
+                            </div>
+                             <!-- Full-Time Student Status -->
+                             <div class="p-4 border border-gray-200 rounded-lg">
+                                <span class="label-text">Is any household member (age 18+) a full-time student?</span>
+                                 <div class="radio-group mt-2">
+                                    <label class="radio-label"><input type="radio" name="Full-Time Student" value="yes" class="radio-input mr-2">Yes</label>
+                                    <label class="radio-label"><input type="radio" name="Full-Time Student" value="no" class="radio-input mr-2" checked>No</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END: Household Members (Moved from Page 3) -->
                 </section>
                 <!-- END: SECTION 2 (Page 2 - Applicant Details & Rental History) -->
 
 
-                <!-- START: SECTION 3 (Page 3 - Household Members) -->
+                <!-- START: SECTION 3 (Page 3 - Financial & Employment) -->
                 <section id="section-3" class="form-section">
                     <h2 class="text-2xl font-semibold mb-2 text-gray-800">PAGE 3</h2>
-                    <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Household Members</h3>
-                    <p class="text-gray-600 mb-6">List all other persons who will occupy the unit (excluding Applicant and Co-Applicant).</p>
-
-                    <!-- Household Members Dynamic Blocks -->
-                    <div id="household-members-container" class="mt-4 space-y-4"></div>
-                    <button type="button" id="add-member-btn" class="mt-4 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200">+ Add Household Member</button>
-
-                    <div class="mt-8 space-y-6">
-                        <!-- Citizenship Status -->
-                        <div class="p-4 border border-gray-200 rounded-lg">
-                            <span class="label-text">Are ALL members of the household U.S. Citizens?</span>
-                             <div class="radio-group mt-2">
-                                <label class="radio-label"><input type="radio" name="US Citizens" value="yes" class="radio-input mr-2" checked>Yes</label>
-                                <label class="radio-label"><input type="radio" name="US Citizens" value="no" class="radio-input mr-2">No</label>
-                            </div>
-                        </div>
-                         <!-- Full-Time Student Status -->
-                         <div class="p-4 border border-gray-200 rounded-lg">
-                            <span class="label-text">Is any household member (age 18+) a full-time student?</span>
-                             <div class="radio-group mt-2">
-                                <label class="radio-label"><input type="radio" name="Full-Time Student" value="yes" class="radio-input mr-2">Yes</label>
-                                <label class="radio-label"><input type="radio" name="Full-Time Student" value="no" class="radio-input mr-2" checked>No</label>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                <!-- END: SECTION 3 (Page 3 - Household Members) -->
-
-
-                <!-- START: SECTION 4 (Page 4 - Financial & Employment) -->
-                <section id="section-4" class="form-section">
-                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">PAGE 4</h2>
                     <p class="text-gray-600 mb-6">Placeholder for Financial & Employment Information.</p>
                 </section>
-                <!-- END: SECTION 4 (Page 4 - Financial & Employment) -->
+                <!-- END: SECTION 3 (Page 3 - Financial & Employment) -->
 
-                <!-- START: SECTION 5 (Page 5 - Background & History) -->
-                <section id="section-5" class="form-section">
-                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">PAGE 5</h2>
+                <!-- START: SECTION 4 (Page 4 - Background & History) -->
+                <section id="section-4" class="form-section">
+                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">PAGE 4</h2>
                     <p class="text-gray-600 mb-6">Placeholder for Background & History.</p>
                 </section>
-                <!-- END: SECTION 5 (Page 5 - Background & History) -->
+                <!-- END: SECTION 4 (Page 4 - Background & History) -->
 
-                <!-- START: SECTION 6 (Page 6 - Authorization) -->
-                <section id="section-6" class="form-section">
-                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">PAGE 6</h2>
+                <!-- START: SECTION 5 (Page 5 - Authorization) -->
+                <section id="section-5" class="form-section">
+                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">PAGE 5</h2>
                     <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Authorizations & Agreement</h3>
                     <p class="text-gray-600 mb-6">You're almost done! Please read the following legal statements carefully. Your agreement is required to finalize and submit your application for review.</p>
                     <div class="prose prose-sm max-w-none text-gray-600 bg-gray-50 p-4 rounded-md border border-gray-200">
@@ -394,7 +390,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             let currentStep = 1;
-            const totalSteps = 6;
+            const totalSteps = 5; // Updated to 5 total steps
             const form = document.getElementById('rental-application-form');
             const prevBtn = document.getElementById('prev-btn');
             const nextBtn = document.getElementById('next-btn');
@@ -425,18 +421,23 @@
 
             // Helper function to update the progress bar style
             const updateProgressBar = () => {
-                for (let i = 1; i <= totalSteps; i++) {
-                    const step = document.getElementById(`step-${i}`);
-                    step.classList.remove('step-item-active', 'step-item-complete');
-                    step.querySelector('div').classList.remove('border-blue-500', 'text-blue-600', 'border-green-500', 'text-green-600', 'bg-green-50');
-                    step.querySelector('div').classList.add('border-gray-200', 'text-gray-400');
+                const totalSteps = 5; // Use 5 for the progress bar
+                for (let i = 1; i <= 6; i++) { // Loop through all potential sections
+                    const stepElement = document.getElementById(`step-${i}`);
+                    if (!stepElement) continue;
 
-                    if (i < currentStep) {
-                        step.classList.add('step-item-complete');
-                        step.querySelector('div').classList.add('border-green-500', 'text-green-600');
-                    } else if (i === currentStep) {
-                        step.classList.add('step-item-active');
-                        step.querySelector('div').classList.add('border-blue-500', 'text-blue-600');
+                    stepElement.classList.remove('step-item-active', 'step-item-complete');
+                    stepElement.querySelector('div').classList.remove('border-blue-500', 'text-blue-600', 'border-green-500', 'text-green-600', 'bg-green-50');
+                    stepElement.querySelector('div').classList.add('border-gray-200', 'text-gray-400');
+
+                    if (i <= totalSteps) { // Only style up to the visible number of steps
+                         if (i < currentStep) {
+                            stepElement.classList.add('step-item-complete');
+                            stepElement.querySelector('div').classList.add('border-green-500', 'text-green-600');
+                        } else if (i === currentStep) {
+                            stepElement.classList.add('step-item-active');
+                            stepElement.querySelector('div').classList.add('border-blue-500', 'text-blue-600');
+                        }
                     }
                 }
             };
@@ -449,11 +450,9 @@
 
             // Helper function to calculate residency duration (Used for Previous Address logic)
             const calculateResidencyDuration = (fromDateStr, toDateStr) => {
-                // Parses YYYY-MM-DD date string (from input)
                 const parseDate = (dateStr) => {
                     if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return null;
                     const [year, month, day] = dateStr.split('-').map(Number);
-                    // Use UTC date to avoid timezone issues for calculation
                     const date = new Date(Date.UTC(year, month - 1, day));
                     return date;
                 };
@@ -485,7 +484,7 @@
 
                 let isRequired = false;
 
-                // Check if date fields are filled and valid (required by their pattern)
+                // Check if date fields are filled and valid
                 if (fromDateInput && toDateInput && fromDateInput.checkValidity() && toDateInput.checkValidity() && fromDateInput.value && toDateInput.value) {
                     const durationMonths = calculateResidencyDuration(fromDateInput.value, toDateInput.value);
                     
