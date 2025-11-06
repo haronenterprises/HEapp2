@@ -6,7 +6,7 @@
     <title>Haron Enterprises, LLC - Residential Lease Application</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chosen Palette: Professional Neutral -->
-    <!-- Application Structure Plan: Multi-step wizard (5 steps total). Combines all applicant personal/address/household data into Page 2. Page 3 is for Financial/Employment. Client-side PDF generation on final step. -->
+    <!-- Application Structure Plan: Multi-step wizard (5 steps total). Combines all applicant personal/address/household data into Page 2. Page 3 is for Background History. Page 4 is Financial/Employment. Page 5 is the final authorization/Submit. Client-side PDF generation on final step. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
@@ -47,21 +47,13 @@
         .radio-group-sm {
             @apply flex items-center gap-x-2 text-sm font-medium;
         }
-        /* START: FIX for Red X on dynamic items */
-        .dynamic-item .remove-btn { 
-            display: none; 
-        }
-        .dynamic-item:hover .remove-btn {
-            display: block; 
-        }
-        /* END: FIX for Red X on dynamic items */
         /* Style for print output */
         @media print {
             body { background: #fff; }
-            #navigation-controls, #progress-bar, #header, #footer, #application-wizard { display: none !important; }
+            #navigation-controls, #progress-bar, #header, #application-wizard, .no-print { display: none !important; }
             .printable-only { display: block !important; }
             .print-button { display: none !important; }
-            .no-print { display: none !important; }
+            .print-container { padding: 0.5in !important; }
         }
         .printable-only {
             display: none;
@@ -80,21 +72,57 @@
         .description-col {
             font-weight: 500;
             color: #1f2937; /* Gray-800 */
-            padding-top: 0.35rem; /* Align with input */
-            padding-bottom: 0.35rem; /* Align with input */
-            line-height: 2.25rem; /* Match height of input container */
+            padding-top: 0.35rem; 
+            padding-bottom: 0.35rem; 
+            line-height: 2.25rem; 
         }
         .field-container {
-            min-height: 40px; /* Ensures consistent vertical alignment */
+            min-height: 40px; 
             display: flex;
             align-items: center;
         }
         .input-label-row {
-            line-height: 2.25rem; /* Ensures vertical alignment for text fields */
+            line-height: 2.25rem; 
         }
         .explain-box {
             display: none;
             margin-top: 0.5rem;
+        }
+        .summary-value {
+             font-weight: 600;
+             border-bottom: 1px solid #ccc;
+             display: block;
+             min-height: 1.5rem;
+             padding: 0 0.25rem;
+        }
+        .summary-label {
+            font-size: 0.8rem;
+            color: #4b5563;
+            margin-top: 0.5rem;
+        }
+        .summary-section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            border-bottom: 2px solid #333;
+            padding-bottom: 0.25rem;
+            margin-top: 1.5rem;
+        }
+        .summary-data-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+        }
+        .summary-description-col {
+            font-weight: 500;
+            color: #1f2937;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+        .summary-field-box {
+            border: 1px solid #ccc;
+            min-height: 2.5rem;
+            display: flex;
+            align-items: center;
+            padding-left: 0.5rem;
         }
     </style>
 </head>
@@ -106,32 +134,22 @@
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
             <p class="text-sm text-gray-600 font-semibold">In Accordance with Seminole County NSP Rentals Program</p>
             <p class="text-sm text-red-600 font-bold">AII INCOMPLETE applications will be REJECTED. Tel: (407) 702-3281 / Fax: (866) 858-5371</p>
-            <p class="text-sm text-gray-500">Eff date 11 06 2025 v58.0 Final</p>
+            <p class="text-sm text-gray-500">Eff date 11 06 2025 v58.1</p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
-            <!-- Progress Bar (Updated to 5 Steps) -->
+            <!-- Progress Bar (5 Steps) -->
             <div id="progress-bar" class="p-6 border-b border-gray-200">
                 <div class="flex items-center justify-between">
-                    <div id="step-1" class="step-item step-item-active text-center w-1/5">
-                        <div class="border-b-4 pb-2 text-xs md:text-sm font-semibold">Page 1</div>
-                    </div>
-                     <div id="step-2" class="step-item text-center w-1/5">
-                        <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Page 2</div>
-                    </div>
-                     <div id="step-3" class="step-item text-center w-1/5">
-                        <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Page 3</div>
-                    </div>
-                     <div id="step-4" class="step-item text-center w-1/5">
-                        <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Page 4</div>
-                    </div>
-                    <div id="step-5" class="step-item text-center w-1/5">
-                        <div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Submit</div>
-                    </div>
+                    <div id="step-1" class="step-item step-item-active text-center w-1/5"><div class="border-b-4 pb-2 text-xs md:text-sm font-semibold">Page 1</div></div>
+                    <div id="step-2" class="step-item text-center w-1/5"><div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Page 2</div></div>
+                    <div id="step-3" class="step-item text-center w-1/5"><div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Page 3</div></div>
+                    <div id="step-4" class="step-item text-center w-1/5"><div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Page 4</div></div>
+                    <div id="step-5" class="step-item text-center w-1/5"><div class="border-b-4 border-gray-200 pb-2 text-xs md:text-sm font-semibold text-gray-400">Submit</div></div>
                 </div>
             </div>
 
-            <!-- CRITICAL FIX: Removed action attribute entirely for self-contained operation -->
+            <!-- Form Container -->
             <form id="rental-application-form" class="p-6 md:p-8">
                 <div id="status-message" class="text-sm px-4 py-2 rounded-md mb-4 hidden" role="alert"></div>
                 
@@ -152,7 +170,7 @@
                         </div>
 
                         <div class="space-y-3 p-4 border rounded-lg">
-                            <h3 class="text-lg font-semibold mb-3 text-gray-700 border-b pb-1">Required Documents/Actions (Check All)</h3>
+                            <h3 class="text-lg font-semibold mb-3 text-gray-700 border-b pb-1">Required Documents/Actions (Check First 5)</h3>
                             
                             <!-- Checkboxes 1-5 are REQUIRED; others optional -->
                             <div class="flex items-start"><input type="checkbox" name="Checklist 1" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">I/We understand that this property is owned by a private company and subject to Maximum Income Qualification as established by HUD & Seminole County's Neighborhood Stabilization Program (NSP) requirements.</label></div>
@@ -161,7 +179,7 @@
                             <div class="flex items-start"><input type="checkbox" name="Checklist 4" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">Attach: Copies of photo Identification for all adult household members.</label></div>
                             <div class="flex items-start"><input type="checkbox" name="Checklist 5" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3" required><label class="text-sm text-gray-700">Attach: Copies of Social Security Cards for all household members.</label></div>
                             
-                            <!-- Checkboxes 6-18 are OPTIONAL (required attribute removed) - Wording Finalized in v47.3/47.7 fix attempts -->
+                            <!-- Checkboxes 6-18 are OPTIONAL - Wording Finalized in v47.3/47.7 fix attempts -->
                             <div class="flex items-start"><input type="checkbox" name="Checklist 6" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3"><label class="text-sm text-gray-700">Copies of birth certificates for all household members under the age of 18 are required.</label></div>
                             <div class="flex items-start"><input type="checkbox" name="Checklist 7" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3"><label class="text-sm text-gray-700">Attach: SIX (6) most current pay check stubs for all household members who are working now.</label></div>
                             <div class="flex items-start"><input type="checkbox" name="Checklist 8" value="Checked" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 mr-3"><label class="text-sm text-gray-700">Attach: Proof of last SIX (6) month's rent or mortgage payments.</label></div>
@@ -186,7 +204,7 @@
 
                     <!-- Section 2.1: Applicant/Co-Applicant Data (3-Column Layout) -->
                     <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Applicant & Co-Applicant Details</h3>
-                    <div class="data-grid space-y-4 border p-4 rounded-lg bg-white shadow-sm">
+                    <div class="data-grid space-y-4 border p-4 rounded-lg bg-gray-50 shadow-sm">
                         
                         <!-- Row 1: Headers -->
                         <div class="text-sm font-bold description-col border-b pb-2 text-gray-800">DESCRIPTION</div>
@@ -572,7 +590,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             let currentStep = 1;
-            const totalSteps = 5; // Updated to 5 total steps (1, 2, 3, 4, 5)
+            const totalSteps = 5; 
             const form = document.getElementById('rental-application-form');
             const prevBtn = document.getElementById('prev-btn');
             const nextBtn = document.getElementById('next-btn');
@@ -584,11 +602,11 @@
             if (dateInput) {
                 const today = new Date();
                 const yyyy = today.getFullYear();
-                let mm = today.getMonth() + 1; // Months start at 0
+                let mm = today.getMonth() + 1; 
                 let dd = today.getDate();
                 if (dd < 10) dd = '0' + dd;
                 if (mm < 10) mm = '0' + mm;
-                 dateInput.value = `${yyyy}-${mm}-${dd}`; // Set to YYYY-MM-DD for date input
+                dateInput.value = `${yyyy}-${mm}-${dd}`; 
             }
             
             // Helper function to update button visibility and style
@@ -697,77 +715,96 @@
                      return;
                 }
 
-                // 2. Data Collection and Formatting (Logic for PDF Generation)
+                // --- 1. Data Collection ---
                 const formData = new FormData(form);
-                let reportContent = '';
-                
-                // Group data for cleaner PDF output
-                const groupedData = {};
+                const data = {};
                 formData.forEach((value, key) => {
-                    // Normalize keys for display
-                    let section = 'Miscellaneous';
-                    if (key.startsWith('Full Name') || key.startsWith('DOB') || key.startsWith('SSN') || key.startsWith('DL') || key.startsWith('Phone') || key.startsWith('Email')) {
-                        section = 'Applicant/CoApplicant Details';
-                    } else if (key.startsWith('Current') || key.startsWith('Time At') || key.startsWith('Security') || key.startsWith('Reason')) {
-                         section = 'Current Address & Residency';
-                    } else if (key.startsWith('Household Member') || key.startsWith('US Citizens') || key.startsWith('Full-Time')) {
-                        section = 'Household Members';
-                    } else if (key.startsWith('Q')) {
-                        section = 'Background & History';
-                    } else if (key.startsWith('Employment') || key.startsWith('Income') || key.startsWith('Asset') || key.startsWith('Liability')) {
-                        section = 'Financial & Employment';
-                    } else if (key.startsWith('Checklist')) {
-                        section = 'Application Checklist';
-                    }
-
-                    if (!groupedData[section]) {
-                        groupedData[section] = [];
-                    }
-                    
-                    // Simple cleaning for display
-                    let displayKey = key.replace(/([A-Z])/g, ' $1').trim();
-                    displayKey = displayKey.replace(/SSN Co/g, 'SSN Co-Applicant');
-                    displayKey = displayKey.replace(/DL Co/g, 'DL Co-Applicant');
-
-                    groupedData[section].push({ key: displayKey, value: value });
+                    data[key] = value;
                 });
                 
-                // Build the final HTML report content
-                let finalReportHTML = '';
-                for (const section in groupedData) {
-                    finalReportHTML += `<h3 class="text-lg font-bold mt-6 border-b pb-1">${section}</h3>`;
-                    finalReportHTML += `<div class="grid grid-cols-2 gap-x-6 gap-y-2 mt-2 text-sm">`;
-                    
-                    groupedData[section].forEach(item => {
-                        // Skip empty optional fields for a cleaner report
-                        if (item.value.trim() === '' || item.value.trim() === 'No') return;
-                        finalReportHTML += `<p class="text-sm"><span class="font-bold">${item.key}:</span> ${item.value}</p>`;
-                    });
-
-                    finalReportHTML += `</div>`;
-                }
-
-
-                // Final Printable HTML
-                let reportHTML = `<div class="p-8 bg-white border border-gray-300 rounded-lg shadow-xl print-container">
+                // --- 2. Build Structured HTML for PDF/Print ---
+                let summaryHTML = `<div class="p-8 bg-white border border-gray-300 rounded-lg shadow-xl print-container">
                     <header class="text-center mb-6 border-b pb-4">
                         <h1 class="text-2xl font-bold">HARON ENTERPRISES, LLC</h1>
-                        <h2 class="text-xl">FINAL APPLICATION SUMMARY (v57.3)</h2>
+                        <h2 class="text-xl">FINAL APPLICATION SUMMARY (v58.1)</h2>
                         <p class="text-xs text-gray-500">Generated: ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}</p>
                     </header>
                     
-                    ${finalReportHTML}
+                    <h3 class="summary-section-title">PAGE 1: APPLICATION CHECKLIST</h3>
+                    <div class="grid grid-cols-2 gap-4 mt-4">`;
+
+                // Add Checklist Data (Checkboxes 1-18)
+                document.querySelectorAll('#section-1 input[type="checkbox"]').forEach(checkbox => {
+                    const labelText = checkbox.nextElementSibling.textContent.trim();
+                    const status = data[checkbox.name] === 'Checked' ? '☑' : '☐';
+                    summaryHTML += `<div class="flex items-start"><span class="mr-2 font-bold">${status}</span><span class="text-sm">${labelText}</span></div>`;
+                });
+                summaryHTML += `</div>`;
+                summaryHTML += `<div class="grid grid-cols-2 gap-4 mt-4"><p class="text-sm"><span class="font-bold">Full Name:</span> <span class="summary-value">${data['Full Name'] || 'N/A'}</span></p><p class="text-sm"><span class="font-bold">Date:</span> <span class="summary-value">${data['Date'] || 'N/A'}</span></p></div>`;
+
+
+                // Page 2: Applicant Details, Address, Household
+                summaryHTML += `<h3 class="summary-section-title">PAGE 2: APPLICANT DETAILS & HOUSEHOLD</h3>`;
                 
-                    <div class="mt-8 text-center no-print">
+                // Applicant/Co-Applicant Details (3-Column Table)
+                summaryHTML += `<h4 class="font-bold mt-4 mb-2">Applicant & Co-Applicant Details</h4>`;
+                summaryHTML += `<div class="summary-data-grid text-sm border-t border-l border-r">
+                    <div class="font-bold p-1 border-b">DESCRIPTION</div>
+                    <div class="font-bold p-1 border-b text-center">APPLICANT</div>
+                    <div class="font-bold p-1 border-b text-center">CO-APPLICANT</div>`;
+
+                const detailFields = [
+                    'Full Name', 'DOB', 'SSN', 'DL', 'Phone', 'Email', 'Armed Services', 'Vehicle Make', 'Vehicle Tag', 'Nearest Relative', 'Relative Phone', 'Evicted', 'Foreclosed'
+                ];
+                
+                detailFields.forEach(field => {
+                    const desc = field.replace(' App', '').replace(' CoApp', '');
+                    const valueApp = data[`${field} Applicant`] || data[`${field} App`] || 'N/A';
+                    const valueCoApp = data[`${field} CoApplicant`] || data[`${field} CoApp`] || 'N/A';
+
+                    summaryHTML += `<div class="summary-description-col p-1 border-b border-r">${desc}</div>`;
+                    summaryHTML += `<div class="summary-field-box border-b border-r text-center">${valueApp}</div>`;
+                    summaryHTML += `<div class="summary-field-box border-b text-center">${valueCoApp}</div>`;
+                });
+                summaryHTML += `</div>`;
+
+
+                // Current Address
+                summaryHTML += `<h4 class="font-bold mt-4 mb-2">Current Address & Residency</h4>`;
+                summaryHTML += `<div class="grid grid-cols-2 gap-4 text-sm">`;
+                summaryHTML += `<p><span class="font-bold">Street Address:</span> <span class="summary-value">${data['Current Street Address'] || ''}</span></p>`;
+                summaryHTML += `<p><span class="font-bold">City/State/Zip:</span> <span class="summary-value">${data['Current City'] || ''}, ${data['Current State'] || ''} ${data['Current Zip Code'] || ''}</span></p>`;
+                summaryHTML += `<p><span class="font-bold">From Date:</span> <span class="summary-value">${data['Time At Current From Date'] || ''}</span></p>`;
+                summaryHTML += `<p><span class="font-bold">To Date:</span> <span class="summary-value">${data['Time At Current To Date'] || ''}</span></p>`;
+                summaryHTML += `<p><span class="font-bold">Monthly Rent:</span> <span class="summary-value">${data['Current Monthly Rent'] || ''}</span></p>`;
+                summaryHTML += `<p><span class="font-bold">Reason For Leaving:</span> <span class="summary-value">${data['Reason For Leaving'] || ''}</span></p>`;
+                summaryHTML += `<p><span class="font-bold">Landlord/Mortgage Co.:</span> <span class="summary-value">${data['Current Landlord/Mortgage Co.'] || ''}</span></p>`;
+                summaryHTML += `<p><span class="font-bold">Landlord Phone:</span> <span class="summary-value">${data['Current Landlord Phone'] || ''}</span></p>`;
+                summaryHTML += `</div>`;
+
+                // Household Members (Dynamic Content)
+                summaryHTML += `<h4 class="font-bold mt-4 mb-2">Household Members</h4>`;
+                document.querySelectorAll('#household-members-container .dynamic-item').forEach((item, index) => {
+                    summaryHTML += `<p class="text-sm font-bold mt-2">Member ${index + 1}:</p>`;
+                    summaryHTML += `<div class="grid grid-cols-3 gap-2 text-sm border p-2 rounded-md">`;
+                    summaryHTML += `<p><span class="font-bold">Name:</span> ${data[`Household Member ${index + 1} Full Name`] || 'N/A'}</p>`;
+                    summaryHTML += `<p><span class="font-bold">DOB:</span> ${data[`Household Member ${index + 1} DOB`] || 'N/A'}</p>`;
+                    summaryHTML += `<p><span class="font-bold">Rel:</span> ${data[`Household Member ${index + 1} Relationship`] || 'N/A'}</p>`;
+                    summaryHTML += `</div>`;
+                });
+                
+                // Final Authorization and Print Button
+                summaryHTML += `<div class="mt-8 text-center no-print">
                         <p class="text-lg text-red-600 font-bold mb-4">TO FINALIZE: You must save this page as a PDF.</p>
                         <button class="print-button px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow-lg" onclick="window.print()">✅ Click to Save to PDF / Print</button>
                         <p class="text-sm text-gray-500 mt-2">Then, email the saved PDF to your landlord.</p>
                     </div>
                 </div>`;
 
-                // 3. Display the Final Document
-                document.body.innerHTML = reportHTML; // Replace the entire body content with the summary
-                window.scrollTo(0, 0); // Scroll to top of the new page
+
+                // --- 3. Display the Final Document ---
+                document.body.innerHTML = summaryHTML; 
+                window.scrollTo(0, 0); 
             });
             // END: Submit button logic
 
@@ -831,22 +868,20 @@
             };
 
             // Function to toggle explain boxes for Background Questions
-            window.toggleExplain = (radio, divId, showOnYes) => {
+            window.toggleExplain = (radio, divId) => {
                 const explainDiv = document.getElementById(divId);
                 const explainTextarea = explainDiv.querySelector('textarea');
                 
-                // Show only if 'yes' is clicked and showOnYes is true
+                // Show only if 'yes' is clicked
                 const shouldShow = radio.value === 'yes';
 
                 if (shouldShow) {
-                    explainDiv.classList.remove('explain-box'); // Remove display:none
-                    // Make the textarea required when visible
+                    explainDiv.classList.remove('explain-box'); 
                     explainTextarea.setAttribute('required', ''); 
                 } else {
-                    explainDiv.classList.add('explain-box'); // Add display:none
-                    // Remove required status when hidden
+                    explainDiv.classList.add('explain-box'); 
                     explainTextarea.removeAttribute('required');
-                    explainTextarea.value = ''; // Clear value when hidden
+                    explainTextarea.value = ''; 
                 }
             }
 
@@ -874,7 +909,6 @@
             // Function to check total employment duration (Placeholder - logic not implemented yet)
             const checkEmploymentHistory = () => {
                 // Future logic to iterate over all Applicant Employment blocks and sum duration
-                // Not strictly required for the current validation bug fix, but reserved for future functionality.
             };
 
             // Previous Address Dynamic Block Creator
@@ -903,7 +937,7 @@
             // Employment Block Creator
             const createEmploymentBlock = (isApplicant, containerId) => {
                 const prefix = isApplicant ? 'Applicant Employment' : 'CoApplicant Employment';
-                const required = isApplicant ? 'required' : ''; // Only Applicant Employment is required
+                const required = isApplicant ? 'required' : ''; 
                 createDynamicBlock(containerId, prefix, (count) => `
                      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div><label class="label-text text-xs">Employer Name</label><input type="text" name="${prefix} ${count} Employer Name" class="input-field text-sm" ${required}></div>
@@ -914,8 +948,7 @@
                         <div><label class="label-text text-xs">Annual Income (gross)</label><input type="number" name="${prefix} ${count} Annual Income" class="input-field text-sm" ${required} min="0"></div>
                         <div><label class="label-text text-xs">Start Date (YYYY-MM-DD)</label><input type="date" name="${prefix} ${count} Start Date" class="input-field text-sm" ${required}></div>
                         <div><label class="label-text text-xs">End Date (YYYY-MM-DD or Current)</label><input type="text" name="${prefix} ${count} End Date" placeholder="YYYY-MM-DD or 'Current'" class="input-field text-sm" ${required}></div>
-                    </div>`, isApplicant); // Pass isEmployment flag
-
+                    </div>`, isApplicant); 
             };
             
             // Other Financial Dynamic Blocks
