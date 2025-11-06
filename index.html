@@ -124,6 +124,17 @@
             align-items: center;
             padding-left: 0.5rem;
         }
+        .summary-question-box {
+            display: grid; 
+            grid-template-columns: 0.1fr 1.9fr; 
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+        .summary-question-status {
+            font-weight: 900;
+            font-size: 1.2rem;
+            margin-top: 0.1rem;
+        }
     </style>
 </head>
 <body class="antialiased text-gray-800">
@@ -134,7 +145,7 @@
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
             <p class="text-sm text-gray-600 font-semibold">In Accordance with Seminole County NSP Rentals Program</p>
             <p class="text-sm text-red-600 font-bold">AII INCOMPLETE applications will be REJECTED. Tel: (407) 702-3281 / Fax: (866) 858-5371</p>
-            <p class="text-sm text-gray-500">Eff date 11 06 2025 v58.1</p>
+            <p class="text-sm text-gray-500">Eff date 11 06 2025 v58.2</p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -723,27 +734,58 @@
                 });
                 
                 // --- 2. Build Structured HTML for PDF/Print ---
+                const printSummaryDiv = document.getElementById('print-summary');
                 let summaryHTML = `<div class="p-8 bg-white border border-gray-300 rounded-lg shadow-xl print-container">
                     <header class="text-center mb-6 border-b pb-4">
                         <h1 class="text-2xl font-bold">HARON ENTERPRISES, LLC</h1>
-                        <h2 class="text-xl">FINAL APPLICATION SUMMARY (v58.1)</h2>
+                        <h2 class="text-xl">RESIDENTIAL LEASE APPLICATION</h2>
+                        <p class="text-xs text-gray-500">In Accordance with Seminole County NSP Rentals Program</p>
                         <p class="text-xs text-gray-500">Generated: ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}</p>
-                    </header>
-                    
-                    <h3 class="summary-section-title">PAGE 1: APPLICATION CHECKLIST</h3>
-                    <div class="grid grid-cols-2 gap-4 mt-4">`;
+                    </header>`;
 
+                // Helper function to extract and format dynamic blocks
+                const getDynamicSummary = (containerId, blockTitle, fields, isEmployment = false) => {
+                    let dynamicHTML = `<h4 class="font-bold mt-4 mb-2">${blockTitle}</h4>`;
+                    let count = 0;
+                    document.querySelectorAll(`#${containerId} .dynamic-item`).forEach(item => {
+                        count++;
+                        dynamicHTML += `<div class="border p-2 mt-2 bg-gray-50 text-sm"><strong>Item ${count}:</strong></div>`;
+                        dynamicHTML += `<div class="grid grid-cols-2 gap-4 text-sm p-2">`;
+                        fields.forEach(field => {
+                            const inputElement = item.querySelector(`[name^="${field.name}"]`);
+                            const name = inputElement ? inputElement.name : '';
+                            const value = data[name] || 'N/A';
+                            
+                            // Special formatting for End Date in employment
+                            const displayValue = (isEmployment && field.name.includes('End Date') && value === 'Current') ? 'CURRENT' : value;
+
+                            dynamicHTML += `<div><span class="font-bold">${field.label}:</span> <span class="summary-value">${displayValue}</span></div>`;
+                        });
+                        dynamicHTML += `</div>`;
+                    });
+                    return dynamicHTML;
+                };
+
+                // Helper function to format radio/select/text fields
+                const getSimpleFieldSummary = (label, name) => {
+                    return `<p class="mt-1"><span class="font-bold">${label}:</span> <span class="summary-value">${data[name] || 'N/A'}</span></p>`;
+                };
+                
+                // --- PAGE 1: APPLICATION CHECKLIST ---
+                summaryHTML += `<h3 class="summary-section-title">PAGE 1: APPLICATION CHECKLIST</h3>`;
+                summaryHTML += `<p class="text-sm"><span class="font-bold">Full Name:</span> <span class="summary-value">${data['Full Name'] || 'N/A'}</span></p><p class="text-sm"><span class="font-bold">Date:</span> <span class="summary-value">${data['Date'] || 'N/A'}</span></p>`;
+
+                summaryHTML += `<div class="mt-4 space-y-2 text-sm">`;
                 // Add Checklist Data (Checkboxes 1-18)
                 document.querySelectorAll('#section-1 input[type="checkbox"]').forEach(checkbox => {
                     const labelText = checkbox.nextElementSibling.textContent.trim();
                     const status = data[checkbox.name] === 'Checked' ? '☑' : '☐';
-                    summaryHTML += `<div class="flex items-start"><span class="mr-2 font-bold">${status}</span><span class="text-sm">${labelText}</span></div>`;
+                    summaryHTML += `<div class="summary-question-box"><span class="summary-question-status">${status}</span><span class="text-sm">${labelText}</span></div>`;
                 });
                 summaryHTML += `</div>`;
-                summaryHTML += `<div class="grid grid-cols-2 gap-4 mt-4"><p class="text-sm"><span class="font-bold">Full Name:</span> <span class="summary-value">${data['Full Name'] || 'N/A'}</span></p><p class="text-sm"><span class="font-bold">Date:</span> <span class="summary-value">${data['Date'] || 'N/A'}</span></p></div>`;
 
 
-                // Page 2: Applicant Details, Address, Household
+                // --- PAGE 2: APPLICANT DETAILS & HOUSEHOLD ---
                 summaryHTML += `<h3 class="summary-section-title">PAGE 2: APPLICANT DETAILS & HOUSEHOLD</h3>`;
                 
                 // Applicant/Co-Applicant Details (3-Column Table)
@@ -754,17 +796,28 @@
                     <div class="font-bold p-1 border-b text-center">CO-APPLICANT</div>`;
 
                 const detailFields = [
-                    'Full Name', 'DOB', 'SSN', 'DL', 'Phone', 'Email', 'Armed Services', 'Vehicle Make', 'Vehicle Tag', 'Nearest Relative', 'Relative Phone', 'Evicted', 'Foreclosed'
+                    { desc: 'Full Name', app: 'Full Name Applicant', co: 'Full Name CoApplicant' },
+                    { desc: 'Date of Birth', app: 'DOB Applicant', co: 'DOB CoApplicant' },
+                    { desc: 'Social Security Number', app: 'SSN Applicant', co: 'SSN CoApplicant' },
+                    { desc: 'Driver\'s License #', app: 'DL Applicant', co: 'DL CoApplicant' },
+                    { desc: 'Phone', app: 'Phone Applicant', co: 'Phone CoApplicant' },
+                    { desc: 'Email Address', app: 'Email Applicant', co: 'Email CoApplicant' },
+                    { desc: 'Armed Services Member?', app: 'Armed Services App', co: 'Armed Services CoApp' },
+                    { desc: 'Vehicle Make & Model', app: 'Vehicle Make Applicant', co: 'Vehicle Make CoApplicant' },
+                    { desc: 'Vehicle Tag #', app: 'Vehicle Tag Applicant', co: 'Vehicle Tag CoApplicant' },
+                    { desc: 'Name of Nearest Relative', app: 'Name of Nearest Relative', co: '' }, 
+                    { desc: 'Phone of Nearest Relative', app: 'Phone Nearest Relative', co: '' }, 
+                    { desc: 'Ever Been Evicted?', app: 'Evicted App', co: 'Evicted CoApp' },
+                    { desc: 'Ever Been Foreclosed?', app: 'Foreclosed App', co: 'Foreclosed CoApp' }
                 ];
                 
                 detailFields.forEach(field => {
-                    const desc = field.replace(' App', '').replace(' CoApp', '');
-                    const valueApp = data[`${field} Applicant`] || data[`${field} App`] || 'N/A';
-                    const valueCoApp = data[`${field} CoApplicant`] || data[`${field} CoApp`] || 'N/A';
+                    const valueApp = data[field.app] || (field.desc.includes('Armed Services') || field.desc.includes('Evicted') || field.desc.includes('Foreclosed') ? 'NO' : 'N/A');
+                    const valueCoApp = data[field.co] || (field.desc.includes('Armed Services') || field.desc.includes('Evicted') || field.desc.includes('Foreclosed') ? 'NO' : 'N/A');
 
-                    summaryHTML += `<div class="summary-description-col p-1 border-b border-r">${desc}</div>`;
-                    summaryHTML += `<div class="summary-field-box border-b border-r text-center">${valueApp}</div>`;
-                    summaryHTML += `<div class="summary-field-box border-b text-center">${valueCoApp}</div>`;
+                    summaryHTML += `<div class="summary-description-col p-1 border-b border-r">${field.desc}</div>`;
+                    summaryHTML += `<div class="summary-field-box border-b border-r text-center">${valueApp.toUpperCase()}</div>`;
+                    summaryHTML += `<div class="summary-field-box border-b text-center">${valueCoApp.toUpperCase()}</div>`;
                 });
                 summaryHTML += `</div>`;
 
@@ -772,26 +825,87 @@
                 // Current Address
                 summaryHTML += `<h4 class="font-bold mt-4 mb-2">Current Address & Residency</h4>`;
                 summaryHTML += `<div class="grid grid-cols-2 gap-4 text-sm">`;
-                summaryHTML += `<p><span class="font-bold">Street Address:</span> <span class="summary-value">${data['Current Street Address'] || ''}</span></p>`;
-                summaryHTML += `<p><span class="font-bold">City/State/Zip:</span> <span class="summary-value">${data['Current City'] || ''}, ${data['Current State'] || ''} ${data['Current Zip Code'] || ''}</span></p>`;
-                summaryHTML += `<p><span class="font-bold">From Date:</span> <span class="summary-value">${data['Time At Current From Date'] || ''}</span></p>`;
-                summaryHTML += `<p><span class="font-bold">To Date:</span> <span class="summary-value">${data['Time At Current To Date'] || ''}</span></p>`;
-                summaryHTML += `<p><span class="font-bold">Monthly Rent:</span> <span class="summary-value">${data['Current Monthly Rent'] || ''}</span></p>`;
-                summaryHTML += `<p><span class="font-bold">Reason For Leaving:</span> <span class="summary-value">${data['Reason For Leaving'] || ''}</span></p>`;
-                summaryHTML += `<p><span class="font-bold">Landlord/Mortgage Co.:</span> <span class="summary-value">${data['Current Landlord/Mortgage Co.'] || ''}</span></p>`;
-                summaryHTML += `<p><span class="font-bold">Landlord Phone:</span> <span class="summary-value">${data['Current Landlord Phone'] || ''}</span></p>`;
+                summaryHTML += getSimpleFieldSummary('Street Address', 'Current Street Address');
+                summaryHTML += getSimpleFieldSummary('City/State/Zip', 'Current City') + `, ` + getSimpleFieldSummary('', 'Current State') + ` ` + getSimpleFieldSummary('', 'Current Zip Code');
+                summaryHTML += getSimpleFieldSummary('Contact Person/Title', 'Current Contact Person') + `/` + getSimpleFieldSummary('', 'Current Contact Title');
+                summaryHTML += getSimpleFieldSummary('From/To Dates', 'Time At Current From Date') + ` to ` + getSimpleFieldSummary('', 'Time At Current To Date');
+                summaryHTML += getSimpleFieldSummary('Monthly Rent', 'Current Monthly Rent');
+                summaryHTML += getSimpleFieldSummary('Security Deposit Return %', 'Security Deposit Return Percent');
+                summaryHTML += getSimpleFieldSummary('Reason For Leaving', 'Reason For Leaving');
+                summaryHTML += getSimpleFieldSummary('Landlord/Mortgage Co.', 'Current Landlord/Mortgage Co.');
+                summaryHTML += getSimpleFieldSummary('Landlord Phone', 'Current Landlord Phone');
                 summaryHTML += `</div>`;
+
+                // Previous Address (Dynamic Content)
+                summaryHTML += getDynamicSummary('prev-address-container', 'Previous Address History', [
+                    { label: 'Street', name: 'Previous Address @ Street' },
+                    { label: 'City/State/Zip', name: 'Previous Address @ CityStateZip' },
+                    { label: 'Time at Residence', name: 'Previous Address @ Time' },
+                    { label: 'Landlord/Contact', name: 'Previous Address @ Landlord Contact' },
+                    { label: 'Reason for Leaving', name: 'Previous Address @ Reason' },
+                    { label: 'Monthly Rent', name: 'Previous Address @ Rent' }
+                ]);
 
                 // Household Members (Dynamic Content)
                 summaryHTML += `<h4 class="font-bold mt-4 mb-2">Household Members</h4>`;
-                document.querySelectorAll('#household-members-container .dynamic-item').forEach((item, index) => {
-                    summaryHTML += `<p class="text-sm font-bold mt-2">Member ${index + 1}:</p>`;
-                    summaryHTML += `<div class="grid grid-cols-3 gap-2 text-sm border p-2 rounded-md">`;
-                    summaryHTML += `<p><span class="font-bold">Name:</span> ${data[`Household Member ${index + 1} Full Name`] || 'N/A'}</p>`;
-                    summaryHTML += `<p><span class="font-bold">DOB:</span> ${data[`Household Member ${index + 1} DOB`] || 'N/A'}</p>`;
-                    summaryHTML += `<p><span class="font-bold">Rel:</span> ${data[`Household Member ${index + 1} Relationship`] || 'N/A'}</p>`;
+                summaryHTML += getDynamicSummary('household-members-container', 'Household Member', [
+                    { label: 'Full Name', name: 'Household Member @ Full Name' },
+                    { label: 'Date of Birth', name: 'Household Member @ DOB' },
+                    { label: 'Relationship', name: 'Household Member @ Relationship' }
+                ]);
+                summaryHTML += getSimpleFieldSummary('U.S. Citizens?', 'US Citizens');
+                summaryHTML += getSimpleFieldSummary('Full-Time Student?', 'Full-Time Student');
+
+
+                // --- PAGE 3: BACKGROUND & HISTORY ---
+                summaryHTML += `<h3 class="summary-section-title">PAGE 3: BACKGROUND & HISTORY</h3>`;
+                summaryHTML += `<div class="space-y-4 mt-4 text-sm">`;
+                for (let i = 1; i <= 14; i++) {
+                    const qName = `Q${i}_${detailFields[i-1] ? detailFields[i-1].desc.split(' ')[0] : 'Question'}`; // Simplified Name for lookup
+                    const qTextElement = document.querySelector(`#section-3 [name="${qName}"][value="yes"]`);
+                    const qText = qTextElement ? qTextElement.parentNode.parentNode.querySelector('.label-text').textContent.trim() : `Question ${i}`;
+                    const qAnswer = data[qName] || 'no';
+                    const qExplanation = data[`${qName}_Explanation`] || 'N/A';
+                    
+                    summaryHTML += `<div class="border p-2 rounded-md bg-gray-50">`;
+                    summaryHTML += `<p class="font-bold">${i}. ${qText}</p>`;
+                    summaryHTML += `<p class="ml-4">Status: <span class="${qAnswer === 'yes' ? 'text-red-600' : 'text-green-600'} font-bold">${qAnswer.toUpperCase()}</span></p>`;
+                    if (qAnswer === 'yes' && qExplanation !== 'N/A') {
+                        summaryHTML += `<p class="ml-4 mt-1"><span class="font-bold">Explanation:</span> ${qExplanation}</p>`;
+                    }
                     summaryHTML += `</div>`;
-                });
+                }
+                summaryHTML += `</div>`;
+
+
+                // --- PAGE 4: FINANCIAL & EMPLOYMENT ---
+                summaryHTML += `<h3 class="summary-section-title">PAGE 4: FINANCIAL & EMPLOYMENT</h3>`;
+                
+                 summaryHTML += getDynamicSummary('employment-applicant-container', 'Applicant Employment History', [
+                    { label: 'Employer Name', name: 'Applicant Employment @ Employer Name' },
+                    { label: 'Address', name: 'Applicant Employment @ Address' },
+                    { label: 'Position', name: 'Applicant Employment @ Position' },
+                    { label: 'Pay Rate', name: 'Applicant Employment @ Pay Rate' },
+                    { label: 'Annual Income', name: 'Applicant Employment @ Annual Income' },
+                    { label: 'Start/End Dates', name: 'Applicant Employment @ Start Date' },
+                ], true);
+                
+                 summaryHTML += getDynamicSummary('employment-coapplicant-container', 'Co-Applicant Employment History', [
+                    { label: 'Employer Name', name: 'CoApplicant Employment @ Employer Name' },
+                    { label: 'Address', name: 'CoApplicant Employment @ Address' },
+                    { label: 'Position', name: 'CoApplicant Employment @ Position' },
+                    { label: 'Annual Income', name: 'CoApplicant Employment @ Annual Income' },
+                ], true);
+
+                summaryHTML += getDynamicSummary('income-container', 'Other Income Sources', [{ label: 'Type', name: 'Income @ Type' }, { label: 'Amount', name: 'Income @ Amount' }]);
+                summaryHTML += getDynamicSummary('assets-container', 'Assets', [{ label: 'Type', name: 'Asset @ Type' }, { label: 'Value', name: 'Asset @ Value' }, { label: 'Rate', name: 'Asset @ Interest Rate' }]);
+                summaryHTML += getDynamicSummary('liabilities-container', 'Liabilities', [{ label: 'Type', name: 'Liability @ Type' }, { label: 'Creditor', name: 'Liability @ Creditor\'s Name' }, { label: 'Balance', name: 'Liability @ Balance Owed' }, { label: 'Payment', name: 'Liability @ Monthly Payment' }]);
+
+
+                // --- PAGE 5: AUTHORIZATION ---
+                summaryHTML += `<h3 class="summary-section-title">PAGE 5: AUTHORIZATION & AGREEMENT</h3>`;
+                const agreed = data['agreement'] ? '☑ AGREED (Signature Placeholder)' : '☐ NOT AGREED';
+                summaryHTML += `<div class="mt-4 text-lg font-bold p-3 border-2 border-red-500 bg-red-50 text-center">${agreed}</div>`;
                 
                 // Final Authorization and Print Button
                 summaryHTML += `<div class="mt-8 text-center no-print">
@@ -840,7 +954,9 @@
                 const fromDateInput = document.getElementById('timeAtCurrentFrom');
                 const toDateInput = document.getElementById('timeAtCurrentTo');
                 const wrapper = document.getElementById('prev-address-container-wrapper');
-                const prevInputs = document.querySelectorAll('#prev-address-container input');
+                
+                // Get all required inputs in the section
+                const inputsToToggle = wrapper.querySelectorAll('input, textarea');
 
                 let isRequired = false;
 
@@ -855,15 +971,17 @@
 
                 if (isRequired) {
                     wrapper.classList.remove('hidden');
-                    // Mark inputs as required if the section is visible and does not have at least one entry
-                    if (document.querySelectorAll('#prev-address-container .dynamic-item').length === 0) {
-                         prevInputs.forEach(input => input.setAttribute('required', ''));
+                    // Mark inputs as required for the first dynamic block if present
+                    const firstBlockInputs = wrapper.querySelector('.dynamic-item input');
+                    if(firstBlockInputs) {
+                        inputsToToggle.forEach(input => input.setAttribute('required', ''));
+                    } else if (document.querySelectorAll('#prev-address-container .dynamic-item').length === 0) {
                          // Add the first block if required and none exist
-                         if (document.querySelectorAll('#prev-address-container .dynamic-item').length === 0) createPrevAddressBlock();
+                         createPrevAddressBlock();
                     }
                 } else {
                     wrapper.classList.add('hidden');
-                    prevInputs.forEach(input => input.removeAttribute('required'));
+                    inputsToToggle.forEach(input => input.removeAttribute('required'));
                 }
             };
 
