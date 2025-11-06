@@ -106,7 +106,7 @@
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
             <p class="text-sm text-gray-600 font-semibold">In Accordance with Seminole County NSP Rentals Program</p>
             <p class="text-sm text-red-600 font-bold">AII INCOMPLETE applications will be REJECTED. Tel: (407) 702-3281 / Fax: (866) 858-5371</p>
-            <p class="text-sm text-gray-500">Eff date 10 01 2025 v57.3</p>
+            <p class="text-sm text-gray-500">Eff date 11 06 2025 v58.0 Final</p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -415,6 +415,7 @@
                             <span class="label-text">6. Have you or any household member ever been denied housing?</span>
                             <div class="radio-group mt-2">
                                 <label class="radio-label"><input type="radio" name="Q6_DeniedHousing" value="yes" class="radio-input mr-2" onclick="toggleExplain(this, 'q6-explain', true)">Yes</label>
+                                <label class="radio-label"><input type="radio" name="Q6_DeniedHousing" value="no" class="radio-input mr-2" onclick="toggleExplain(this, 'q6-explain', true)" checked>No</label>
                             </div>
                             <div id="q6-explain" class="explain-box"><label class="label-text text-sm">Explain (Required if Yes):</label><textarea class="input-field" name="Q6_DeniedHousing_Explanation" rows="2"></textarea></div>
                         </div>
@@ -663,17 +664,6 @@
                         togglePreviousAddress(); // Check 4-year rule and set required status
                          // After toggle, re-validate Section 2 if Previous Address became required
                          if (!isCurrentSectionValid()) return;
-                    }
-                     // Run logic specific to the section we are *leaving*
-                    if (currentStep === 4) {
-                        // Check if at least one Applicant Employment block exists and is filled
-                        const applicantEmploymentContainer = document.getElementById('employment-applicant-container');
-                        const applicantEmploymentBlocks = applicantEmploymentContainer.querySelectorAll('.dynamic-item');
-
-                        if (applicantEmploymentBlocks.length === 0) {
-                            alert('Applicant must provide at least one block of employment history.');
-                            return;
-                        }
                     }
                     
                     // If valid, advance the page
