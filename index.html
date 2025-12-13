@@ -15,7 +15,19 @@
         .form-section.active { display: block; }
         .step-item-active { border-color: #3b82f6; color: #3b82f6; }
         .step-item-complete { border-color: #16a34a; color: #16a34a; background-color: #f0fdf4; }
-        .input-field { @apply w-full px-2 py-1 text-gray-700 bg-white border border-gray-300 rounded-sm text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200; }
+        
+        /* Default Input Style */
+        .input-field { 
+            @apply w-full px-2 py-1 text-gray-700 bg-white border border-gray-300 rounded-sm text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200; 
+        }
+        
+        /* Error Input Style (Applied via JS) */
+        .input-error {
+            border-color: #ef4444 !important; /* Red-500 */
+            background-color: #fef2f2 !important; /* Red-50 */
+            box-shadow: 0 0 0 1px #ef4444 !important;
+        }
+
         .label-text { @apply block text-sm font-medium text-gray-800 py-1; }
         .dynamic-item .remove-btn { display: none; }
         .dynamic-item:hover .remove-btn { display: block; }
@@ -63,7 +75,7 @@
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
             <p class="text-sm text-gray-600 font-semibold">In Accordance with Seminole County NSP Rentals Program</p>
             <p class="text-sm text-red-600 font-bold">AII INCOMPLETE applications will be REJECTED. Tel: (407) 702-3281 / Fax: (866) 858-5371</p>
-            <p class="text-sm text-gray-500">Eff date 10 01 25 vBETA 1.1</p>
+            <p class="text-sm text-gray-500">Eff date 10 01 25 v51.0</p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -100,32 +112,38 @@
                         <div>
                             <h3 class="text-lg font-semibold mb-3 text-gray-700 border-b pb-1">Required Documentation Checklist</h3>
                             <div class="space-y-2">
+                                <!-- First 5 are REQUIRED -->
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeQualified" class="mr-2" required>I/We understand that this property is owned by a private company and subject to Maximum Income Qualification.</label>
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeRatio" class="mr-2" required>Our Household Income is at least 3 times the monthly Rent amount.</label>
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_AdultSignatures" class="mr-2" required>All adult household members (18+) must sign page 6.</label>
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_PhotoID" class="mr-2" required>Attach: Copies of photo Identification for all adult household members.</label>
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_SocialSecurityCards" class="mr-2" required>Attach: Copies of Social Security Cards for all household members.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_BirthCertificates" class="mr-2" required>Copies of birth certificates for all household members under 18.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_PayStubs" class="mr-2" required>Attach: SIX (6) most current pay check stubs.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_RentProof" class="mr-2" required>Attach: Proof of last SIX (6) month's rent or mortgage payments.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_SelfEmployedTax" class="mr-2" required>Attach: If Self-Employed, please provide a signed copy of last year's tax return.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeExpenseReports" class="mr-2" required>Attach: If Self-Employed, provide three months of income/expense reports.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_NoIncomeStatement" class="mr-2" required>Attach: Notarized statement for adult household members with no income.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_EmployerLetter" class="mr-2" required>Attach: Letter from employer(s).</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_BankStatements" class="mr-2" required>Attach: Last six (6) months of bank statements.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_AssetsLiabilities" class="mr-2" required>Attach: Documentation for all Assets and Liabilities.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_CreditReport" class="mr-2" required>Attach: Copy of credit report for all adults.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_CriminalCheck" class="mr-2" required>Attach: Criminal background check for all adults.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_ApplicationFee" class="mr-2" required>Attach: Proof of $50 non-refundable application fee payment.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_AnimalPhotos" class="mr-2" required>Attach: Photos of any animals that will be living on the premises.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_OccupancyLimit" class="mr-2" required>I/We understand the unit has occupancy limits.</label>
+                                
+                                <!-- Remaining 13 are OPTIONAL (Not Required) -->
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_BirthCertificates" class="mr-2">Copies of birth certificates for all household members under 18.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_PayStubs" class="mr-2">Attach: SIX (6) most current pay check stubs.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_RentProof" class="mr-2">Attach: Proof of last SIX (6) month's rent or mortgage payments.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_SelfEmployedTax" class="mr-2">Attach: If Self-Employed, please provide a signed copy of last year's tax return.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeExpenseReports" class="mr-2">Attach: If Self-Employed, provide three months of income/expense reports.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_NoIncomeStatement" class="mr-2">Attach: Notarized statement for adult household members with no income.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_EmployerLetter" class="mr-2">Attach: Letter from employer(s).</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_BankStatements" class="mr-2">Attach: Last six (6) months of bank statements.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_AssetsLiabilities" class="mr-2">Attach: Documentation for all Assets and Liabilities.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_CreditReport" class="mr-2">Attach: Copy of credit report for all adults.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_CriminalCheck" class="mr-2">Attach: Criminal background check for all adults.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_ApplicationFee" class="mr-2">Attach: Proof of $50 non-refundable application fee payment.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_AnimalPhotos" class="mr-2">Attach: Photos of any animals that will be living on the premises.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_OccupancyLimit" class="mr-2">I/We understand the unit has occupancy limits.</label>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- SECTION 2: Address & History (3-Column & Vertical Stack Fix) -->
+                <!-- SECTION 2: Address & History (3-Column & Vertical Stack) -->
                 <section id="section-2" class="form-section">
+                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">Detailed Applicant Data & Rental History</h2>
+                    <p class="text-gray-600 mb-6">Enter personal details, identification, and rental history for all relevant parties.</p>
+
                     <div class="data-grid space-y-4 border p-4 rounded-lg bg-white shadow-sm mb-8">
                         <div class="text-sm font-bold description-col border-b pb-2 text-gray-800">DESCRIPTION</div>
                         <div class="text-sm font-bold text-center border-b pb-2 text-gray-800">APPLICANT</div>
@@ -184,11 +202,10 @@
                           <div class="field-container"><div class="flex gap-2"><label><input type="radio" name="Foreclosed CoApp" value="Yes"> Yes</label><label><input type="radio" name="Foreclosed CoApp" value="No"> No</label></div></div>
                     </div>
 
-                    <!-- CURRENT ADDRESS VERTICAL STACK (Left Column Style) -->
+                    <!-- CURRENT ADDRESS VERTICAL STACK -->
                     <div class="mt-8">
                         <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Current Address</h3>
                         <div class="p-4 border border-gray-200 rounded-lg bg-gray-50 flex flex-col gap-3 max-w-lg">
-                            <!-- Vertical Stack as Requested -->
                             <div><label class="label-text">Street Address</label><input type="text" name="Current Street Address" class="input-field" required></div>
                             <div><label class="label-text">City, State, Zip</label><input type="text" name="Current City State Zip" class="input-field" required></div>
                             <div><label class="label-text">Contact Person</label><input type="text" name="Current Contact Person" class="input-field" required></div>
@@ -200,7 +217,6 @@
                             <div><label class="label-text">Reason For Leaving</label><input type="text" name="Reason For Leaving" class="input-field" required></div>
                         </div>
 
-                         <!-- Previous Address Dynamic Blocks (Hidden by default) -->
                          <div id="prev-address-container-wrapper" class="hidden mt-6">
                             <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Previous Address History (Required)</h3>
                             <div id="prev-address-container" class="space-y-4"></div>
@@ -209,19 +225,17 @@
                     </div>
                 </section>
 
-                <!-- SECTION 3: Household Members (3-Column Layout) -->
+                <!-- SECTION 3: Household Members -->
                 <section id="section-3" class="form-section">
                     <h2 class="text-2xl font-semibold mb-2 text-gray-800">Household Members</h2>
                     <p class="text-gray-600 mb-6 border-b pb-4">List all other persons who will occupy the unit (excluding Applicant and Co-Applicant).</p>
                     
-                    <!-- Header Row -->
                     <div class="household-grid mb-2">
                          <div class="text-sm font-bold text-gray-800">Name</div>
                          <div class="text-sm font-bold text-gray-800">Date of Birth</div>
                          <div class="text-sm font-bold text-gray-800">Relationship to Applicant</div>
                     </div>
 
-                    <!-- Dynamic Container -->
                     <div id="household-members-container" class="space-y-4"></div>
                     <button type="button" id="add-member-btn" class="mt-4 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200">+ Add Household Member</button>
                 </section>
@@ -351,7 +365,7 @@
             };
 
             // Dynamic Blocks
-            const createDynamicBlock = (containerId, titlePrefix, innerHTMLCallback) => {
+            const createDynamicBlock = (containerId, innerHTMLCallback) => {
                 const container = document.getElementById(containerId);
                 const count = container.querySelectorAll('.dynamic-item').length + 1;
                 const newBlock = document.createElement('div');
@@ -361,7 +375,7 @@
             };
 
             const createPrevAddressBlock = () => {
-                createDynamicBlock('prev-address-container', 'Previous Residence', (count) => `
+                createDynamicBlock('prev-address-container', (count) => `
                     <div class="space-y-2">
                         <h4 class="font-semibold mb-2 text-sm">Previous Residence ${count}</h4>
                         <div><label class="label-text text-xs">Street Address</label><input type="text" name="Previous Address ${count} Street" class="input-field" required></div>
@@ -373,12 +387,32 @@
 
             const createHouseholdMemberBlock = () => {
                 // Uses the 3-column grid layout for new members
-                createDynamicBlock('household-members-container', 'Household Member', (count) => `
+                createDynamicBlock('household-members-container', (count) => `
                     <div class="household-grid">
                         <div><input type="text" name="Household Member ${count} Name" class="input-field" required></div>
                         <div><input type="date" name="Household Member ${count} DOB" class="input-field" required></div>
                         <div><input type="text" name="Household Member ${count} Relationship" class="input-field" required></div>
                     </div>`);
+            };
+            
+             // START: Real-Time Validation
+            const enableRealTimeValidation = (section) => {
+                const inputs = section.querySelectorAll('input, select, textarea');
+                inputs.forEach(input => {
+                    input.addEventListener('blur', function() {
+                        if (!this.checkValidity()) {
+                            this.classList.add('input-error');
+                        } else {
+                            this.classList.remove('input-error');
+                        }
+                    });
+                    
+                    input.addEventListener('input', function() {
+                        if (this.checkValidity()) {
+                            this.classList.remove('input-error');
+                        }
+                    });
+                });
             };
 
             // Event Listeners
@@ -387,7 +421,7 @@
                 const currentSection = document.getElementById(`section-${currentStep}`);
                 // Select only elements that are required AND visible
                 const requiredInputs = Array.from(currentSection.querySelectorAll('[required]')).filter(input => {
-                     return input.offsetParent !== null; 
+                     return input.offsetParent !== null; // offsetParent is null if element or ancestor is hidden
                 });
 
                 let isValid = true;
@@ -399,6 +433,7 @@
                         input.reportValidity(); 
                     } else if (!input.checkValidity()) {
                         isValid = false;
+                        input.classList.add('input-error'); // Add visual error
                         input.reportValidity(); 
                     }
                 });
@@ -411,6 +446,9 @@
                         updateButtons(); 
                         updateProgressBar(); 
                         window.scrollTo(0, 0); 
+                         // Enable real-time validation for the next section
+                         const nextSection = document.getElementById(`section-${currentStep}`);
+                         enableRealTimeValidation(nextSection);
                     }
                 }
             });
@@ -454,6 +492,9 @@
             showSection(1);
             updateButtons();
             updateProgressBar();
+            
+            // Enable validation on first section immediately
+            enableRealTimeValidation(document.getElementById('section-1'));
         });
     </script>
 </body>
