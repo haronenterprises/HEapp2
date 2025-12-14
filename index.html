@@ -38,10 +38,17 @@
             align-items: center;
         }
         
-        /* 3-Column Grid for Section 3 (Household Members) */
+        /* 3-Column Grid for Household/Financials */
         .household-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        /* 4-Column Grid for Liabilities */
+        .liability-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
             gap: 1rem;
         }
 
@@ -63,7 +70,7 @@
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
             <p class="text-sm text-gray-600 font-semibold">In Accordance with Seminole County NSP Rentals Program</p>
             <p class="text-sm text-red-600 font-bold">AII INCOMPLETE applications will be REJECTED. Tel: (407) 702-3281 / Fax: (866) 858-5371</p>
-            <p class="text-sm text-gray-500">Eff date 10 01 25 vBETA 1.3</p>
+            <p class="text-sm text-gray-500">Eff date 10 01 25 vBETA 1.4</p>
         </header>
 
         <div id="application-wizard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -100,13 +107,14 @@
                         <div>
                             <h3 class="text-lg font-semibold mb-3 text-gray-700 border-b pb-1">Required Documentation Checklist</h3>
                             <div class="space-y-2">
+                                <!-- First 5 are REQUIRED -->
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeQualified" class="mr-2" required>I/We understand that this property is owned by a private company and subject to Maximum Income Qualification.</label>
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeRatio" class="mr-2" required>Our Household Income is at least 3 times the monthly Rent amount.</label>
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_AdultSignatures" class="mr-2" required>All adult household members (18+) must sign page 6.</label>
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_PhotoID" class="mr-2" required>Attach: Copies of photo Identification for all adult household members.</label>
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_SocialSecurityCards" class="mr-2" required>Attach: Copies of Social Security Cards for all household members.</label>
                                 
-                                <!-- Optional Boxes -->
+                                <!-- Remaining 13 are OPTIONAL -->
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_BirthCertificates" class="mr-2">Copies of birth certificates for all household members under 18.</label>
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_PayStubs" class="mr-2">Attach: SIX (6) most current pay check stubs.</label>
                                 <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_RentProof" class="mr-2">Attach: Proof of last SIX (6) month's rent or mortgage payments.</label>
@@ -134,7 +142,7 @@
                     <div class="data-grid space-y-4 border p-4 rounded-lg bg-white shadow-sm mb-8">
                         <div class="text-sm font-bold description-col border-b pb-2 text-gray-800">DESCRIPTION</div>
                         <div class="text-sm font-bold text-center border-b pb-2 text-gray-800">APPLICANT</div>
-                        <div class="text-sm font-bold text-center border-b pb-2 text-gray-800">CO-APPLICANT / RELATIVE</div>
+                        <div class="text-sm font-bold text-center border-b pb-2 text-gray-800">CO-APPLICANT</div>
 
                         <div class="description-col">Full Name</div>
                         <div class="field-container"><input type="text" name="Full Name Applicant" class="input-field" required></div>
@@ -193,7 +201,6 @@
                     <div class="mt-8">
                         <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Current Address</h3>
                         <div class="p-4 border border-gray-200 rounded-lg bg-gray-50 flex flex-col gap-3 max-w-lg">
-                            <!-- Vertical Stack as Requested -->
                             <div><label class="label-text">Street Address</label><input type="text" name="Current Street Address" class="input-field" required></div>
                             <div><label class="label-text">City, State, Zip</label><input type="text" name="Current City State Zip" class="input-field" required></div>
                             <div><label class="label-text">Contact Person</label><input type="text" name="Current Contact Person" class="input-field" required></div>
@@ -205,7 +212,6 @@
                             <div><label class="label-text">Reason For Leaving</label><input type="text" name="Reason For Leaving" class="input-field" required></div>
                         </div>
 
-                         <!-- Previous Address Dynamic Blocks (Hidden by default) -->
                          <div id="prev-address-container-wrapper" class="hidden mt-6">
                             <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Previous Address History (Required)</h3>
                             <div id="prev-address-container" class="space-y-4"></div>
@@ -229,10 +235,72 @@
                     <button type="button" id="add-member-btn" class="mt-4 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200">+ Add Household Member</button>
                 </section>
 
-                <!-- SECTION 4: Financial Placeholder -->
+                <!-- SECTION 4: Financial Information (NEW vBETA 1.4) -->
                 <section id="section-4" class="form-section">
-                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">Financial Information</h2>
-                    <p class="text-gray-600">Placeholder for Financial Info.</p>
+                    <h2 class="text-2xl font-semibold mb-2 text-gray-800">Financial & Employment Information</h2>
+                    <p class="text-gray-600 mb-6 border-b pb-4">Employment history must cover 4 years minimum.</p>
+
+                    <!-- Current Employment -->
+                    <div class="mb-8">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-3">Current Employment</h3>
+                        <div class="p-4 border border-gray-200 rounded-lg bg-gray-50 flex flex-col gap-3">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div><label class="label-text">Employer Name</label><input type="text" name="Current Employer Name" class="input-field" required></div>
+                                <div><label class="label-text">Phone Number</label><input type="tel" name="Current Employer Phone" class="input-field" required></div>
+                            </div>
+                            <div><label class="label-text">Address</label><input type="text" name="Current Employer Address" class="input-field" required></div>
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div><label class="label-text">Position</label><input type="text" name="Current Employer Position" class="input-field" required></div>
+                                <div><label class="label-text">Pay Rate</label><input type="text" name="Current Employer Pay Rate" class="input-field" required></div>
+                                <div><label class="label-text">Annual Income</label><input type="text" name="Current Employer Annual Income" class="input-field" required></div>
+                                <div><label class="label-text">Time Employed</label><input type="text" name="Current Employer Time Employed" class="input-field" required></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Previous Employment -->
+                    <div class="mb-8">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-2">Previous Employment History</h3>
+                        <div id="prev-employment-container" class="space-y-4"></div>
+                        <button type="button" id="add-employment-btn" class="mt-2 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200">+ Add Previous Employment</button>
+                    </div>
+
+                    <!-- Other Income -->
+                    <div class="mb-8">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-2">Other Sources of Income</h3>
+                        <div class="household-grid mb-2">
+                             <div class="text-sm font-bold text-gray-800">Type of Income</div>
+                             <div class="text-sm font-bold text-gray-800">Gross Annual Amount</div>
+                             <div></div>
+                        </div>
+                        <div id="income-container" class="space-y-2"></div>
+                        <button type="button" id="add-income-btn" class="mt-2 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200">+ Add Income Source</button>
+                    </div>
+
+                    <!-- Assets -->
+                    <div class="mb-8">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-2">Assets</h3>
+                        <div class="household-grid mb-2">
+                             <div class="text-sm font-bold text-gray-800">Type of Asset</div>
+                             <div class="text-sm font-bold text-gray-800">Asset Value</div>
+                             <div class="text-sm font-bold text-gray-800">Interest Rate / Income</div>
+                        </div>
+                        <div id="asset-container" class="space-y-2"></div>
+                        <button type="button" id="add-asset-btn" class="mt-2 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200">+ Add Asset</button>
+                    </div>
+
+                    <!-- Liabilities -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-700 mb-2">Liabilities</h3>
+                        <div class="liability-grid mb-2">
+                             <div class="text-sm font-bold text-gray-800">Type of Credit/Loan</div>
+                             <div class="text-sm font-bold text-gray-800">Creditor's Name</div>
+                             <div class="text-sm font-bold text-gray-800">Balance Owed</div>
+                             <div class="text-sm font-bold text-gray-800">Monthly Payment</div>
+                        </div>
+                        <div id="liability-container" class="space-y-2"></div>
+                        <button type="button" id="add-liability-btn" class="mt-2 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200">+ Add Liability</button>
+                    </div>
                 </section>
 
                 <!-- SECTION 5: History Placeholder -->
@@ -276,7 +344,7 @@
             const submitBtn = document.getElementById('submit-btn');
             const spacer = document.getElementById('spacer');
 
-            // Set current date on Page 1
+            // Set current date
             const today = new Date();
             const yyyy = today.getFullYear();
             let mm = today.getMonth() + 1; 
@@ -377,7 +445,7 @@
             };
 
             // Dynamic Blocks
-            const createDynamicBlock = (containerId, titlePrefix, innerHTMLCallback) => {
+            const createDynamicBlock = (containerId, innerHTMLCallback) => {
                 const container = document.getElementById(containerId);
                 const count = container.querySelectorAll('.dynamic-item').length + 1;
                 const newBlock = document.createElement('div');
@@ -387,24 +455,66 @@
             };
 
             const createPrevAddressBlock = () => {
-                createDynamicBlock('prev-address-container', 'Previous Residence', (count) => `
+                createDynamicBlock('prev-address-container', (count) => `
                     <div class="space-y-2">
                         <h4 class="font-semibold mb-2 text-sm">Previous Residence ${count}</h4>
                         <div><label class="label-text text-xs">Street Address</label><input type="text" name="Previous Address ${count} Street" class="input-field" required></div>
                         <div><label class="label-text text-xs">City/State/Zip</label><input type="text" name="Previous Address ${count} CityStateZip" class="input-field" required></div>
                         <div><label class="label-text text-xs">From Date</label><input type="date" name="Previous Address ${count} From" class="input-field" required></div>
                         <div><label class="label-text text-xs">To Date</label><input type="date" name="Previous Address ${count} To" class="input-field" required></div>
+                        <div><label class="label-text text-xs">Landlord Name/Phone</label><input type="text" name="Previous Address ${count} Landlord" class="input-field" required></div>
+                        <div><label class="label-text text-xs">Reason for Leaving</label><input type="text" name="Previous Address ${count} Reason" class="input-field" required></div>
                     </div>`);
             };
 
             const createHouseholdMemberBlock = () => {
                 // Uses the 3-column grid layout for new members - NOT REQUIRED
-                createDynamicBlock('household-members-container', 'Household Member', (count) => `
+                createDynamicBlock('household-members-container', (count) => `
                     <div class="household-grid">
                         <div><input type="text" name="Household Member ${count} Name" class="input-field"></div>
                         <div><input type="date" name="Household Member ${count} DOB" class="input-field"></div>
                         <div><input type="text" name="Household Member ${count} Relationship" class="input-field"></div>
                     </div>`);
+            };
+
+            const createEmploymentBlock = () => {
+                createDynamicBlock('prev-employment-container', (count) => `
+                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><label class="label-text text-xs">Employer Name</label><input type="text" name="Prev Employment ${count} Employer Name" class="input-field"></div>
+                        <div><label class="label-text text-xs">Phone Number</label><input type="text" name="Prev Employment ${count} Phone Number" class="input-field"></div>
+                        <div class="md:col-span-2"><label class="label-text text-xs">Address</label><input type="text" name="Prev Employment ${count} Address" class="input-field"></div>
+                        <div><label class="label-text text-xs">Position</label><input type="text" name="Prev Employment ${count} Position" class="input-field"></div>
+                        <div><label class="label-text text-xs">Pay Rate</label><input type="text" name="Prev Employment ${count} Pay Rate" class="input-field"></div>
+                        <div><label class="label-text text-xs">Annual Income</label><input type="text" name="Prev Employment ${count} Annual Income" class="input-field"></div>
+                        <div><label class="label-text text-xs">Time Employed</label><input type="text" name="Prev Employment ${count} Time Employed" class="input-field"></div>
+                    </div>`);
+            };
+
+            const createIncomeBlock = () => {
+                createDynamicBlock('income-container', (count) => `
+                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div><input type="text" name="Income ${count} Type" class="input-field"></div>
+                        <div><input type="text" name="Income ${count} Amount" class="input-field"></div>
+                     </div>`);
+            };
+
+            const createAssetBlock = () => {
+                createDynamicBlock('asset-container', (count) => `
+                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div><input type="text" name="Asset ${count} Type" class="input-field"></div>
+                        <div><input type="text" name="Asset ${count} Value" class="input-field"></div>
+                        <div><input type="text" name="Asset ${count} Rate" class="input-field"></div>
+                     </div>`);
+            };
+
+            const createLiabilityBlock = () => {
+                createDynamicBlock('liability-container', (count) => `
+                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                        <div><input type="text" name="Liability ${count} Type" class="input-field"></div>
+                        <div><input type="text" name="Liability ${count} Name" class="input-field"></div>
+                        <div><input type="text" name="Liability ${count} Balance" class="input-field"></div>
+                        <div><input type="text" name="Liability ${count} Payment" class="input-field"></div>
+                     </div>`);
             };
 
             // Event Listeners
@@ -468,8 +578,13 @@
 
             const dateFields = [document.getElementById('timeAtCurrentFrom'), document.getElementById('timeAtCurrentTo')];
             dateFields.forEach(f => f.addEventListener('input', () => { if(f.checkValidity()) togglePreviousAddress(); }));
+            
             document.getElementById('add-prev-address-btn').addEventListener('click', createPrevAddressBlock);
             document.getElementById('add-member-btn').addEventListener('click', createHouseholdMemberBlock);
+            document.getElementById('add-employment-btn').addEventListener('click', createEmploymentBlock);
+            document.getElementById('add-income-btn').addEventListener('click', createIncomeBlock);
+            document.getElementById('add-asset-btn').addEventListener('click', createAssetBlock);
+            document.getElementById('add-liability-btn').addEventListener('click', createLiabilityBlock);
 
             // Init
             createPrevAddressBlock(); // Init hidden prev address
