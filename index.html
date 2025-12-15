@@ -6,64 +6,59 @@
     <title>Haron Enterprises, LLC - Residential Lease Application</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #f8f7f4; font-family: 'Inter', sans-serif; }
+        body {
+            background-color: #f8f7f4; 
+            font-family: 'Inter', sans-serif;
+        }
         @import url('https://rsms.me/inter/inter.css');
-        
-        /* Form Visibility */
         .form-section { display: none; }
         .form-section.active { display: block; }
-        
-        /* Progress Bar */
         .step-item-active { border-color: #3b82f6; color: #3b82f6; }
         .step-item-complete { border-color: #16a34a; color: #16a34a; background-color: #f0fdf4; }
-        
-        /* Inputs */
         .input-field { @apply w-full px-2 py-1 text-gray-700 bg-white border border-gray-300 rounded-sm text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200; }
         .label-text { @apply block text-sm font-medium text-gray-800 py-1; }
-        .input-error { border-color: #ef4444 !important; background-color: #fef2f2 !important; }
-
-        /* Dynamic Buttons */
         .dynamic-item .remove-btn { display: none; }
         .dynamic-item:hover .remove-btn { display: block; }
         
-        /* Custom Grids */
+        /* 3-Column Grid for Section 2 */
         .data-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 1rem; }
         .description-col { font-weight: 500; color: #1f2937; padding-top: 0.35rem; line-height: 2.25rem; }
         .field-container { min-height: 40px; display: flex; align-items: center; }
         .household-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
-        
-        /* Print/PDF View Styles */
-        #print-view { display: none; }
+
+        /* Print Styles - Crucial for PDF generation */
         @media print {
-            body { background-color: white; }
-            #application-wizard, .no-print { display: none !important; }
+            body { background: #fff; padding: 0; margin: 0; }
+            #navigation-controls, #progress-bar, #header, #application-wizard { display: none !important; }
             #print-view { display: block !important; }
-            .print-section { margin-bottom: 1.5rem; page-break-inside: avoid; border: 1px solid #000; padding: 10px; }
-            .print-header { background-color: #e5e7eb; font-weight: bold; padding: 5px; margin: -10px -10px 10px -10px; border-bottom: 1px solid #000; }
-            .print-row { display: flex; border-bottom: 1px solid #eee; padding: 2px 0; }
-            .print-label { width: 40%; font-weight: 600; font-size: 12px; }
-            .print-value { width: 60%; font-size: 12px; }
-            .print-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-            .checkbox-print { font-family: monospace; }
+            .no-print { display: none !important; }
+            
+            /* Page Break Logic */
+            .page-break { page-break-before: always; }
+            
+            /* Print Layout Tweaks */
+            .print-container { padding: 40px; max-width: 100%; }
+            .print-section-header { background-color: #f3f4f6; border-bottom: 2px solid #000; padding: 5px; font-weight: bold; margin-bottom: 10px; -webkit-print-color-adjust: exact; }
+            .checkbox-list-item { margin-bottom: 4px; display: flex; align-items: flex-start; page-break-inside: avoid; }
+            .print-check-box { width: 16px; height: 16px; border: 1px solid #000; margin-right: 10px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; }
         }
+        
+        /* Screen styles for the print view (before actual printing) */
+        #print-view { display: none; background: white; min-height: 100vh; }
     </style>
 </head>
 <body class="antialiased text-gray-800">
 
-    <div class="container mx-auto px-4 py-8 md:py-12">
-        
-        <!-- Header -->
-        <header id="header" class="text-center mb-10 no-print">
+    <div class="container mx-auto px-4 py-8 md:py-12 no-print">
+        <header id="header" class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Haron Enterprises, LLC</h1>
             <p class="mt-2 text-lg text-gray-600">Residential Lease Application</p>
             <p class="text-sm text-gray-600 font-semibold">In Accordance with Seminole County NSP Rentals Program</p>
             <p class="text-sm text-red-600 font-bold">AII INCOMPLETE applications will be REJECTED. Tel: (407) 702-3281 / Fax: (866) 858-5371</p>
-            <p class="text-sm text-gray-500">Eff date 10 01 25 vBETA 1.8</p>
+            <p class="text-sm text-gray-500">Eff date 10 01 25 vBETA 1.9</p>
         </header>
 
-        <!-- Main Wizard Container -->
         <div id="application-wizard" class="max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
-            <!-- Progress Bar -->
             <div id="progress-bar" class="p-6 border-b border-gray-200">
                 <div class="flex items-center justify-between text-xs md:text-sm">
                     <div id="step-1" class="step-item step-item-active w-1/6 text-center"><div class="border-b-4 pb-2 font-semibold">Checklist</div></div>
@@ -76,8 +71,9 @@
             </div>
 
             <form id="rental-application-form" class="p-6 md:p-8">
+                <div id="status-message" class="text-sm px-4 py-2 rounded-md mb-4 hidden" role="alert"></div>
                 
-                <!-- SECTION 1: Checklist -->
+                <!-- SECTION 1 -->
                 <section id="section-1" class="form-section active">
                     <h2 class="text-2xl font-semibold mb-3 text-gray-800">APPLICATION CHECKLIST</h2>
                     <p class="text-gray-600 mb-6 border-b pb-4">Please review and confirm the initial requirements.</p>
@@ -94,28 +90,27 @@
                         <div>
                             <h3 class="text-lg font-semibold mb-3 text-gray-700 border-b pb-1">Required Documentation Checklist</h3>
                             <div class="space-y-2">
-                                <!-- First 5 REQUIRED -->
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeQualified" class="mr-2" required>I/We understand property is subject to Max Income Qualification.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeRatio" class="mr-2" required>Household Income is at least 3x monthly Rent.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_AdultSignatures" class="mr-2" required>All adult members (18+) must sign page 6.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_PhotoID" class="mr-2" required>Attach: Copies of photo ID for all adults.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_SocialSecurityCards" class="mr-2" required>Attach: Copies of SSN Cards for all members.</label>
+                                <!-- Checkboxes -->
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="1. Income Qualified" class="mr-2" required>I/We understand that this property is owned by a private company and subject to Maximum Income Qualification.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="2. Income Ratio" class="mr-2" required>Our Household Income is at least 3 times the monthly Rent amount.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="3. Adult Signatures" class="mr-2" required>All adult household members (18+) must sign page 6.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="4. Photo ID" class="mr-2" required>Attach: Copies of photo Identification for all adult household members.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="5. SSN Cards" class="mr-2" required>Attach: Copies of Social Security Cards for all household members.</label>
                                 
-                                <!-- 13 OPTIONAL -->
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_BirthCertificates" class="mr-2">Copies of birth certificates (under 18).</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_PayStubs" class="mr-2">Attach: SIX (6) most current pay stubs.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_RentProof" class="mr-2">Attach: Proof of last SIX (6) month's rent/mortgage.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_SelfEmployedTax" class="mr-2">Attach: If Self-Employed, signed last year's tax return.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_IncomeExpenseReports" class="mr-2">Attach: If Self-Employed, 3 months income reports.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_NoIncomeStatement" class="mr-2">Attach: Notarized statement for no income.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_EmployerLetter" class="mr-2">Attach: Letter from employer(s).</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_BankStatements" class="mr-2">Attach: Last six (6) months bank statements.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_AssetsLiabilities" class="mr-2">Attach: Documentation for all Assets/Liabilities.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_CreditReport" class="mr-2">Attach: Copy of credit report for all adults.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_CriminalCheck" class="mr-2">Attach: Criminal background check for all adults.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_ApplicationFee" class="mr-2">Attach: Proof of $50 application fee payment.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_AnimalPhotos" class="mr-2">Attach: Photos of any animals.</label>
-                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="Checklist_OccupancyLimit" class="mr-2">I/We understand the unit has occupancy limits.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="6. Birth Certs" class="mr-2">Copies of birth certificates for all household members under 18.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="7. Pay Stubs" class="mr-2">Attach: SIX (6) most current pay check stubs.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="8. Rent Proof" class="mr-2">Attach: Proof of last SIX (6) month's rent or mortgage payments.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="9. Self Employed Tax" class="mr-2">Attach: If Self-Employed, please provide a signed copy of last year's tax return.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="10. Self Employed Reports" class="mr-2">Attach: If Self-Employed, provide three months of income/expense reports.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="11. No Income Stmt" class="mr-2">Attach: Notarized statement for adult household members with no income.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="12. Employer Letter" class="mr-2">Attach: Letter from employer(s).</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="13. Bank Stmts" class="mr-2">Attach: Last six (6) months of bank statements.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="14. Assets/Liab" class="mr-2">Attach: Documentation for all Assets and Liabilities.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="15. Credit Report" class="mr-2">Attach: Copy of credit report for all adults.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="16. Criminal Check" class="mr-2">Attach: Criminal background check for all adults.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="17. App Fee" class="mr-2">Attach: Proof of $50 non-refundable application fee payment.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="18. Animal Photos" class="mr-2">Attach: Photos of any animals that will be living on the premises.</label>
+                                <label class="flex items-center text-sm text-gray-700"><input type="checkbox" name="19. Occupancy" class="mr-2">I/We understand the unit has occupancy limits.</label>
                             </div>
                         </div>
                     </div>
@@ -141,13 +136,37 @@
                         <div class="field-container"><input type="tel" name="Phone Applicant" class="input-field" required pattern="[0-9]{10}"></div>
                         <div class="field-container"><input type="tel" name="Phone CoApplicant" class="input-field" pattern="[0-9]{10}"></div>
 
-                        <div class="description-col">Social Security Number</div>
+                        <div class="description-col">SSN</div>
                         <div class="field-container"><input type="text" name="SSN Applicant" class="input-field" required pattern="[0-9]{9}"></div>
                         <div class="field-container"><input type="text" name="SSN CoApplicant" class="input-field" pattern="[0-9]{9}"></div>
 
-                        <div class="description-col">Email Address</div>
+                        <div class="description-col">Email</div>
                         <div class="field-container"><input type="email" name="Email Applicant" class="input-field" required></div>
                         <div class="field-container"><input type="email" name="Email CoApplicant" class="input-field"></div>
+
+                        <div class="description-col">Armed Services?</div>
+                         <div class="field-container"><div class="flex gap-2"><label><input type="radio" name="Armed Services App" value="Yes"> Yes</label><label><input type="radio" name="Armed Services App" value="No"> No</label></div></div>
+                          <div class="field-container"><div class="flex gap-2"><label><input type="radio" name="Armed Services CoApp" value="Yes"> Yes</label><label><input type="radio" name="Armed Services CoApp" value="No"> No</label></div></div>
+
+                        <div class="description-col">DL #</div>
+                        <div class="field-container"><input type="text" name="DL Applicant" class="input-field" required></div>
+                        <div class="field-container"><input type="text" name="DL CoApplicant" class="input-field"></div>
+
+                        <div class="description-col">Vehicle Make</div>
+                        <div class="field-container"><input type="text" name="Vehicle Make Applicant" class="input-field"></div>
+                        <div class="field-container"><input type="text" name="Vehicle Make CoApplicant" class="input-field"></div>
+
+                        <div class="description-col">Vehicle Tag</div>
+                        <div class="field-container"><input type="text" name="Vehicle Tag Applicant" class="input-field"></div>
+                        <div class="field-container"><input type="text" name="Vehicle Tag CoApplicant" class="input-field"></div>
+
+                        <div class="description-col">Nearest Relative</div>
+                        <div class="field-container"></div>
+                        <div class="field-container"><input type="text" name="Name of Nearest Relative" class="input-field"></div>
+
+                        <div class="description-col">Relative Phone</div>
+                        <div class="field-container"></div>
+                        <div class="field-container"><input type="tel" name="Phone Nearest Relative" class="input-field" pattern="[0-9]{10}"></div>
                     </div>
 
                     <div class="mt-8">
@@ -160,30 +179,29 @@
                             <div><label class="label-text">From Date</label><input type="date" id="timeAtCurrentFrom" name="Current From Date" class="input-field" required></div>
                             <div><label class="label-text">To Date</label><input type="date" id="timeAtCurrentTo" name="Current To Date" class="input-field" required></div>
                             <div><label class="label-text">Monthly Rent</label><input type="number" name="Current Monthly Rent" class="input-field" required min="0"></div>
+                            <div><label class="label-text">Security Deposit Return %</label><input type="text" name="Security Deposit Return Percent" class="input-field" required></div>
+                            <div><label class="label-text">Reason For Leaving</label><input type="text" name="Reason For Leaving" class="input-field" required></div>
                         </div>
 
                          <div id="prev-address-container-wrapper" class="hidden mt-6">
                             <h3 class="text-xl font-semibold mb-3 text-gray-800 border-b pb-1">Previous Address History (Required)</h3>
                             <div id="prev-address-container" class="space-y-4"></div>
-                            <button type="button" id="add-prev-address-btn" class="mt-4 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200">+ Add Previous Address</button>
+                            <button type="button" id="add-prev-address-btn" class="mt-4 text-sm font-semibold text-blue-600 hover:text-blue-800">+ Add Previous Address</button>
                          </div>
                     </div>
                 </section>
 
-                <!-- SECTION 3: Household Members -->
+                <!-- SECTION 3: Household -->
                 <section id="section-3" class="form-section">
                     <h2 class="text-2xl font-semibold mb-2 text-gray-800">Household Members</h2>
-                    <p class="text-gray-600 mb-6 border-b pb-4">List all other persons who will occupy the unit (excluding Applicant and Co-Applicant).</p>
-                    <div class="household-grid mb-2"><div class="text-sm font-bold text-gray-800">Name</div><div class="text-sm font-bold text-gray-800">Date of Birth</div><div class="text-sm font-bold text-gray-800">Relationship</div></div>
+                    <div class="household-grid mb-2"><div class="text-sm font-bold text-gray-800">Name</div><div class="text-sm font-bold text-gray-800">DOB</div><div class="text-sm font-bold text-gray-800">Relationship</div></div>
                     <div id="household-members-container" class="space-y-4"></div>
-                    <button type="button" id="add-member-btn" class="mt-4 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200">+ Add Household Member</button>
+                    <button type="button" id="add-member-btn" class="mt-4 text-sm font-semibold text-blue-600 hover:text-blue-800">+ Add Household Member</button>
                 </section>
 
-                <!-- SECTION 4: Financial Information (Restored) -->
+                <!-- SECTION 4: Financial -->
                 <section id="section-4" class="form-section">
                     <h2 class="text-2xl font-semibold mb-2 text-gray-800">Financial & Employment</h2>
-                    <p class="text-gray-600 mb-6 border-b pb-4">Employment history must cover 4 years minimum.</p>
-
                     <div class="mb-8">
                         <h3 class="text-lg font-semibold text-gray-700 mb-3">Current Employment (Required)</h3>
                         <div class="p-4 border border-gray-200 rounded-lg bg-gray-50 flex flex-col gap-3">
@@ -194,42 +212,27 @@
                             <div><label class="label-text">Address</label><input type="text" name="Current Employer Address" class="input-field" required></div>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div><label class="label-text">Position</label><input type="text" name="Current Employer Position" class="input-field" required></div>
-                                <div><label class="label-text">Income (Gross/Year)</label><input type="text" name="Current Employer Income" class="input-field" required></div>
-                                <div><label class="label-text">Time Employed</label><input type="text" name="Current Employer Time" class="input-field" required></div>
+                                <div><label class="label-text">Income</label><input type="text" name="Current Employer Income" class="input-field" required></div>
+                                <div><label class="label-text">Time</label><input type="text" name="Current Employer Time" class="input-field" required></div>
                             </div>
                         </div>
                     </div>
-
                     <div class="mb-8">
                         <h3 class="text-lg font-semibold text-gray-700 mb-2">Previous Employment</h3>
                         <div id="prev-employment-container" class="space-y-4"></div>
                         <button type="button" id="add-employment-btn" class="mt-2 text-sm font-semibold text-blue-600 hover:text-blue-800">+ Add Previous Employment</button>
                     </div>
-
                     <div class="mb-8">
                         <h3 class="text-lg font-semibold text-gray-700 mb-2">Other Income / Assets / Liabilities</h3>
                         <div id="financial-extras-container" class="space-y-4">
-                            <!-- Dynamic containers for other items -->
-                            <div>
-                                <label class="label-text font-bold">Other Income Sources</label>
-                                <div id="income-container" class="space-y-2"></div>
-                                <button type="button" id="add-income-btn" class="text-xs text-blue-600">+ Add Income</button>
-                            </div>
-                            <div>
-                                <label class="label-text font-bold">Assets (Bank Accts, Vehicles, etc)</label>
-                                <div id="asset-container" class="space-y-2"></div>
-                                <button type="button" id="add-asset-btn" class="text-xs text-blue-600">+ Add Asset</button>
-                            </div>
-                             <div>
-                                <label class="label-text font-bold">Liabilities (Loans, Credit Cards)</label>
-                                <div id="liability-container" class="space-y-2"></div>
-                                <button type="button" id="add-liability-btn" class="text-xs text-blue-600">+ Add Liability</button>
-                            </div>
+                            <div><label class="label-text font-bold">Other Income</label><div id="income-container" class="space-y-2"></div><button type="button" id="add-income-btn" class="text-xs text-blue-600">+ Add Income</button></div>
+                            <div><label class="label-text font-bold">Assets</label><div id="asset-container" class="space-y-2"></div><button type="button" id="add-asset-btn" class="text-xs text-blue-600">+ Add Asset</button></div>
+                             <div><label class="label-text font-bold">Liabilities</label><div id="liability-container" class="space-y-2"></div><button type="button" id="add-liability-btn" class="text-xs text-blue-600">+ Add Liability</button></div>
                         </div>
                     </div>
                 </section>
 
-                <!-- SECTION 5: Background History (Restored) -->
+                <!-- SECTION 5: Background -->
                 <section id="section-5" class="form-section">
                     <h2 class="text-2xl font-semibold mb-2 text-gray-800">Background & History</h2>
                     <div class="space-y-4">
@@ -322,6 +325,10 @@
             const showSection = (step) => {
                 document.querySelectorAll('.form-section').forEach(section => section.classList.remove('active'));
                 document.getElementById(`section-${step}`).classList.add('active');
+                setTimeout(() => {
+                    const firstInput = document.getElementById(`section-${step}`).querySelector('input, select, textarea');
+                    if (firstInput) firstInput.focus();
+                }, 100);
             };
 
             const calculateResidency = (from, to) => {
@@ -412,61 +419,98 @@
                 const printDiv = document.getElementById('print-view');
                 
                 let html = `
-                    <div class="print-header">
-                        <div style="font-size:20px; text-transform: uppercase;">Haron Enterprises, LLC - Application for Tenancy</div>
-                        <div style="font-size:12px; margin-top:5px;">Generated: ${new Date().toLocaleString()}</div>
-                    </div>
-                    
-                    <div class="print-section">
-                        <div style="font-weight:bold; border-bottom:1px solid #000; margin-bottom:10px;">APPLICANT INFORMATION</div>
-                        <div class="print-grid">
-                            <div><span class="print-label">Full Name:</span> ${formData.get('Full Name')}</div>
-                            <div><span class="print-label">Date:</span> ${formData.get('Date')}</div>
-                            <div><span class="print-label">SSN:</span> ${formData.get('SSN Applicant')}</div>
-                            <div><span class="print-label">DOB:</span> ${formData.get('DOB Applicant')}</div>
-                            <div><span class="print-label">Phone:</span> ${formData.get('Phone Applicant')}</div>
-                            <div><span class="print-label">Email:</span> ${formData.get('Email Applicant')}</div>
+                    <div class="print-container">
+                        <div class="print-header">
+                            <h1 style="font-size:20px; font-weight:bold;">HARON ENTERPRISES, LLC - APPLICATION CHECKLIST</h1>
+                            <div style="font-size:12px;">Generated: ${new Date().toLocaleString()}</div>
                         </div>
-                    </div>
 
-                    <div class="print-section">
-                        <div style="font-weight:bold; border-bottom:1px solid #000; margin-bottom:10px;">RESIDENCE HISTORY</div>
-                         <div><span class="print-label">Current Address:</span> ${formData.get('Current Street Address')}, ${formData.get('Current City State Zip')}</div>
-                         <div class="print-grid">
-                            <div><span class="print-label">Landlord:</span> ${formData.get('Current Contact Person')}</div>
-                            <div><span class="print-label">Phone:</span> ${formData.get('Current Landlord Phone')}</div>
-                            <div><span class="print-label">Dates:</span> ${formData.get('Current From Date')} to ${formData.get('Current To Date')}</div>
-                            <div><span class="print-label">Rent:</span> $${formData.get('Current Monthly Rent')}</div>
+                        <!-- PAGE 1: CHECKLIST -->
+                        <div class="print-section">
+                             <div class="print-section-header">APPLICANT & CHECKLIST</div>
+                             <div class="print-grid">
+                                <div><span class="print-label">Applicant:</span> ${formData.get('Full Name')}</div>
+                                <div><span class="print-label">Date:</span> ${formData.get('Date')}</div>
+                             </div>
+                             <div style="margin-top:20px;">
+                                ${Array.from(formData.keys()).filter(k => k.startsWith('Checklist_')).map(k => 
+                                    `<div class="checkbox-list-item"><div class="print-check-box">X</div><div>${k.replace('Checklist_', '').replace(/([A-Z])/g, ' $1')}</div></div>`
+                                ).join('')}
+                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="print-section">
-                        <div style="font-weight:bold; border-bottom:1px solid #000; margin-bottom:10px;">FINANCIAL & EMPLOYMENT</div>
-                        <div class="print-grid">
-                            <div><span class="print-label">Employer:</span> ${formData.get('Current Employer Name')}</div>
-                            <div><span class="print-label">Position:</span> ${formData.get('Current Employer Position')}</div>
-                            <div><span class="print-label">Income:</span> ${formData.get('Current Employer Annual Income')}</div>
-                            <div><span class="print-label">Time:</span> ${formData.get('Current Employer Time')}</div>
-                        </div>
-                    </div>
 
-                    <div class="print-section">
-                         <div style="font-weight:bold; border-bottom:1px solid #000; margin-bottom:10px;">BACKGROUND</div>
-                         <div><span class="print-label">Evicted?</span> ${formData.get('History Evicted')} <br> ${formData.get('Eviction Explanation') || ''}</div>
-                         <div><span class="print-label">Felony?</span> ${formData.get('History Felony')} <br> ${formData.get('Felony Explanation') || ''}</div>
-                    </div>
-                    
-                    <div style="margin-top:40px; border-top:1px solid #000; padding-top:10px;">
-                        <p>I certify that the information provided herein is true and correct.</p>
-                        <br><br>
-                        <div style="display:flex; justify-content:space-between;">
-                            <div style="border-top:1px solid #000; width:45%; padding-top:5px;">Applicant Signature</div>
-                            <div style="border-top:1px solid #000; width:45%; padding-top:5px;">Date</div>
+                        <div class="page-break"></div>
+
+                        <!-- PAGE 2: DETAILS -->
+                        <div class="print-header">APPLICANT DETAILS & ADDRESS</div>
+                        <div class="print-section">
+                            <div class="print-section-header">PERSONAL & CONTACT INFO</div>
+                            <table class="report-table">
+                                <tr><th>Field</th><th>Applicant</th><th>Co-Applicant</th></tr>
+                                <tr><td>Name</td><td>${formData.get('Full Name Applicant')||''}</td><td>${formData.get('Full Name CoApplicant')||''}</td></tr>
+                                <tr><td>DOB</td><td>${formData.get('DOB Applicant')||''}</td><td>${formData.get('DOB CoApplicant')||''}</td></tr>
+                                <tr><td>Phone</td><td>${formData.get('Phone Applicant')||''}</td><td>${formData.get('Phone CoApplicant')||''}</td></tr>
+                                <tr><td>SSN</td><td>${formData.get('SSN Applicant')||''}</td><td>${formData.get('SSN CoApplicant')||''}</td></tr>
+                                <tr><td>Email</td><td>${formData.get('Email Applicant')||''}</td><td>${formData.get('Email CoApplicant')||''}</td></tr>
+                            </table>
                         </div>
-                    </div>
-                    
-                    <div class="no-print" style="margin-top:20px; text-align:center;">
-                        <button onclick="window.print()" style="background:red; color:white; padding:15px 30px; font-size:18px; border-radius:5px; cursor:pointer;">SAVE AS PDF</button>
+
+                        <div class="print-section">
+                             <div class="print-section-header">RESIDENCE HISTORY</div>
+                             <div><span class="print-label">Current:</span> ${formData.get('Current Street Address')}, ${formData.get('Current City State Zip')}</div>
+                             <div class="print-grid">
+                                <div><span class="print-label">Landlord:</span> ${formData.get('Current Contact Person')}</div>
+                                <div><span class="print-label">Phone:</span> ${formData.get('Current Landlord Phone')}</div>
+                                <div><span class="print-label">Dates:</span> ${formData.get('Current From Date')} to ${formData.get('Current To Date')}</div>
+                                <div><span class="print-label">Reason:</span> ${formData.get('Reason For Leaving')}</div>
+                            </div>
+                        </div>
+
+                        <div class="page-break"></div>
+
+                        <!-- PAGE 3: HOUSEHOLD & FINANCIAL -->
+                        <div class="print-header">HOUSEHOLD & FINANCIAL INFO</div>
+                        <div class="print-section">
+                            <div class="print-section-header">HOUSEHOLD MEMBERS</div>
+                            ${Array.from(document.querySelectorAll('#household-members-container .household-grid')).map(div => {
+                                const inputs = div.querySelectorAll('input');
+                                return `<div style="margin-bottom:4px;">${inputs[0].value} (${inputs[1].value}) - ${inputs[2].value}</div>`
+                            }).join('') || 'None Listed'}
+                        </div>
+
+                        <div class="print-section">
+                            <div class="print-section-header">FINANCIALS</div>
+                            <div class="print-grid">
+                                <div><span class="print-label">Employer:</span> ${formData.get('Current Employer Name')}</div>
+                                <div><span class="print-label">Income:</span> ${formData.get('Current Employer Annual Income')}</div>
+                            </div>
+                            <div style="margin-top:10px;">
+                                <strong>Other Income/Assets:</strong><br>
+                                ${Array.from(document.querySelectorAll('#income-container .grid')).map(d => d.querySelector('input').value).join(', ')}
+                            </div>
+                        </div>
+                        
+                         <div class="print-section">
+                             <div class="print-section-header">BACKGROUND QUESTIONS</div>
+                             <div>Evicted: ${formData.get('History Evicted')}</div>
+                             <div>Foreclosed: ${formData.get('History Foreclosed')}</div>
+                             <div>Bankruptcy: ${formData.get('History Bankruptcy')}</div>
+                             <div>Felony: ${formData.get('History Felony')}</div>
+                             <div>Broken Lease: ${formData.get('History BrokenLease')}</div>
+                        </div>
+
+                        <div style="margin-top:40px; border-top:1px solid #000; padding-top:10px;">
+                            <p>I certify that the information provided herein is true and correct.</p>
+                            <br><br>
+                            <div style="display:flex; justify-content:space-between;">
+                                <div style="border-top:1px solid #000; width:45%; padding-top:5px;">Applicant Signature</div>
+                                <div style="border-top:1px solid #000; width:45%; padding-top:5px;">Date</div>
+                            </div>
+                        </div>
+                        
+                        <div class="no-print" style="margin-top:20px; text-align:center;">
+                            <button onclick="window.print()" style="background:red; color:white; padding:15px 30px; font-size:18px; border-radius:5px; cursor:pointer;">SAVE AS PDF</button>
+                        </div>
                     </div>
                 `;
 
@@ -491,7 +535,21 @@
             // Start
             showSection(1);
             updateButtons();
+            
+            // Validate first section on load for visual feedback
+            enableRealTimeValidation(document.getElementById('section-1'));
         });
+        
+        // Add Real-time validation function definition
+        function enableRealTimeValidation(section) {
+             const inputs = section.querySelectorAll('[required]');
+             inputs.forEach(input => {
+                 input.addEventListener('blur', () => {
+                     if (!input.checkValidity()) input.classList.add('input-error');
+                     else input.classList.remove('input-error');
+                 });
+             });
+        }
     </script>
 </body>
 </html>
